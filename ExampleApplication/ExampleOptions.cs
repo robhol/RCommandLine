@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using RCommandLine;
+﻿using RCommandLine;
 
 namespace ExampleApplication
 {
@@ -25,7 +19,7 @@ namespace ExampleApplication
 
         public class ReadOptions : FileOptions
         {
-            [Flag('c', Description = "The size of individual chunks being read"), Optional(Default = 2048)] // (--chunk-size)
+            [Flag('c'), Optional(Default = 2048)] // (--chunk-size)
             public int ChunkSize { get; set; }
         }
 

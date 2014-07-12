@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RCommandLine
 {
@@ -19,11 +17,8 @@ namespace RCommandLine
 
         readonly Type _optionsType;
 
-        private readonly string _commandName;
-
         public ParameterParser(string commandName = "")
         {
-            _commandName = commandName;
             _optionsType = typeof(TTarget);
             ExploreType();
         }

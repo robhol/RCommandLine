@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using RCommandLine;
 
 namespace ExampleApplication
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             
             //Step 1: define Options classes (see ExampleOptions.cs)

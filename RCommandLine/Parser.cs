@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace RCommandLine
 {
     public class Parser<TTarget>
@@ -42,7 +39,7 @@ namespace RCommandLine
         /// <returns></returns>
         public ParseResult Parse(IEnumerable<string> args, bool joinStringSegments = true)
         {
-            _commandParser = new CommandParser<TTarget>() { BaseCommandName = BaseCommandName };
+            _commandParser = new CommandParser<TTarget> { BaseCommandName = BaseCommandName };
 
             var argList = args.ToList();
             if (AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()))
@@ -54,7 +51,7 @@ namespace RCommandLine
             Type parserType;
             IEnumerable<string> remainingArgs;
 
-            _parameterParser = ((ICommandParser<object>)_commandParser).GetParser(argList, out parserType, out remainingArgs, out _commandName);
+            _parameterParser = _commandParser.GetParser(argList, out parserType, out remainingArgs, out _commandName);
             
             var remainingArgsList = remainingArgs.ToList();
             if (AutomaticHelp && remainingArgsList.Count == 1 && new[] {"-?", "--help"}.Contains(remainingArgsList.First().ToLower()))

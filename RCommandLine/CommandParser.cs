@@ -7,15 +7,13 @@ using System.Text;
 namespace RCommandLine
 {
 
-    public class CommandParser<TTarget> : ICommandParser<TTarget>
+    public class CommandParser<TTarget> : ICommandParser
     {
 
         /// <summary>
         /// In help screens etc., show this command (usually the executable name) in front of all commands.
         /// </summary>
         public string BaseCommandName { get; set; }
-
-        public string LastCommand { get; private set; }
 
         private readonly List<CommandElement> _commands;
         private readonly Type _topType;

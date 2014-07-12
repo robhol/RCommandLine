@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RCommandLine
 {
@@ -22,7 +16,7 @@ namespace RCommandLine
         public PropertyInfo TargetProperty { get; private set; }
         public Type TargetType { get; private set; }
 
-        public ArgumentElement(PropertyInfo prop, string name, string description, OptionalAttribute optionalAttributeInfo)
+        protected ArgumentElement(PropertyInfo prop, string name, string description, OptionalAttribute optionalAttributeInfo)
         {
             Name = name;
             Description = description;

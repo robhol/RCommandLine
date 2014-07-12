@@ -1,11 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RCommandLine;
-using System.Text;
-using System.Linq;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace TestRCommandLine
 {
@@ -70,7 +65,7 @@ namespace TestRCommandLine
         [ExpectedException(typeof(InvalidCastException))]
         public void FlagTypeTest()
         {
-            var opts = _parameterParser.Parse("--str required --integer-flag definitelyNotAnInteger");
+            _parameterParser.Parse("--str required --integer-flag definitelyNotAnInteger");
         }
 
     }
