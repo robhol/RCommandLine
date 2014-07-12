@@ -155,7 +155,9 @@ namespace RCommandLine
                 if (e.Description != null)
                     sb
                         .Append(" - ")
-                        .AppendLine(e.Description);
+                        .Append(e.Description);
+
+                sb.AppendLine();
             }
 
             sb.AppendLine();
@@ -169,7 +171,9 @@ namespace RCommandLine
                 if (e.Description != null)
                     sb
                         .Append(" - ")
-                        .AppendLine(e.Description);
+                        .Append(e.Description);
+
+                sb.AppendLine();
             }
 
             return sb.ToString();
