@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace RCommandLine
 {
 
-    public class CommandParser<TTarget>
+    public class CommandParser<TTarget> : ICommandParser<TTarget>
     {
+
+        /// <summary>
+        /// In help screens etc., show this command (usually the executable name) in front of all commands.
+        /// </summary>
+        public string BaseCommandName { get; set; }
+
         public string LastCommand { get; private set; }
 
         private readonly List<CommandElement> _commands;
@@ -20,7 +27,7 @@ namespace RCommandLine
 
             ExploreCommandTree(_topType);
         }
-
+        
         private void ExploreCommandTree(MemberInfo t, CommandElement parent = null)
         {
             foreach (var cmd in t.GetCustomAttributes<HasCommandAttribute>().Select(attr => new CommandElement(attr, parent)))
@@ -32,7 +39,7 @@ namespace RCommandLine
             }
         }
 
-        public object GetParser(IEnumerable<string> inputArgs, out Type parserType, out IEnumerable<string> remainingArgs, out string commandName)
+        public IParameterParser<object> GetParser(IEnumerable<string> inputArgs, out Type parserType, out IEnumerable<string> remainingArgs, out string commandName)
         {
             var optType = _topType;
 
@@ -40,11 +47,10 @@ namespace RCommandLine
             var currentCommandPath = new List<CommandElement>();
 
             var argQueue = new Queue<string>(inputArgs);
-
+            
             while (argQueue.Count > 0)
             {
                 var name = argQueue.Peek();
-
 
                 var cmdSource = (currentCommand == null ? _commands : currentCommand.Children);
                 var next =
@@ -63,55 +69,32 @@ namespace RCommandLine
             if (currentCommand != null)
                 optType = currentCommand.CommandOptionsType;
 
-            parserType = typeof(Parser<>).MakeGenericType(optType);
+            parserType = typeof(ParameterParser<>).MakeGenericType(optType);
             remainingArgs = argQueue;
-            commandName = string.Join(" ", currentCommandPath);
+            commandName = string.Join(" ", currentCommandPath.Select(c => c.Name));
 
-            return Activator.CreateInstance(parserType);
+            return (IParameterParser<object>)Activator.CreateInstance(parserType, commandName);
         }
 
-        /// <summary>
-        /// Parses (without joining strings) the given command.
-        /// </summary>
-        /// <returns>Returns the option object for the best matched HasCommandAttribute attribute.</returns>
-        public CommandParseResult ParseIEnumerable(IEnumerable<string> inputArgs, out string commandName)
+        public string GetCommandList()
         {
-            Type parserType;
-            IEnumerable<string> remainingArgs;
-            var parserObject = GetParser(inputArgs, out parserType, out remainingArgs, out commandName);
+            var sb = new StringBuilder();
 
-            var optObject = parserType.GetMethod("ParseIEnumerable").Invoke(parserObject, new object[] {remainingArgs});
+            Action<CommandElement, string> walk = null;
+            walk = (c, prefix) =>
+            {
+                if (!c.Hidden)
+                    sb.Append(prefix).AppendLine(c.Name);
 
-            LastCommand = commandName;
+                foreach (var cc in c.Children)
+                    walk(cc, prefix + c.Name + " ");
+            };
 
-            return new CommandParseResult(optObject, commandName);
+            foreach (var command in _commands)
+                walk(command, BaseCommandName != null ? BaseCommandName + " " : "");
+
+            return sb.ToString();
         }
-
-        
-
-        /// <summary>
-        /// Parses the selected string
-        /// </summary>
-        /// <param name="rawString">ArgumentAttribute string. Defaults to Environment.CommandLine</param>
-        /// <returns></returns>
-        public CommandParseResult Parse(string rawString)
-        {
-            string command;
-            return Parse(rawString, out command);
-        }
-
-        /// <summary>
-        /// Parses the selected string
-        /// </summary>
-        /// <param name="rawString">ArgumentAttribute string. Defaults to Environment.CommandLine</param>
-        /// <param name="command">The final command, subcommands separated by space.</param>
-        /// <returns></returns>
-        public CommandParseResult Parse(string rawString, out string command)
-        {
-            return ParseIEnumerable(Util.JoinQuotedStringSegments((rawString ?? Environment.CommandLine).Split(' ')), out command);
-        }
-
-
 
     }
 

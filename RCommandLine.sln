@@ -7,6 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCommandLine", "RCommandLin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRCommandLine", "TestRCommandLine\TestRCommandLine.csproj", "{907D0798-1907-406D-B24C-D122A5A0622D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApplication", "ExampleApplication\ExampleApplication.csproj", "{A0B258F0-C661-4329-BE16-8F041BA1A20E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{946EFA66-9DFC-4929-AB93-1E927190CF87}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +30,10 @@ Global
 		{907D0798-1907-406D-B24C-D122A5A0622D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{907D0798-1907-406D-B24C-D122A5A0622D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{907D0798-1907-406D-B24C-D122A5A0622D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0B258F0-C661-4329-BE16-8F041BA1A20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0B258F0-C661-4329-BE16-8F041BA1A20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0B258F0-C661-4329-BE16-8F041BA1A20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0B258F0-C661-4329-BE16-8F041BA1A20E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

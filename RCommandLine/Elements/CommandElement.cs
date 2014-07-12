@@ -14,11 +14,11 @@ namespace RCommandLine
     class CommandElement : Element
     {
 
-        //public bool Default { get; set; }
-
         readonly List<CommandElement> _children = new List<CommandElement>();
         public IEnumerable<CommandElement> Children { get { return _children; } }
         public CommandElement Parent { get; private set; }
+
+        public bool Hidden { get; private set; }
 
         public Type CommandOptionsType { get; private set; }
 
@@ -26,6 +26,7 @@ namespace RCommandLine
         {
             CommandOptionsType = cmd.CommandOptionsType;
             Name = cmd.Name ?? Regex.Replace(CommandOptionsType.Name.ToLower(), "options?$", "");
+            Hidden = cmd.Hidden;
 
             Parent = parentCommand;
             

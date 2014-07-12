@@ -103,5 +103,10 @@ namespace RCommandLine
             });
         }
 
+        public static string JoinNotNulls(string separator, IEnumerable<string> str)
+        {
+            return string.Join(separator, str.Where((s => s != null)));
+        }
+
     }
 }

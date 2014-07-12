@@ -49,7 +49,6 @@ namespace TestRCommandLine
 
             Assert.AreEqual("\"cake foo", transform("\"cake foo"));
 
-
         }
 
     }

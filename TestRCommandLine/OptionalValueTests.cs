@@ -27,38 +27,46 @@ namespace TestRCommandLine
             [Flag('i')]
             public int? OptionalInteger { get; set; }
 
-            [Argument(0)]
+            [Parameter(0)]
             public string RequiredArgument { get; set; }
 
-            [Argument(1), Optional]
+            [Parameter(1), Optional]
             public string OptionalArgument { get; set; }
         }
 
-        private readonly Parser<OptionalValueOptions> _parser;
+        private readonly ParameterParser<OptionalValueOptions> _parameterParser;
         public OptionalValueTests()
         {
-            _parser = new Parser<OptionalValueOptions>();
+            _parameterParser = new ParameterParser<OptionalValueOptions>();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MissingValuesException))]
+        [ExpectedException(typeof(MissingArgumentException))]
         public void RequiredArgTest()
         {
-            _parser.Parse("-s flag");
+            _parameterParser.Parse("-s flag");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MissingValuesException))]
+        [ExpectedException(typeof(MissingArgumentException))]
         public void RequiredFlagTest()
         {
-            _parser.Parse("arg");
+            _parameterParser.Parse("arg");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MissingValueException))]
+        public void DanglingFlagTest()
+        {
+            _parameterParser.Parse("arg --required-string reqstr --optional-string");
+            Assert.Fail("Expected MissingValueException. MissingMissingValuesExceptionException?");
         }
 
         [TestMethod]
         public void OptionalValueTest()
         {
-            var optsNull = _parser.Parse("reqArg -s reqString");
-            var optsGiven = _parser.Parse("reqArg -s reqString -Ai hello 42 something");
+            var optsNull = _parameterParser.Parse("reqArg -s reqString");
+            var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");
 
             Assert.IsNull(optsNull.OptionalString);
             Assert.IsNull(optsNull.OptionalInteger);

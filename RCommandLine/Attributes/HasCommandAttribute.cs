@@ -1,30 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace RCommandLine
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class HasCommandAttribute : Attribute
+    public class HasCommandAttribute : ElementAttribute
     {
         private readonly Type _commandOptionsType;
 
         /// <summary>
-        /// Whether or not this command should be the default, if a (sub)command at the same level is not specified.
-        /// Note that this will "override" the possibility of the parent command being called with no arguments.
+        /// Whether or not this should be hidden from the CommandParser.GetUsage method.
         /// </summary>
-        //public bool Default { get; set; }
-
-        public string Name { get; set; }
+        public bool Hidden { get; set; }
 
         public Type CommandOptionsType { get { return _commandOptionsType; } }
 
-        public HasCommandAttribute(Type commandOptionsType)
+        public HasCommandAttribute(Type commandOptionsType, string name = null)
         {
             _commandOptionsType = commandOptionsType;
+            _name = name;
         }
     }
 }

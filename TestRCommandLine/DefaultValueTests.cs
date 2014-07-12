@@ -26,24 +26,24 @@ namespace TestRCommandLine
             [Flag('i'), Optional(Default = 1024)]
             public int OptionalInteger { get; set; }
 
-            [Argument(0)]
+            [Parameter(0)]
             public string RequiredArgument { get; set; }
 
-            [Argument(1), Optional(Default = "nothing")]
+            [Parameter(1), Optional(Default = "nothing")]
             public string OptionalArgument { get; set; }
         }
 
-        private readonly Parser<DefaultValueOptions> _parser;
+        private readonly ParameterParser<DefaultValueOptions> _parameterParser;
         public DefaultValueTests()
         {
-            _parser = new Parser<DefaultValueOptions>();
+            _parameterParser = new ParameterParser<DefaultValueOptions>();
         }
 
         [TestMethod]
         public void DefaultValueTest()
         {
-            var optsDefault = _parser.Parse("reqArg -s reqString");
-            var optsGiven = _parser.Parse("reqArg -s reqString -Ai hello 42 something");
+            var optsDefault = _parameterParser.Parse("reqArg -s reqString");
+            var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");
 
             Assert.AreEqual("none", optsDefault.OptionalString);
             Assert.AreEqual(1024, optsDefault.OptionalInteger);

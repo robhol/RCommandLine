@@ -12,13 +12,13 @@ namespace TestRCommandLine
     [TestClass]
     public class CommandTests
     {
-
+        
         public class CommonOptions
         {
             [Flag('v')]
             public bool CommonBool { get; set; }
 
-            [Argument(0)]
+            [Parameter(0)]
             public string CommonStringArg { get; set; }
         }
 
@@ -36,35 +36,35 @@ namespace TestRCommandLine
             [Flag('X')]
             public double FooDouble { get; set; }
 
-            [Argument(1)]
+            [Parameter(1)]
             public int FooIntArg { get; set; }
         }
 
-        [HasCommand(typeof(BarBazOptions), Name = "baz")]
+        [HasCommand(typeof(BarBazOptions), "baz")]
         public class BarOptions : CommonOptions
         {
 
             [Flag('X')]
             public string BarString { get; set; }
 
-            [Argument(1), Optional]
+            [Parameter(1), Optional]
             public string BarStringArg { get; set; }
         }
 
         public class BarBazOptions
         {
 
-            [Argument(0)]
+            [Parameter(0)]
             public int BazIntegerArg { get; set; }
 
         }
 
         
-        private readonly CommandParser<MyOptions> _parser;
+        private readonly Parser<MyOptions> _parser;
 
         public CommandTests()
         {
-            _parser = new CommandParser<MyOptions>();
+            _parser = new Parser<MyOptions>();
         }
 
         [TestMethod]
@@ -79,16 +79,20 @@ namespace TestRCommandLine
         [TestMethod]
         public void CommandFlatTest()
         {
-            var foo = _parser.Parse("foo commonString 32 -X 55.4321").Options as FooOptions;
-            var bar = _parser.Parse("bar commonString barString -X barFlag").Options as BarOptions;
+            var fooResult = _parser.Parse("foo commonString 32 -X 55.4321");
+            var foo = fooResult.Options as FooOptions;
+            var barResult = _parser.Parse("bar commonString barString -X barFlag");
+            var bar = barResult.Options as BarOptions;
 
             Assert.IsNotNull(foo);
             Assert.IsNotNull(bar);
 
+            Assert.AreEqual("foo", fooResult.Command);
             Assert.AreEqual("commonString", foo.CommonStringArg);
             Assert.AreEqual(32, foo.FooIntArg);
             Assert.AreEqual(55.4321, foo.FooDouble);
 
+            Assert.AreEqual("bar", barResult.Command);
             Assert.AreEqual("commonString", bar.CommonStringArg);
             Assert.AreEqual("barString", bar.BarStringArg);
             Assert.AreEqual("barFlag", bar.BarString);
@@ -98,16 +102,17 @@ namespace TestRCommandLine
         public void CommandNestedTest()
         {
             var bar = _parser.Parse("bar commonString barString -X 55.4321").Options as BarOptions;
-            var baz = _parser.Parse("bar baz 999").Options as BarBazOptions;
+            var bazResult = _parser.Parse("bar baz 999");
+            var baz = bazResult.Options as BarBazOptions;
 
             Assert.IsNotNull(bar);
             Assert.IsNotNull(baz);
 
+            Assert.AreEqual("bar baz", bazResult.Command);
             Assert.AreEqual("commonString", bar.CommonStringArg);
             Assert.AreEqual("barString", bar.BarStringArg);
 
             Assert.AreEqual(999, baz.BazIntegerArg);
         }
-
     }
 }

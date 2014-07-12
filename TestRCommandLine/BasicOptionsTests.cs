@@ -22,28 +22,28 @@ namespace TestRCommandLine
             [Flag('i')]
             public int IntegerFlag { get; set; }
 
-            [Flag('s', Name = "str")]
+            [Flag('s', "str")]
             public string StringFlag { get; set; }
 
-            [Argument(0)]
+            [Parameter(0)]
             public string StringArgument { get; set; }
 
-            [Argument(1)]
+            [Parameter(1)]
             public int IntegerArgument { get; set; }
 
         }
 
-        readonly Parser<BasicOptions> _parser;
+        readonly ParameterParser<BasicOptions> _parameterParser;
 
         public BasicOptionsTests()
         {
-            _parser = new Parser<BasicOptions>();
+            _parameterParser = new ParameterParser<BasicOptions>();
         }
 
         [TestMethod]
         public void BasicFlagTest()
         {
-            var opts = _parser.Parse("--str -bi grell 8 arg 9001"); //=>  --str grell -b -i 8  , args are "arg" and 9001
+            var opts = _parameterParser.Parse("--str -bi grell 8 arg 9001"); //=>  --str grell -b -i 8  , args are "arg" and 9001
 
             Assert.AreEqual(opts.BooleanFlag, true);
             Assert.AreEqual(opts.IntegerFlag, 8);
@@ -53,7 +53,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void BasicArgumentTest()
         {
-            var opts = _parser.Parse("argOne -s flagValue 42 -bi 44");
+            var opts = _parameterParser.Parse("argOne -s flagValue 42 -bi 44");
 
             Assert.AreEqual("argOne", opts.StringArgument);
             Assert.AreEqual(42, opts.IntegerArgument);
@@ -63,14 +63,14 @@ namespace TestRCommandLine
         public void ParserReusabilityTest()
         {
             const string args = "-is 1 a b 2";
-            Assert.AreNotSame(_parser.Parse(args), _parser.Parse(args));
+            Assert.AreNotSame(_parameterParser.Parse(args), _parameterParser.Parse(args));
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidCastException))]
         public void FlagTypeTest()
         {
-            var opts = _parser.Parse("--str required --integer-flag definitelyNotAnInteger");
+            var opts = _parameterParser.Parse("--str required --integer-flag definitelyNotAnInteger");
         }
 
     }
