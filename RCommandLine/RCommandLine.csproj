@@ -43,12 +43,12 @@
     <Compile Include="Attributes\OptionalAttribute.cs" />
     <Compile Include="Exceptions\MissingArgumentException.cs" />
     <Compile Include="ParseResult.cs" />
-    <Compile Include="Elements\ParameterElement.cs" />
+    <Compile Include="Elements\OrderedParameterElement.cs" />
     <Compile Include="Elements\CommandElement.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\ArgumentElement.cs" />
     <Compile Include="CommandParser.cs" />
-    <Compile Include="Attributes\ParameterAttribute.cs" />
+    <Compile Include="Attributes\OrderedParameterAttribute.cs" />
     <Compile Include="Attributes\ElementAttribute.cs" />
     <Compile Include="Attributes\FlagAttribute.cs" />
     <Compile Include="Elements\FlagElement.cs" />

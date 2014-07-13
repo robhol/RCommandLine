@@ -20,10 +20,10 @@ namespace TestRCommandLine
             [Flag('s', "str")]
             public string StringFlag { get; set; }
 
-            [Parameter(0)]
+            [OrderedParameter(0)]
             public string StringArgument { get; set; }
 
-            [Parameter(1)]
+            [OrderedParameter(1)]
             public int IntegerArgument { get; set; }
 
         }

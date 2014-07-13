@@ -10,7 +10,7 @@ namespace ExampleApplication
     {
         public abstract class FileOptions
         {
-            [Parameter(0, Description = "The file to act upon")] //Name default: Path
+            [OrderedParameter(0, Description = "The file to act upon")] //Name default: Path
             public string Path { get; set; }
 
             [Flag('F', longName: "", Description = "The format to use in a file operation"), Optional(Default = "foo")] //Name default: format (--format)

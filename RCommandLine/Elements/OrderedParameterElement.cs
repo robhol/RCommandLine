@@ -5,11 +5,11 @@ namespace RCommandLine
     /// <summary>
     /// Parameters occur in a fixed order after all the flags are dealt with.
     /// </summary>
-    class ParameterElement : ArgumentElement
+    class OrderedParameterElement : ArgumentElement
     {
         public int Order { get; private set; }
 
-        public ParameterElement(ParameterAttribute a, PropertyInfo property, OptionalAttribute optionalAttributeInfo) 
+        public OrderedParameterElement(OrderedParameterAttribute a, PropertyInfo property, OptionalAttribute optionalAttributeInfo) 
             : base(property, a.Name, a.Description, optionalAttributeInfo)
         {
             Name = Name ?? property.Name;

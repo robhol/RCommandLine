@@ -12,7 +12,7 @@ namespace TestRCommandLine
             [Flag('v')]
             public bool CommonBool { get; set; }
 
-            [Parameter(0)]
+            [OrderedParameter(0)]
             public string CommonStringArg { get; set; }
         }
 
@@ -30,7 +30,7 @@ namespace TestRCommandLine
             [Flag('X')]
             public double FooDouble { get; set; }
 
-            [Parameter(1)]
+            [OrderedParameter(1)]
             public int FooIntArg { get; set; }
         }
 
@@ -41,14 +41,14 @@ namespace TestRCommandLine
             [Flag('X')]
             public string BarString { get; set; }
 
-            [Parameter(1), Optional]
+            [OrderedParameter(1), Optional]
             public string BarStringArg { get; set; }
         }
 
         public class BarBazOptions
         {
 
-            [Parameter(0)]
+            [OrderedParameter(0)]
             public int BazIntegerArg { get; set; }
 
         }

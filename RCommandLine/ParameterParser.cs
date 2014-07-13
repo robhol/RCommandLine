@@ -11,7 +11,7 @@ namespace RCommandLine
     {
 
         List<FlagElement> _flags;
-        List<ParameterElement> _parameters;
+        List<OrderedParameterElement> _parameters;
 
         IEnumerable<ArgumentElement> AllArguments { get { return _flags.Union<ArgumentElement>(_parameters); } } 
 
@@ -37,7 +37,7 @@ namespace RCommandLine
 
             //Queues for "waiting" flags and parameters - ie. the next ones to receive a value.
             var flagQueue = new Queue<FlagElement>();
-            var parameterQueue = new Queue<ParameterElement>(_parameters.OrderBy(element => element.Order));
+            var parameterQueue = new Queue<OrderedParameterElement>(_parameters.OrderBy(element => element.Order));
             
             while (inputQueue.Count > 0)
             {
@@ -112,7 +112,7 @@ namespace RCommandLine
         /// <summary>
         /// Parses the selected string.
         /// </summary>
-        /// <param name="rawString">ParameterAttribute string. Defaults to Environment.CommandLine</param>
+        /// <param name="rawString">OrderedParameterAttribute string. Defaults to Environment.CommandLine</param>
         /// <returns></returns>
         public TTarget Parse(string rawString)
         {
@@ -177,7 +177,7 @@ namespace RCommandLine
         void ExploreType()
         {
             _flags = new List<FlagElement>();
-            _parameters = new List<ParameterElement>();
+            _parameters = new List<OrderedParameterElement>();
 
             foreach (var prop in _optionsType.GetProperties())
             {
@@ -192,7 +192,7 @@ namespace RCommandLine
                 if (flag != null)
                     _flags.Add(new FlagElement(flag, prop, optionalInfo));
                 else
-                    _parameters.Add(new ParameterElement((ParameterAttribute)attribute, prop, optionalInfo));
+                    _parameters.Add(new OrderedParameterElement((OrderedParameterAttribute)attribute, prop, optionalInfo));
             }
 
         }

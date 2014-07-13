@@ -21,10 +21,10 @@ namespace TestRCommandLine
             [Flag('i'), Optional(Default = 1024)]
             public int OptionalInteger { get; set; }
 
-            [Parameter(0)]
+            [OrderedParameter(0)]
             public string RequiredArgument { get; set; }
 
-            [Parameter(1), Optional(Default = "nothing")]
+            [OrderedParameter(1), Optional(Default = "nothing")]
             public string OptionalArgument { get; set; }
         }
 
