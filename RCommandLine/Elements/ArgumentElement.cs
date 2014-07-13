@@ -16,13 +16,13 @@ namespace RCommandLine
         public PropertyInfo TargetProperty { get; private set; }
         public Type TargetType { get; private set; }
 
-        protected ArgumentElement(PropertyInfo prop, string name, string description, OptionalAttribute optionalAttributeInfo)
+        protected ArgumentElement(ElementAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
         {
-            Name = name;
-            Description = description;
+            Name = attribute.Name;
+            Description = attribute.Description;
 
-            TargetProperty = prop;
-            TargetType = prop.PropertyType;
+            TargetProperty = property;
+            TargetType = property.PropertyType;
             
             Required = true;
 

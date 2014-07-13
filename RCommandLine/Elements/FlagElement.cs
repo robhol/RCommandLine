@@ -10,7 +10,7 @@ namespace RCommandLine
         public char ShortName { get; private set; }
 
         public FlagElement(FlagAttribute f, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
-            : base(property, f.Name, f.Description, optionalAttributeInfo)
+            : base(f, property, optionalAttributeInfo)
         {
             ShortName = f.GetShortName();
             if (f.Name == null)

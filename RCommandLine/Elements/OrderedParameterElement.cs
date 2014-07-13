@@ -3,17 +3,17 @@
 namespace RCommandLine
 {
     /// <summary>
-    /// Parameters occur in a fixed order after all the flags are dealt with.
+    /// Parameters occur in attr fixed order after all the flags are dealt with.
     /// </summary>
     class OrderedParameterElement : ArgumentElement
     {
         public int Order { get; private set; }
 
-        public OrderedParameterElement(OrderedParameterAttribute a, PropertyInfo property, OptionalAttribute optionalAttributeInfo) 
-            : base(property, a.Name, a.Description, optionalAttributeInfo)
+        public OrderedParameterElement(OrderedParameterAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo) 
+            : base(attribute, property, optionalAttributeInfo)
         {
             Name = Name ?? property.Name;
-            Order = a.GetOrder();
+            Order = attribute.GetOrder();
         }
 
         public override string ToString()

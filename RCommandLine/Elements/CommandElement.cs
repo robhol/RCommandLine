@@ -18,11 +18,11 @@ namespace RCommandLine
 
         public Type CommandOptionsType { get; private set; }
 
-        public CommandElement(HasCommandAttribute cmd, CommandElement parentCommand = null)
+        public CommandElement(HasCommandAttribute attribute, CommandElement parentCommand = null)
         {
-            CommandOptionsType = cmd.CommandOptionsType;
-            Name = cmd.Name ?? Regex.Replace(CommandOptionsType.Name.ToLower(), "options?$", "");
-            Hidden = cmd.Hidden;
+            CommandOptionsType = attribute.CommandOptionsType;
+            Name = attribute.Name ?? Regex.Replace(CommandOptionsType.Name.ToLower(), "(options)?$", "");
+            Hidden = attribute.Hidden;
 
             Parent = parentCommand;
             
