@@ -7,7 +7,7 @@ namespace RCommandLine
     /// <summary>
     /// Either a named argument or a flag (subtype)
     /// </summary>
-    abstract class ArgumentElement : Element
+    abstract class CommonParameterElement : Element
     {
         public bool Required { get; set; }
         public object DefaultValue { get; set; }
@@ -16,7 +16,7 @@ namespace RCommandLine
         public PropertyInfo TargetProperty { get; private set; }
         public Type TargetType { get; private set; }
 
-        protected ArgumentElement(ElementAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
+        protected CommonParameterElement(ElementAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
         {
             Name = attribute.Name;
             Description = attribute.Description;

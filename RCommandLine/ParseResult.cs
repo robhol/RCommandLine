@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RCommandLine
 {
     public class ParseResult
     {
 
-        static readonly ParseResult none = new ParseResult(null, null, null, null);
+        static readonly ParseResult none = new ParseResult(null, null, null, null, null);
         public static ParseResult None { get { return none; } }
 
         /// <summary>
@@ -18,13 +19,16 @@ namespace RCommandLine
         /// </summary>
         public string Command { get; private set; }
 
+        public IList<string> ExtraArguments { get; private set; } 
+
         private readonly ICommandParser _commandParser;
         private readonly IParameterParser _parameterParser;
 
-        public ParseResult(object finalOptions, string cmd, ICommandParser commandParser, IParameterParser parameterParser)
+        internal ParseResult(object finalOptions, string cmd, IList<string> extraArgs, ICommandParser commandParser, IParameterParser parameterParser)
         {
             Options = finalOptions;
             Command = cmd;
+            ExtraArguments = extraArgs;
 
             _commandParser = commandParser;
             _parameterParser = parameterParser;

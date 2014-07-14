@@ -66,11 +66,13 @@ namespace RCommandLine
 
             try
             {
-                var options = ((IParameterParser<object>) _parameterParser).ParseIEnumerable(joinStringSegments
+                var pparser = (IParameterParser<object>) _parameterParser;
+                IEnumerable<string> extra;
+                var options = pparser.ParseIEnumerable(joinStringSegments
                     ? Util.JoinQuotedStringSegments(remainingArgsList)
-                    : remainingArgsList);
+                    : remainingArgsList, out extra);
 
-                return new ParseResult(options, _commandName, _commandParser, _parameterParser);
+                return new ParseResult(options, _commandName, extra.ToList(), _commandParser, _parameterParser);
             }
             catch (UnrecognizedFlagException e)
             {
@@ -78,6 +80,7 @@ namespace RCommandLine
                     throw;
 
                 ErrorAndUsage(string.Format("The flag {0} was not recognized.", e.Flag), _commandName, _parameterParser);
+                return ParseResult.None;
             }
             catch (MissingArgumentException e)
             {
@@ -85,14 +88,14 @@ namespace RCommandLine
                     throw;
 
                 ErrorAndUsage(string.Format(e.Message + " " + string.Join(", ", e.Parameters)), _commandName, _parameterParser);
+                return ParseResult.None;
             }
             catch (MissingValueException e)
             {
-                Console.WriteLine("Missing values for " + string.Join(", ", e.Parameters));
+                ErrorAndUsage("Missing values for " + string.Join(", ", e.Parameters), _commandName, _parameterParser);
                 return ParseResult.None;
             }
 
-            return new ParseResult(null, _commandName, _commandParser, _parameterParser);
         }
 
         void PrintCommandList()

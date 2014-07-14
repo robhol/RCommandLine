@@ -5,7 +5,7 @@ namespace RCommandLine
     /// <summary>
     /// Parameters occur in attr fixed order after all the flags are dealt with.
     /// </summary>
-    class OrderedParameterElement : ArgumentElement
+    class OrderedParameterElement : CommonParameterElement
     {
         public int Order { get; private set; }
 

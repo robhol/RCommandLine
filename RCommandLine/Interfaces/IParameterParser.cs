@@ -12,9 +12,8 @@ namespace RCommandLine
 
     public interface IParameterParser<out TTarget> : IParameterParser
     {
-        TTarget ParseIEnumerable(IEnumerable<string> strEnumerable);
+        TTarget ParseIEnumerable(IEnumerable<string> strEnumerable, out IEnumerable<string> extra);
 
-        TTarget Parse(string str);
-
+        TTarget Parse(string str, out IEnumerable<string> extra);
     }
 }

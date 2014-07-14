@@ -46,7 +46,7 @@
     <Compile Include="Elements\OrderedParameterElement.cs" />
     <Compile Include="Elements\CommandElement.cs" />
     <Compile Include="Elements\Element.cs" />
-    <Compile Include="Elements\ArgumentElement.cs" />
+    <Compile Include="Elements\CommonParameterElement.cs" />
     <Compile Include="CommandParser.cs" />
     <Compile Include="Attributes\OrderedParameterAttribute.cs" />
     <Compile Include="Attributes\ElementAttribute.cs" />
@@ -54,8 +54,8 @@
     <Compile Include="Elements\FlagElement.cs" />
     <Compile Include="Exceptions\MissingValueException.cs" />
     <Compile Include="Exceptions\UnrecognizedFlagException.cs" />
-    <Compile Include="ICommandParser.cs" />
-    <Compile Include="IParameterParser.cs" />
+    <Compile Include="Interfaces\ICommandParser.cs" />
+    <Compile Include="Interfaces\IParameterParser.cs" />
     <Compile Include="ParameterParser.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

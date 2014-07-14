@@ -13,7 +13,7 @@ namespace RCommandLine
         List<FlagElement> _flags;
         List<OrderedParameterElement> _parameters;
 
-        IEnumerable<ArgumentElement> AllArguments { get { return _flags.Union<ArgumentElement>(_parameters); } } 
+        IEnumerable<CommonParameterElement> AllParameters { get { return _flags.Union<CommonParameterElement>(_parameters); } } 
 
         readonly Type _optionsType;
 
@@ -26,18 +26,19 @@ namespace RCommandLine
         /// <summary>
         /// Parses any string IEnumerable, but will not join strings.
         /// </summary>
-        /// <param name="inputArgs"></param>
-        /// <returns></returns>
-        public TTarget ParseIEnumerable(IEnumerable<string> inputArgs)
+        /// <returns>Options object</returns>
+        public TTarget ParseIEnumerable(IEnumerable<string> inputArgs, out IEnumerable<string> remaining)
         {
             var inputQueue = new Queue<string>(inputArgs);
             var targetObject = new TTarget();
-            foreach (var e in AllArguments)
+            foreach (var e in AllParameters)
                 e.Hydrate(targetObject);
 
             //Queues for "waiting" flags and parameters - ie. the next ones to receive a value.
             var flagQueue = new Queue<FlagElement>();
             var parameterQueue = new Queue<OrderedParameterElement>(_parameters.OrderBy(element => element.Order));
+
+            var extraArguments = new List<string>();
             
             while (inputQueue.Count > 0)
             {
@@ -94,11 +95,13 @@ namespace RCommandLine
                     {
                         if (parameterQueue.Count > 0)
                             parameterQueue.Dequeue().ConvertAndSetValue(targetObject, arg);
+                        else
+                            extraArguments.Add(arg);
                     }
                 }
             }
 
-            var missing = AllArguments.Where(a => a.Required && !a.HasValue).ToList();
+            var missing = AllParameters.Where(a => a.Required && !a.HasValue).ToList();
 
             if (missing.Any())
                 throw new MissingArgumentException("Missing required arguments.", missing);
@@ -106,17 +109,23 @@ namespace RCommandLine
             if (flagQueue.Count > 0)
                 throw new MissingValueException("Syntax error. Missing value for flag(s).", flagQueue);
 
+            remaining = extraArguments;
             return targetObject;
         }
 
         /// <summary>
         /// Parses the selected string.
         /// </summary>
-        /// <param name="rawString">OrderedParameterAttribute string. Defaults to Environment.CommandLine</param>
         /// <returns></returns>
+        public TTarget Parse(string rawString, out IEnumerable<string> extra)
+        {
+            return ParseIEnumerable(Util.JoinQuotedStringSegments(rawString.Split(' ')), out extra);
+        }
+
         public TTarget Parse(string rawString)
         {
-            return ParseIEnumerable(Util.JoinQuotedStringSegments(rawString.Split(' ')));
+            IEnumerable<string> _;
+            return Parse(rawString, out _);
         }
 
         /// <summary>
@@ -128,7 +137,7 @@ namespace RCommandLine
         {
             return shownCommand + " " +
                 string.Join(" ", 
-                AllArguments
+                AllParameters
                     .OrderBy(f => f.GetType().Name)
                     .ThenByDescending(f => f.Required)
                     .Select(f => f.GetHelpTextRepresentation() ));

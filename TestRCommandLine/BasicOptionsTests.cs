@@ -28,17 +28,18 @@ namespace TestRCommandLine
 
         }
 
-        readonly ParameterParser<BasicOptions> _parameterParser;
+        private readonly Parser<BasicOptions> _parser;
 
         public BasicOptionsTests()
         {
-            _parameterParser = new ParameterParser<BasicOptions>();
+            _parser = new Parser<BasicOptions>();
         }
 
         [TestMethod]
         public void BasicFlagTest()
         {
-            var opts = _parameterParser.Parse("--str -bi grell 8 arg 9001"); //=>  --str grell -b -i 8  , args are "arg" and 9001
+            var opts = _parser.Parse("--str -bi grell 8 arg 9001").Options as BasicOptions; //=>  --str grell -b -i 8  , args are "arg" and 9001
+            Assert.IsNotNull(opts);
 
             Assert.AreEqual(opts.BooleanFlag, true);
             Assert.AreEqual(opts.IntegerFlag, 8);
@@ -48,7 +49,8 @@ namespace TestRCommandLine
         [TestMethod]
         public void BasicArgumentTest()
         {
-            var opts = _parameterParser.Parse("argOne -s flagValue 42 -bi 44");
+            var opts = _parser.Parse("argOne -s flagValue 42 -bi 44").Options as BasicOptions;
+            Assert.IsNotNull(opts);
 
             Assert.AreEqual("argOne", opts.StringArgument);
             Assert.AreEqual(42, opts.IntegerArgument);
@@ -58,14 +60,28 @@ namespace TestRCommandLine
         public void ParserReusabilityTest()
         {
             const string args = "-is 1 a b 2";
-            Assert.AreNotSame(_parameterParser.Parse(args), _parameterParser.Parse(args));
+            Assert.AreNotSame(_parser.Parse(args).Options, _parser.Parse(args).Options);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidCastException))]
         public void FlagTypeTest()
         {
-            _parameterParser.Parse("--str required --integer-flag definitelyNotAnInteger");
+            _parser.Parse("--str required --integer-flag definitelyNotAnInteger");
+        }
+
+        [TestMethod]
+        public void ExtraArgumentsTest()
+        {
+            var pr = _parser.Parse("argOne -s flagValue 42 -bi 44 extra1 extra2");
+            var opts = pr.Options as BasicOptions;
+            Assert.IsNotNull(opts);
+
+            Assert.AreEqual("argOne", opts.StringArgument);
+            Assert.AreEqual(42, opts.IntegerArgument);
+
+            Assert.AreEqual(2, pr.ExtraArguments.Count);
+            Assert.AreEqual("extra1, extra2", string.Join(", ", pr.ExtraArguments));
         }
 
     }

@@ -5,7 +5,7 @@ namespace RCommandLine
     /// <summary>
     /// A flag can occur anywhere identified by a mandatory char or an optional long name.
     /// </summary>
-    class FlagElement : ArgumentElement
+    class FlagElement : CommonParameterElement
     {
         public char ShortName { get; private set; }
 
