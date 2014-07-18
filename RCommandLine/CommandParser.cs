@@ -28,7 +28,7 @@ namespace RCommandLine
         
         private void ExploreCommandTree(MemberInfo t, CommandElement parent = null)
         {
-            foreach (var cmd in t.GetCustomAttributes<HasCommandAttribute>().Select(attr => new CommandElement(attr, parent)))
+            foreach (var cmd in t.GetCustomAttributes<HasCommandAttribute>(false).Select(attr => new CommandElement(attr, parent)))
             {
                 if (parent == null)
                     _commands.Add(cmd);
