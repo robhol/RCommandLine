@@ -42,7 +42,7 @@
     <Compile Include="Attributes\HasCommandAttribute.cs" />
     <Compile Include="Attributes\OptionalAttribute.cs" />
     <Compile Include="Exceptions\MissingArgumentException.cs" />
-    <Compile Include="ParseResult.cs" />
+    <Compile Include="ParserInfo\ParseResult.cs" />
     <Compile Include="Elements\OrderedParameterElement.cs" />
     <Compile Include="Elements\CommandElement.cs" />
     <Compile Include="Elements\Element.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="Interfaces\IParameterParser.cs" />
     <Compile Include="ParameterParser.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="ParserInfo\ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

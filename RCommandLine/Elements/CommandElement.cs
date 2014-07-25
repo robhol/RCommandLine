@@ -21,7 +21,7 @@ namespace RCommandLine
         public CommandElement(HasCommandAttribute attribute, CommandElement parentCommand = null)
         {
             CommandOptionsType = attribute.CommandOptionsType;
-            Name = attribute.Name ?? Regex.Replace(CommandOptionsType.Name.ToLower(), "(options)?$", "");
+            Name = attribute.Name ?? Regex.Replace(CommandOptionsType.Name.ToLower(), "(options|command)?$", "");
             Hidden = attribute.Hidden;
 
             Parent = parentCommand;

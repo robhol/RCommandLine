@@ -6,8 +6,8 @@ namespace RCommandLine
     public class ParseResult
     {
 
-        static readonly ParseResult none = new ParseResult(null, null, null, null, null);
-        public static ParseResult None { get { return none; } }
+        static readonly ParseResult NoResult = new ParseResult(null, null, null, null, null);
+        public static ParseResult None { get { return NoResult; } }
 
         /// <summary>
         /// The ultimate options object
@@ -19,7 +19,7 @@ namespace RCommandLine
         /// </summary>
         public string Command { get; private set; }
 
-        public IList<string> ExtraArguments { get; private set; } 
+        public IList<string> ExtraArguments { get; private set; }
 
         private readonly ICommandParser _commandParser;
         private readonly IParameterParser _parameterParser;

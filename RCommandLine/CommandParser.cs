@@ -67,7 +67,9 @@ namespace RCommandLine
             if (currentCommand != null)
                 optType = currentCommand.CommandOptionsType;
 
+            //will throw ArgumentException if the optType has no default constructor
             parserType = typeof(ParameterParser<>).MakeGenericType(optType);
+
             remainingArgs = argQueue;
             commandName = string.Join(" ", currentCommandPath.Select(c => c.Name));
 

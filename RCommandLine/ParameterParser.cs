@@ -140,6 +140,7 @@ namespace RCommandLine
                 AllParameters
                     .OrderBy(f => f.GetType().Name)
                     .ThenByDescending(f => f.Required)
+                    .ThenBy(f => (f is OrderedParameterElement) ? ((OrderedParameterElement)f).Order : 0)
                     .Select(f => f.GetHelpTextRepresentation() ));
         }
 

@@ -6,30 +6,17 @@ namespace RCommandLine
     public class Parser<TTarget>
     {
 
-        /// <summary>
-        /// Whether or not to show a list of acceptable commands when input is empty.
-        /// </summary>
-        public bool AutomaticCommandList { get; set; }
-
-        /// <summary>
-        /// Whether or not to display a command's usage when given arguments are insufficient or incorrect
-        /// </summary>
-        public bool AutomaticUsage { get; set; }
-
-        /// <summary>
-        /// Whether or not to intercept -? and --help.
-        /// </summary>
-        public bool AutomaticHelp { get; set; }
-
-        /// <summary>
-        /// In help screens etc., show this command (usually the executable name) in front of all commands.
-        /// </summary>
-        public string BaseCommandName { get; set; }
+        public ParserOptions Options { get; set; }
 
         private ICommandParser _commandParser;
         private IParameterParser _parameterParser;
 
         private string _commandName;
+
+        public Parser(ParserOptions options = null, string baseCommandName = null)
+        {
+            Options = options ?? new ParserOptions(baseCommandName);
+        }
 
         /// <summary>
         /// Parses the input arguments.
@@ -39,22 +26,30 @@ namespace RCommandLine
         /// <returns></returns>
         public ParseResult Parse(IEnumerable<string> args, bool joinStringSegments = true)
         {
-            _commandParser = new CommandParser<TTarget> { BaseCommandName = BaseCommandName };
+            _commandParser = new CommandParser<TTarget> { BaseCommandName = Options.BaseCommandName };
 
             var argList = args.ToList();
-            if (AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()))
+            if (Options.AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()))
             {
                 PrintCommandList();
                 return ParseResult.None;
             }
 
-            Type parserType;
             IEnumerable<string> remainingArgs;
 
-            _parameterParser = _commandParser.GetParser(argList, out parserType, out remainingArgs, out _commandName);
+            try
+            {
+                Type parserType;
+                _parameterParser = _commandParser.GetParser(argList, out parserType, out remainingArgs, out _commandName);
+            }
+            catch (ArgumentException) //option type has no default constructor
+            {
+                PrintCommandList();
+                return ParseResult.None;
+            }
             
             var remainingArgsList = remainingArgs.ToList();
-            if (AutomaticHelp && remainingArgsList.Count == 1 && new[] {"-?", "--help"}.Contains(remainingArgsList.First().ToLower()))
+            if (Options.AutomaticHelp && remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
             {
                 if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
                     PrintCommandList();
@@ -76,7 +71,7 @@ namespace RCommandLine
             }
             catch (UnrecognizedFlagException e)
             {
-                if (!AutomaticUsage)
+                if (!Options.AutomaticUsage)
                     throw;
 
                 ErrorAndUsage(string.Format("The flag {0} was not recognized.", e.Flag), _commandName, _parameterParser);
@@ -84,7 +79,7 @@ namespace RCommandLine
             }
             catch (MissingArgumentException e)
             {
-                if (!AutomaticUsage)
+                if (!Options.AutomaticUsage)
                     throw;
 
                 ErrorAndUsage(string.Format(e.Message + " " + string.Join(", ", e.Parameters)), _commandName, _parameterParser);
@@ -98,6 +93,7 @@ namespace RCommandLine
 
         }
 
+
         void PrintCommandList()
         {
             Console.WriteLine("Available commands: " + Environment.NewLine + _commandParser.GetCommandList());
@@ -107,7 +103,7 @@ namespace RCommandLine
         {
 
             Console.WriteLine(
-                        _parameterParser.GetUsage((BaseCommandName == null ? "" : BaseCommandName + " ") + _commandName) + Environment.NewLine + Environment.NewLine +
+                        _parameterParser.GetUsage((Options.BaseCommandName == null ? "" : Options.BaseCommandName + " ") + _commandName) + Environment.NewLine + Environment.NewLine +
                         _parameterParser.GetArgumentList()
                         );
 

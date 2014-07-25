@@ -10,13 +10,11 @@ namespace ExampleApplication
             
             //Step 1: define Options classes (see ExampleOptions.cs)
             //Step 2: instantiate Parser with desired Options type and settings
-            var parser = new Parser<ExampleOptions>
-            {
-                BaseCommandName = System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location),
-                AutomaticCommandList = true,
-                AutomaticUsage = true,
-                AutomaticHelp = true
-            };
+            var parser = new Parser<ExampleOptions>(
+                baseCommandName:
+                    System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location)
+                );
+                
 
             //Step 3: Parse() and output consumption!
             var result = parser.Parse();
