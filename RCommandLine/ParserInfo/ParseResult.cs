@@ -34,17 +34,27 @@ namespace RCommandLine
             _parameterParser = parameterParser;
         }
 
+        public string GetCommandList()
+        {
+           return string.Format("Available commands:\n{0}", _commandParser.GetCommandList());
+        }
+
         public void ShowCommandList()
         {
-            Console.WriteLine("Available commands: " + Environment.NewLine + _commandParser.GetCommandList());
+            Console.WriteLine(GetCommandList());
+        }
+
+        public string GetHelpText()
+        {
+            return string.Format("{0}\n\n{1}",
+                        _parameterParser.GetUsage(string.IsNullOrEmpty(Command) ? "" : Command),
+                        _parameterParser.GetArgumentList()
+                        );
         }
 
         public void ShowHelpText()
         {
-            Console.WriteLine(
-                        _parameterParser.GetUsage(string.IsNullOrEmpty(Command) ? "" : Command) + Environment.NewLine + Environment.NewLine +
-                        _parameterParser.GetArgumentList()
-                        );
+            Console.WriteLine(GetHelpText());
         }
 
     }

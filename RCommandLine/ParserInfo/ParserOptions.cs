@@ -38,6 +38,5 @@ namespace RCommandLine
         /// </summary>
         public string BaseCommandName { get; set; }
 
-
     }
 }

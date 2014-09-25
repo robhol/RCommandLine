@@ -37,7 +37,7 @@ namespace ExampleApplication
                     default:
                     {
                         //by design, AutomaticCommandList doesn't catch "invalid" commands, just empty ones.
-                        result.ShowCommandList();
+                        result.GetCommandList();
                         break;
                     }
                 }

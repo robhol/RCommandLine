@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RCommandLine.Output;
+
 namespace RCommandLine
 {
     public class Parser<TTarget>
@@ -13,9 +15,12 @@ namespace RCommandLine
 
         private string _commandName;
 
+        public IOutput Output { get; set; }
+
         public Parser(ParserOptions options = null, string baseCommandName = null)
         {
             Options = options ?? new ParserOptions(baseCommandName);
+            Output = ConsoleOutputChannel.Instance;
         }
 
         /// <summary>
@@ -29,7 +34,7 @@ namespace RCommandLine
             _commandParser = new CommandParser<TTarget> { BaseCommandName = Options.BaseCommandName };
 
             var argList = args.ToList();
-            if (Options.AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()))
+            if (Options.AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()) && !_commandParser.IsTerminal )
             {
                 PrintCommandList();
                 return ParseResult.None;
@@ -49,12 +54,16 @@ namespace RCommandLine
             }
             
             var remainingArgsList = remainingArgs.ToList();
-            if (Options.AutomaticHelp && remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
+            if (Options.AutomaticHelp && 
+                (remainingArgsList.Count == 0) ||
+                (remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
+                )
             {
                 if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
-                    PrintCommandList();
-                else
-                    PrintHelpScreen();
+                    if (!_commandParser.IsTerminal)
+                        PrintCommandList();
+                    else
+                        PrintHelpScreen();
 
                 return ParseResult.None;
             }
@@ -96,17 +105,16 @@ namespace RCommandLine
 
         void PrintCommandList()
         {
-            Console.WriteLine("Available commands: " + Environment.NewLine + _commandParser.GetCommandList());
+            Output.WriteLine(string.Format("Available commands:\n{0}", _commandParser.GetCommandList()));
         }
 
         void PrintHelpScreen()
         {
-
-            Console.WriteLine(
-                        _parameterParser.GetUsage((Options.BaseCommandName == null ? "" : Options.BaseCommandName + " ") + _commandName) + Environment.NewLine + Environment.NewLine +
-                        _parameterParser.GetArgumentList()
-                        );
-
+            Output.WriteLine(string.Format("{0}{1}\n\n{2}",
+                (Options.BaseCommandName == null ? "" : Options.BaseCommandName + " "),
+                _commandName,
+                _parameterParser.GetArgumentList()
+                ));
         }
 
         static void ErrorAndUsage(string err, string cmd, IParameterParser p)

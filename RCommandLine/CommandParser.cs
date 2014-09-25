@@ -15,6 +15,8 @@ namespace RCommandLine
         /// </summary>
         public string BaseCommandName { get; set; }
 
+        public bool IsTerminal { get { return _commands.Count == 0; } }
+
         private readonly List<CommandElement> _commands;
         private readonly Type _topType;
 
@@ -42,7 +44,7 @@ namespace RCommandLine
             var optType = _topType;
 
             CommandElement currentCommand = null;
-            var currentCommandPath = new List<CommandElement>();
+            var commandPathList = new List<CommandElement>();
 
             var argQueue = new Queue<string>(inputArgs);
             
@@ -59,7 +61,7 @@ namespace RCommandLine
                     break;
 
                 currentCommand = next;
-                currentCommandPath.Add(currentCommand);
+                commandPathList.Add(currentCommand);
 
                 argQueue.Dequeue();
             }
@@ -71,7 +73,7 @@ namespace RCommandLine
             parserType = typeof(ParameterParser<>).MakeGenericType(optType);
 
             remainingArgs = argQueue;
-            commandName = string.Join(" ", currentCommandPath.Select(c => c.Name));
+            commandName = string.Join(" ", commandPathList.Select(c => c.Name));
 
             return (IParameterParser<object>)Activator.CreateInstance(parserType, commandName);
         }

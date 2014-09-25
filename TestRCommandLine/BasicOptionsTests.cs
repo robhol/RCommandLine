@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RCommandLine;
 
@@ -81,7 +82,7 @@ namespace TestRCommandLine
             Assert.AreEqual(42, opts.IntegerArgument);
 
             Assert.AreEqual(2, pr.ExtraArguments.Count);
-            Assert.AreEqual("extra1, extra2", string.Join(", ", pr.ExtraArguments));
+            Assert.IsTrue(pr.ExtraArguments.SequenceEqual(new[] {"extra1", "extra2"}));
         }
 
     }
