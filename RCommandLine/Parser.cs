@@ -55,7 +55,7 @@ namespace RCommandLine
             
             var remainingArgsList = remainingArgs.ToList();
             if (Options.AutomaticHelp && 
-                (remainingArgsList.Count == 0) ||
+                (remainingArgsList.Count == 0 && _parameterParser.GetRequiredParameterCount() > 0) ||
                 (remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
                 )
             {

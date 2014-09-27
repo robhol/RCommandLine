@@ -8,6 +8,8 @@ namespace RCommandLine
         string GetUsage(string command);
 
         string GetArgumentList();
+
+        int GetRequiredParameterCount();
     }
 
     public interface IParameterParser<out TTarget> : IParameterParser

@@ -184,6 +184,11 @@ namespace RCommandLine
             return sb.ToString();
         }
 
+        public int GetRequiredParameterCount()
+        {
+            return _flags.Cast<CommonParameterElement>().Union(_parameters).Count(p => p.Required);
+        }
+
         void ExploreType()
         {
             _flags = new List<FlagElement>();
