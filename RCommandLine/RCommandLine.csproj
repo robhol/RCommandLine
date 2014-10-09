@@ -61,7 +61,7 @@
     <Compile Include="ParserInfo\ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Output\ConsoleOutputChannel.cs" />
-    <Compile Include="Output\IOutput.cs" />
+    <Compile Include="Output\IOutputTarget.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup />

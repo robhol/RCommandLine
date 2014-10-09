@@ -6,7 +6,7 @@ namespace RCommandLine
     public class ParseResult
     {
 
-        static readonly ParseResult NoResult = new ParseResult(null, null, null, null, null);
+        static readonly ParseResult NoResult = new ParseResult(null, null, null, null, null, false);
         public static ParseResult None { get { return NoResult; } }
 
         /// <summary>
@@ -21,18 +21,23 @@ namespace RCommandLine
 
         public IList<string> ExtraArguments { get; private set; }
 
+        public bool Success { get; private set; }
+
         private readonly ICommandParser _commandParser;
         private readonly IParameterParser _parameterParser;
 
-        internal ParseResult(object finalOptions, string cmd, IList<string> extraArgs, ICommandParser commandParser, IParameterParser parameterParser)
+        internal ParseResult(object finalOptions, string cmd, IList<string> extraArgs, ICommandParser commandParser, IParameterParser parameterParser, bool success)
         {
             Options = finalOptions;
             Command = cmd;
             ExtraArguments = extraArgs;
+            Success = success;
 
             _commandParser = commandParser;
             _parameterParser = parameterParser;
         }
+
+
 
         public string GetCommandList()
         {

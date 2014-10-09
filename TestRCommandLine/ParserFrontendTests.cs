@@ -24,27 +24,38 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void Bugfix_CommandListOnEmptyInput()
+        public void Parser_OnValidCommand_AndEmptyArgs_AndNotTerminal_ShouldPrintCommandList()
         {
-            var parser = new Parser<SimpleOptions> { Output = new InMemoryOutputChannel() };
-            var parser2 = new Parser<CommandTests.MyOptions> { Output = new InMemoryOutputChannel() };
+            var parser = new Parser<SimpleOptions> { OutputTarget = new InMemoryOutputChannel() };
+            var parser2 = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
             parser.Parse("");
             parser2.Parse("");
 
-            var op = parser.Output.ToString();
+            var op = parser.OutputTarget.ToString();
             Assert.IsFalse(op.Contains("Available commands"));
             Assert.IsTrue(op.Contains("--yes"));
             Assert.IsTrue(op.Contains("Maybe"));
 
-            Assert.IsTrue(parser2.Output.ToString().Contains("Available commands"));
+            Assert.IsTrue(parser2.OutputTarget.ToString().Contains("Available commands"));
+        }
+
+        [TestMethod]
+        public void Parser_OnValidCommand_ShouldReturnArgumentList()
+        {
+            var parser = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
+            parser.Parse("bar-name baz");
+
+            var op = parser.OutputTarget.ToString();
+            Assert.IsFalse(op.Contains("Available commands"));
+            Assert.IsTrue(op.Contains("BazIntegerArg"));
         }
 
     }
 
-    internal class InMemoryOutputChannel : RCommandLine.Output.IOutput
+    internal class InMemoryOutputChannel : RCommandLine.Output.IOutputTarget
     {
         private readonly StringBuilder _log = new StringBuilder();
-        
+
         public void Write(string s)
         {
             _log.Append(s);

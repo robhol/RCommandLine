@@ -15,12 +15,12 @@ namespace RCommandLine
 
         private string _commandName;
 
-        public IOutput Output { get; set; }
+        public IOutputTarget OutputTarget { get; set; }
 
         public Parser(ParserOptions options = null, string baseCommandName = null)
         {
             Options = options ?? new ParserOptions(baseCommandName);
-            Output = ConsoleOutputChannel.Instance;
+            OutputTarget = ConsoleOutputChannel.Instance;
         }
 
         /// <summary>
@@ -54,10 +54,8 @@ namespace RCommandLine
             }
             
             var remainingArgsList = remainingArgs.ToList();
-            if (Options.AutomaticHelp && 
-                (remainingArgsList.Count == 0 && _parameterParser.GetRequiredParameterCount() > 0) ||
-                (remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
-                )
+
+            if (Options.AutomaticHelp && remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
             {
                 if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
                     if (!_commandParser.IsTerminal)
@@ -76,7 +74,7 @@ namespace RCommandLine
                     ? Util.JoinQuotedStringSegments(remainingArgsList)
                     : remainingArgsList, out extra);
 
-                return new ParseResult(options, _commandName, extra.ToList(), _commandParser, _parameterParser);
+                return new ParseResult(options, _commandName, extra.ToList(), _commandParser, _parameterParser, true);
             }
             catch (UnrecognizedFlagException e)
             {
@@ -105,22 +103,22 @@ namespace RCommandLine
 
         void PrintCommandList()
         {
-            Output.WriteLine(string.Format("Available commands:\n{0}", _commandParser.GetCommandList()));
+            OutputTarget.WriteLine(string.Format("Available commands:\n{0}", _commandParser.GetCommandList()));
         }
 
         void PrintHelpScreen()
         {
-            Output.WriteLine(string.Format("{0}{1}\n\n{2}",
+            OutputTarget.WriteLine(string.Format("{0}{1}\n\n{2}",
                 (Options.BaseCommandName == null ? "" : Options.BaseCommandName + " "),
                 _commandName,
                 _parameterParser.GetArgumentList()
                 ));
         }
 
-        static void ErrorAndUsage(string err, string cmd, IParameterParser p)
+        void ErrorAndUsage(string err, string cmd, IParameterParser p)
         {
-            Console.WriteLine(err + Environment.NewLine + "Usage for command " + cmd);
-            Console.WriteLine(p.GetUsage(cmd));
+            OutputTarget.WriteLine(err + Environment.NewLine + "Usage for command " + cmd);
+            OutputTarget.WriteLine(p.GetUsage(cmd));
         }
 
         public ParseResult Parse(string args = null)

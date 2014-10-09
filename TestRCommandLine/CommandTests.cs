@@ -125,6 +125,5 @@ namespace TestRCommandLine
 
             Assert.IsFalse(output.Contains("(HIDDEN)"));
         }
-
     }
 }

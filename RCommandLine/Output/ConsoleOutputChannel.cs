@@ -2,7 +2,7 @@
 
 namespace RCommandLine.Output
 {
-    internal class ConsoleOutputChannel : IOutput
+    internal class ConsoleOutputChannel : IOutputTarget
     {
         private static readonly ConsoleOutputChannel CocInstance = new ConsoleOutputChannel();
         public static ConsoleOutputChannel Instance { get { return CocInstance; } }

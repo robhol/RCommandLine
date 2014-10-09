@@ -17,9 +17,10 @@ namespace RCommandLine
 
         readonly Type _optionsType;
 
-        public ParameterParser(string commandName = "")
+        public ParameterParser(string commandName = "", bool isTerminal = true)
         {
             _optionsType = typeof(TTarget);
+            IsTerminal = isTerminal;
             ExploreType();
         }
 
@@ -188,6 +189,11 @@ namespace RCommandLine
         {
             return _flags.Cast<CommonParameterElement>().Union(_parameters).Count(p => p.Required);
         }
+
+        /// <summary>
+        /// Whether the options object belonging to this ParameterParser has any subcommands
+        /// </summary>
+        public bool IsTerminal { get; private set; }
 
         void ExploreType()
         {

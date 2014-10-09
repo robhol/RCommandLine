@@ -71,11 +71,12 @@ namespace RCommandLine
 
             //will throw ArgumentException if the optType has no default constructor
             parserType = typeof(ParameterParser<>).MakeGenericType(optType);
+            var isTerminal = !optType.GetCustomAttributes<HasCommandAttribute>().Any();
 
             remainingArgs = argQueue;
             commandName = string.Join(" ", commandPathList.Select(c => c.Name));
 
-            return (IParameterParser<object>)Activator.CreateInstance(parserType, commandName);
+            return (IParameterParser<object>) Activator.CreateInstance(parserType, commandName, isTerminal);
         }
 
         public string GetCommandList()

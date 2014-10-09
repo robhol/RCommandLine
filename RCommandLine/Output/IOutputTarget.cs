@@ -1,6 +1,6 @@
 ﻿namespace RCommandLine.Output
 {
-    public interface IOutput
+    public interface IOutputTarget
     {
         void Write(string s);
 

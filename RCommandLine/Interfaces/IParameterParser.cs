@@ -10,6 +10,11 @@ namespace RCommandLine
         string GetArgumentList();
 
         int GetRequiredParameterCount();
+
+        /// <summary>
+        /// Whether or not this command has any children.
+        /// </summary>
+        bool IsTerminal { get; }
     }
 
     public interface IParameterParser<out TTarget> : IParameterParser
