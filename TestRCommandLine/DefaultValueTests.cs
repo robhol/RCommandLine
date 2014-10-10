@@ -35,7 +35,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void DefaultValueTest()
+        public void Should_MapGivenDefaultValues()
         {
             var optsDefault = _parameterParser.Parse("reqArg -s reqString");
             var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");

@@ -24,7 +24,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void Parser_OnValidCommand_AndEmptyArgs_AndNotTerminal_ShouldPrintCommandList()
+        public void Should_PrintCommandList_On_ValidCommand_And_EmptyArgs_AndNonTerminalCommand()
         {
             var parser = new Parser<SimpleOptions> { OutputTarget = new InMemoryOutputChannel() };
             var parser2 = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
@@ -40,7 +40,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void Parser_OnValidCommand_ShouldReturnArgumentList()
+        public void Should_PrintArgumentList_On_ValidCommand_And_MissingArguments()
         {
             var parser = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
             parser.Parse("bar-name baz");

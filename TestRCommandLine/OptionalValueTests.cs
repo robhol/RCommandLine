@@ -37,28 +37,28 @@ namespace TestRCommandLine
 
         [TestMethod]
         [ExpectedException(typeof(MissingArgumentException))]
-        public void RequiredArgTest()
+        public void Should_Throw_On_MissingRequiredArgument()
         {
             _parameterParser.Parse("-s flag");
         }
 
         [TestMethod]
         [ExpectedException(typeof(MissingArgumentException))]
-        public void RequiredFlagTest()
+        public void Should_Throw_On_MissingRequiredFlag()
         {
             _parameterParser.Parse("arg");
         }
 
         [TestMethod]
         [ExpectedException(typeof(MissingValueException))]
-        public void DanglingFlagTest()
+        public void Should_Throw_On_MissingFlagValue()
         {
             _parameterParser.Parse("arg --required-string reqstr --optional-string");
             Assert.Fail("Expected MissingValueException. MissingMissingValuesExceptionException?");
         }
 
         [TestMethod]
-        public void OptionalValueTest()
+        public void Should_MapTypeDefaultValues()
         {
             var optsNull = _parameterParser.Parse("reqArg -s reqString");
             var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");

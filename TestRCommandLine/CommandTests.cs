@@ -68,7 +68,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void CommandBaseTest()
+        public void Should_MapArguments_Without_Command()
         {
             var opt = _parser.Parse("commonString").Options as MyOptions;
 
@@ -77,7 +77,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void FlatCommandTest()
+        public void Should_MapArguments_On_SimpleCommand()
         {
             var fooResult = _parser.Parse("foo commonString 32 -X 55.4321");
             var foo = fooResult.Options as FooOptions;
@@ -99,7 +99,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void NestedCommandTest()
+        public void Should_MapArguments_On_NestedCommands()
         {
             var bar = _parser.Parse("bar-name commonString barString -X 55.4321").Options as BarOptions;
             var bazResult = _parser.Parse("bar-name baz 999");
@@ -116,7 +116,7 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        public void CommandListTest()
+        public void Should_OutputCorrectCommandList_On_EmptyInput()
         {
             var output = _parser.Parse().GetCommandList();
             Assert.IsTrue(output.Contains("foo"));

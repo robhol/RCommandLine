@@ -9,9 +9,8 @@ namespace TestRCommandLine
     {
 
         [TestMethod]
-        public void BumpyCaseToHyphenateTest()
+        public void Should_ProduceExpectedValues_Converting_BumpyCaseToHyphenates()
         {
-
             //trivial case (hue)
             Assert.AreEqual("value", Util.BumpyCaseToHyphenate("Value"));
 
@@ -24,13 +23,11 @@ namespace TestRCommandLine
             Assert.AreEqual("rng-mode", Util.BumpyCaseToHyphenate("RNGMode"));
             Assert.AreEqual("is-ssl-active", Util.BumpyCaseToHyphenate("IsSSLActive"));
             Assert.AreEqual("use-http", Util.BumpyCaseToHyphenate("UseHTTP"));
-
         }
 
         [TestMethod]
-        public void JoinStringsTest()
+        public void Should_ProduceExpectedValues_JoiningStringSegments()
         {
-
             Func<string, string> transform = s => string.Join(",", Util.JoinQuotedStringSegments(s.Split(' ')));
 
             Assert.AreEqual("cake,foo", transform("cake foo"));
@@ -44,7 +41,6 @@ namespace TestRCommandLine
             Assert.AreEqual("herp,cake foo asdf,derp", transform("\"herp\" \"cake foo asdf\" derp"));
 
             Assert.AreEqual("\"cake foo", transform("\"cake foo"));
-
         }
 
     }
