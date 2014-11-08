@@ -31,9 +31,20 @@ namespace RCommandLine
         /// <returns></returns>
         public ParseResult Parse(IEnumerable<string> args, bool joinStringSegments = true)
         {
+
             _commandParser = new CommandParser<TTarget> { BaseCommandName = Options.BaseCommandName };
 
             var argList = args.ToList();
+
+#if DEBUG
+            if (argList.LastOrDefault() == "/!debug")
+            {
+                Console.WriteLine(">> Debug mode <<");
+                Console.ReadKey(true);
+                argList.RemoveAt(argList.Count - 1);
+            }
+#endif
+
             if (Options.AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()) && !_commandParser.IsTerminal )
             {
                 PrintCommandList();
