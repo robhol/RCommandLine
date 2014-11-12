@@ -78,18 +78,22 @@ namespace RCommandLine
                         }
                     }
 
+                    var shortFlagsFail = false;
                     if (shortFlagString != null)
                         foreach (var sfc in shortFlagString)
                         {
                             var fe = _flags.SingleOrDefault(f => f.ShortName == sfc);
 
                             if (fe == null)
-                                throw new UnrecognizedFlagException(ParserOptions.DefaultShortFlagHeader + sfc);
-                            
+                            {
+                                shortFlagsFail = true;
+                                break;
+                            }
+
                             discovered.Add(fe);
                         }
                             
-                    if (!discovered.Any())
+                    if (shortFlagsFail || !discovered.Any())
                         throw new UnrecognizedFlagException(ParserOptions.DefaultLongFlagHeader + longFlagString);
 
                 }

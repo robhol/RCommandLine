@@ -18,7 +18,7 @@ namespace ExampleApplication
 
             //Step 3: Parse() and output consumption!
             var result = parser.Parse();
-            if (result != ParseResult.None) 
+            if (result.Success) 
             {
                 switch (result.Command)
                 {

@@ -56,6 +56,7 @@
     <Compile Include="DefaultValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParserFrontendTests.cs" />
+    <Compile Include="ControlCharacterTests.cs" />
     <Compile Include="UtilTests.cs" />
   </ItemGroup>
   <ItemGroup>

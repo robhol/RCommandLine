@@ -118,7 +118,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_OutputCorrectCommandList_On_EmptyInput()
         {
-            var output = _parser.Parse().GetCommandList();
+            var output = _parser.Parse("").GetCommandList();
             Assert.IsTrue(output.Contains("foo"));
             Assert.IsTrue(output.Contains("bar-name")); //manually specified
             Assert.IsTrue(output.Contains("bar-name baz")); 

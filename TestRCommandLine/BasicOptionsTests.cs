@@ -6,11 +6,12 @@ using RCommandLine;
 
 namespace TestRCommandLine
 {
+    using System.Collections.Generic;
 
     [TestClass]
     public class BasicOptionsTests
     {
-        class BasicOptions
+        public class BasicOptions
         {
 
             [Flag('b')]
@@ -76,13 +77,17 @@ namespace TestRCommandLine
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UnrecognizedFlagException))]
         public void Should_Throw_On_InvalidFlagName()
         {
             _parser.Options.AutomaticUsage = false; // this option "swallows" the exception
             try
             {
                 _parser.Parse("--str required --this-flag-doesnt-even-exist");
+                Assert.Fail("Expected exception was not thrown.");
+            }
+            catch (UnrecognizedFlagException e)
+            {
+                Assert.AreEqual("--this-flag-doesnt-even-exist", e.Flag);
             }
             finally
             {
@@ -102,6 +107,20 @@ namespace TestRCommandLine
 
             Assert.AreEqual(2, pr.ExtraArguments.Count);
             Assert.IsTrue(pr.ExtraArguments.SequenceEqual(new[] {"extra1", "extra2"}));
+        }
+
+        [TestMethod]
+        public void Should_Not_ProcessQuotedFlag()
+        {
+            _parser.Options.AutomaticUsage = false; // this option "swallows" the exception
+            try
+            {
+                _parser.Parse("--str required -bi 33 \"--this-flag-doesnt-even-exist\" 22");
+            }
+            finally
+            {
+                _parser.Options.AutomaticUsage = true;
+            }
         }
 
     }
