@@ -10,18 +10,17 @@ namespace RCommandLine
     public class CommandParser<TTarget> : ICommandParser
     {
 
-        /// <summary>
-        /// In help screens etc., show this command (usually the executable name) in front of all commands.
-        /// </summary>
-        public string BaseCommandName { get; set; }
+        public ParserOptions ParserOptions { get; set; }
 
         public bool IsTerminal { get { return _commands.Count == 0; } }
 
         private readonly List<CommandElement> _commands;
         private readonly Type _topType;
 
-        public CommandParser()
+        public CommandParser(ParserOptions options = null)
         {
+            ParserOptions = options ?? new ParserOptions();
+
             _commands = new List<CommandElement>();
             _topType = typeof(TTarget);
 
@@ -76,7 +75,7 @@ namespace RCommandLine
             remainingArgs = argQueue;
             commandName = string.Join(" ", commandPathList.Select(c => c.Name));
 
-            return (IParameterParser<object>) Activator.CreateInstance(parserType, commandName, isTerminal);
+            return (IParameterParser<object>)Activator.CreateInstance(parserType, ParserOptions, isTerminal);
         }
 
         public string GetCommandList()
@@ -94,7 +93,7 @@ namespace RCommandLine
             };
 
             foreach (var command in _commands)
-                walk(command, BaseCommandName != null ? BaseCommandName + " " : "");
+                walk(command, ParserOptions.BaseCommandName != null ? ParserOptions.BaseCommandName + " " : "");
 
             return sb.ToString();
         }

@@ -8,6 +8,9 @@ namespace RCommandLine
 {
     public class ParserOptions
     {
+        private List<string> _flagValueSeparators;
+        private List<string> _longFlagHeaders;
+        private List<string> _shortFlagHeaders;
 
         public ParserOptions(string baseCommandName = null)
         {
@@ -16,6 +19,9 @@ namespace RCommandLine
             AutomaticHelp = true;
 
             BaseCommandName = baseCommandName;
+            FlagValueSeparators = new List<string>  {"=", ":"};
+            LongFlagHeaders = new List<string>      {"--", "/"};
+            ShortFlagHeaders = new List<string>     {"-", "/"};
         }
 
         /// <summary>
@@ -38,5 +44,53 @@ namespace RCommandLine
         /// </summary>
         public string BaseCommandName { get; set; }
 
+        /// <summary>
+        /// Specifies the possible strings that may separate a flag from its value.
+        /// </summary>
+        public List<string> FlagValueSeparators
+        {
+            get { return _flagValueSeparators; }
+            set { _flagValueSeparators = value.OrderByDescending(f => f.Length).ThenBy(f => f).ToList(); }
+        }
+
+        /// <summary>
+        /// Specifies the possible strings that may denote a "fully named" flag (--flag)
+        /// </summary>
+        public List<string> LongFlagHeaders
+        {
+            get { return _longFlagHeaders; }
+            set { _longFlagHeaders = value.OrderByDescending(f => f.Length).ThenBy(f => f).ToList(); }
+        }
+
+        private string _defaultLongFlagHeader;
+        /// <summary>
+        /// Specifies the long flag header to be used in automatically generated text and examples.
+        /// Defaults to the first header specified.
+        /// </summary>
+        public string DefaultLongFlagHeader
+        {
+            get { return _defaultLongFlagHeader ?? LongFlagHeaders.First(); }
+            set { _defaultLongFlagHeader = value; }
+        }
+
+        /// <summary>
+        /// Specifies the possible strings that may denote a "short" flag (-F)
+        /// </summary>
+        public List<string> ShortFlagHeaders
+        {
+            get { return _shortFlagHeaders; }
+            set { _shortFlagHeaders = value.OrderByDescending(f => f.Length).ThenBy(f => f).ToList(); }
+        }
+
+        private string _defaultShortFlagHeader;
+        /// <summary>
+        /// Specifies the short flag header to be used in automatically generated text and examples.
+        /// Defaults to the first header specified.
+        /// </summary>
+        public string DefaultShortFlagHeader
+        {
+            get { return _defaultShortFlagHeader ?? ShortFlagHeaders.First(); }
+            set { _defaultShortFlagHeader = value; }
+        }
     }
 }

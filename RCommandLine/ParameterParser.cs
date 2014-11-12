@@ -10,6 +10,8 @@ namespace RCommandLine
     public class ParameterParser<TTarget> : IParameterParser<TTarget> where TTarget : new()
     {
 
+        public ParserOptions ParserOptions { get; set; }
+            
         List<FlagElement> _flags;
         List<OrderedParameterElement> _parameters;
 
@@ -17,20 +19,22 @@ namespace RCommandLine
 
         readonly Type _optionsType;
 
-        public ParameterParser(string commandName = "", bool isTerminal = true)
+        public ParameterParser(ParserOptions options = null, bool isTerminal = true)
         {
+            ParserOptions = options ?? new ParserOptions();
             _optionsType = typeof(TTarget);
             IsTerminal = isTerminal;
             ExploreType();
         }
 
         /// <summary>
-        /// Parses any string IEnumerable, but will not join strings.
+        /// Parses a Queue with input 
         /// </summary>
         /// <returns>Options object</returns>
-        public TTarget ParseIEnumerable(IEnumerable<string> inputArgs, out IEnumerable<string> remaining)
+        public TTarget ParseQueue(Queue<string> inputQueue, out IEnumerable<string> remaining, Queue<bool> stringQuoteStatus = null)
         {
-            var inputQueue = new Queue<string>(inputArgs);
+            stringQuoteStatus = stringQuoteStatus ?? new Queue<bool>(inputQueue.Select(_ => false));
+
             var targetObject = new TTarget();
             foreach (var e in AllParameters)
                 e.Hydrate(targetObject);
@@ -46,28 +50,48 @@ namespace RCommandLine
                 //get flag(s)
                 var discovered = new List<FlagElement>();
 
-                while (inputQueue.Count > 0 && inputQueue.Peek().StartsWith("-"))
+                //if input queue is not empty and next is a string
+                while (inputQueue.Count > 0 && 
+                    (!stringQuoteStatus.Peek() && IsFlag(inputQueue.Peek())))
                 {
                     var arg = inputQueue.Dequeue();
-                    
-                    if (arg.StartsWith("--"))
+                    stringQuoteStatus.Dequeue();
+
+                    //try to match as either kind of flag string
+                    var longFlagString = GetFlagName(arg, true, false);
+                    var shortFlagString = GetFlagName(arg, false, true);
+
+                    FlagElement flag;
+
+                    if (longFlagString != null)
                     {
-                        //get fully named flag
-                        var flag = _flags.FirstOrDefault(f => f.Name != null && f.Name.Equals(arg.Substring(2), StringComparison.InvariantCultureIgnoreCase));
+                        flag =
+                            _flags.FirstOrDefault(
+                                f =>
+                                    f.Name != null &&
+                                    f.Name.Equals(longFlagString, StringComparison.InvariantCultureIgnoreCase));
 
-                        if (flag == null)
-                            throw new UnrecognizedFlagException(arg);
-
-                        discovered.Add(flag);
-                    }
-                    else
-                        foreach (var flag in arg.ToCharArray().Skip(1).Select(c => _flags.FirstOrDefault(f => f.ShortName == c)))
+                        if (flag != null)
                         {
-                            if (flag == null)
-                                throw new UnrecognizedFlagException(arg);
-
                             discovered.Add(flag);
+                            continue;
                         }
+                    }
+
+                    if (shortFlagString != null)
+                        foreach (var sfc in shortFlagString)
+                        {
+                            var fe = _flags.SingleOrDefault(f => f.ShortName == sfc);
+
+                            if (fe == null)
+                                throw new UnrecognizedFlagException(ParserOptions.DefaultShortFlagHeader + sfc);
+                            
+                            discovered.Add(fe);
+                        }
+                            
+                    if (!discovered.Any())
+                        throw new UnrecognizedFlagException(ParserOptions.DefaultLongFlagHeader + longFlagString);
+
                 }
 
                 //process new flags
@@ -82,10 +106,13 @@ namespace RCommandLine
                         flagQueue.Enqueue(flag);
                 }
 
-                while (inputQueue.Count > 0 && !inputQueue.Peek().StartsWith("-"))
+                while (inputQueue.Count > 0 &&
+                    (stringQuoteStatus.Peek() || !IsFlag(inputQueue.Peek())))
                 {
+
                     //get all non-flags
                     var arg = inputQueue.Dequeue();
+                    stringQuoteStatus.Dequeue();
 
                     if (flagQueue.Count > 0)
                     {
@@ -120,13 +147,32 @@ namespace RCommandLine
         /// <returns></returns>
         public TTarget Parse(string rawString, out IEnumerable<string> extra)
         {
-            return ParseIEnumerable(Util.JoinQuotedStringSegments(rawString.Split(' ')), out extra);
+            Queue<bool> quoteInfo;
+            var queue = new Queue<string>(Util.JoinQuotedStringSegments(rawString.Split(' '), out quoteInfo));
+            return ParseQueue(queue, out extra, quoteInfo);
         }
 
         public TTarget Parse(string rawString)
         {
             IEnumerable<string> _;
             return Parse(rawString, out _);
+        }
+
+        bool IsFlag(string f)
+        {
+            return ParserOptions.LongFlagHeaders
+                .Union(ParserOptions.ShortFlagHeaders)
+                .Any(f.StartsWith);
+        }
+
+        string GetFlagName(string f, bool checkLong, bool checkShort)
+        {
+            var match = Enumerable.Empty<string>()
+                .Union(checkLong  ? ParserOptions.LongFlagHeaders  : Enumerable.Empty<string>())
+                .Union(checkShort ? ParserOptions.ShortFlagHeaders : Enumerable.Empty<string>())
+                .FirstOrDefault(f.StartsWith);
+
+            return match != null ? f.Substring(match.Length) : null;
         }
 
         /// <summary>
@@ -154,9 +200,9 @@ namespace RCommandLine
             {
                 sb
                     .Append("  ")
-                    .Append((e.ShortName != default(char) ? ("-" + e.ShortName) : "").PadLeft(2))
+                    .Append((e.ShortName != default(char) ? (ParserOptions.DefaultShortFlagHeader + e.ShortName) : "").PadLeft(2))
                     .Append("  ")
-                    .Append((e.Name != null ? ("--" + e.Name) : "").PadRight(nameWidth));
+                    .Append((e.Name != null ? (ParserOptions.DefaultLongFlagHeader + e.Name) : "").PadRight(nameWidth));
 
                 if (e.Description != null)
                     sb

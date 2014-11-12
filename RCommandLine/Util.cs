@@ -7,10 +7,16 @@ namespace RCommandLine
 {
     public static class Util
     {
-
         public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable)
         {
+            Queue<bool> stringQuoteInfo;
+            return JoinQuotedStringSegments(strEnumerable, out stringQuoteInfo);
+        }
+
+        public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable, out Queue<bool> stringQuoteInfo)
+        {
             var output = new List<string>();
+            stringQuoteInfo = new Queue<bool>();
             var queue = new Queue<string>(strEnumerable);
 
             var currentString = new List<string>();
@@ -25,20 +31,26 @@ namespace RCommandLine
                     {
                         currentString.Add(s.Substring(0, s.Length - 1));
                         output.Add(string.Join(" ", currentString));
+                        stringQuoteInfo.Enqueue(true);
                         currentString.Clear();
                     }
                     else
                         currentString.Add(s);
-                else
-                    if (s.StartsWith("\""))
+                else if (s.StartsWith("\""))
+                {
+                    if (s.EndsWith("\""))
                     {
-                        if (s.EndsWith("\""))
-                            output.Add(s.Substring(1, s.Length - 2));
-                        else
-                            currentString.Add(s.Substring(1));
+                        output.Add(s.Substring(1, s.Length - 2));
+                        stringQuoteInfo.Enqueue(true);
                     }
                     else
-                        output.Add(s);
+                        currentString.Add(s.Substring(1));
+                }
+                else
+                {
+                    output.Add(s);
+                    stringQuoteInfo.Enqueue(false);
+                }
 
             }
 

@@ -6,9 +6,6 @@ namespace RCommandLine
     public class ParseResult
     {
 
-        static readonly ParseResult NoResult = new ParseResult(null, null, null, null, null, false);
-        public static ParseResult None { get { return NoResult; } }
-
         /// <summary>
         /// The ultimate options object
         /// </summary>
