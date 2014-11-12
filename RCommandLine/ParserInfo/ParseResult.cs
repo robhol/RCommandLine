@@ -16,6 +16,9 @@ namespace RCommandLine
         /// </summary>
         public string Command { get; private set; }
 
+        /// <summary>
+        /// Any user-supplied arguments that were not read as part of the usual parsing process
+        /// </summary>
         public IList<string> ExtraArguments { get; private set; }
 
         public bool Success { get; private set; }
@@ -33,8 +36,6 @@ namespace RCommandLine
             _commandParser = commandParser;
             _parameterParser = parameterParser;
         }
-
-
 
         public string GetCommandList()
         {

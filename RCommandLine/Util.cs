@@ -7,6 +7,9 @@ namespace RCommandLine
 {
     public static class Util
     {
+
+        const string Quote = "\"";
+
         public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable)
         {
             Queue<bool> stringQuoteInfo;
@@ -27,7 +30,7 @@ namespace RCommandLine
                 var s = queue.Dequeue();
                 var building = currentString.Count > 0;
                 if (building)
-                    if (s.EndsWith("\""))
+                    if (s.EndsWith(Quote))
                     {
                         currentString.Add(s.Substring(0, s.Length - 1));
                         output.Add(string.Join(" ", currentString));
@@ -36,9 +39,9 @@ namespace RCommandLine
                     }
                     else
                         currentString.Add(s);
-                else if (s.StartsWith("\""))
+                else if (s.StartsWith(Quote))
                 {
-                    if (s.EndsWith("\""))
+                    if (s.EndsWith(Quote))
                     {
                         output.Add(s.Substring(1, s.Length - 2));
                         stringQuoteInfo.Enqueue(true);
@@ -56,7 +59,7 @@ namespace RCommandLine
 
             if (currentString.Count > 0)
             {
-                output.Add("\"" + string.Join(" ", currentString));
+                output.Add(Quote + string.Join(" ", currentString));
             }
 
             return output;

@@ -9,9 +9,9 @@ namespace RCommandLine
 
         public IEnumerable<string> Parameters { get; private set; }
 
-        internal MissingArgumentException(string message, IEnumerable<CommonParameterElement> p) : base(message)
+        internal MissingArgumentException(string message, IEnumerable<string> parameters) : base(message)
         {
-            Parameters = p.Select(pa => pa.Name);
+            Parameters = parameters;
         }
 
     }

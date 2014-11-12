@@ -15,6 +15,9 @@ namespace RCommandLine
 
         private string _commandName;
 
+        /// <summary>
+        /// The target to which output should be written.
+        /// </summary>
         public IOutputTarget OutputTarget { get; set; }
 
         public Parser(ParserOptions options = null, string baseCommandName = null)
@@ -52,7 +55,6 @@ namespace RCommandLine
             }
 
             IEnumerable<string> remainingArgs;
-
             try
             {
                 Type parserType;
@@ -79,7 +81,6 @@ namespace RCommandLine
 
                 return new ParseResult(null, _commandName, null, _commandParser, _parameterParser, false);
             }
-
 
             try
             {
@@ -120,7 +121,6 @@ namespace RCommandLine
             }
 
         }
-
 
         void PrintCommandList()
         {

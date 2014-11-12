@@ -136,19 +136,21 @@ namespace RCommandLine
             var missing = AllParameters.Where(a => a.Required && !a.HasValue).ToList();
 
             if (missing.Any())
-                throw new MissingArgumentException("Missing required arguments.", missing);
+                throw new MissingArgumentException("Missing required arguments.", missing.Select(a => a.Name));
 
             if (flagQueue.Count > 0)
-                throw new MissingValueException("Syntax error. Missing value for flag(s).", flagQueue);
+                throw new MissingValueException("Syntax error. Missing value for flag(s).", flagQueue.Select(f => 
+                    f.Name != null ? 
+                    (ParserOptions.DefaultLongFlagHeader + f.Name) : 
+                    (ParserOptions.DefaultShortFlagHeader + f.ShortName)));
 
             remaining = extraArguments;
             return targetObject;
         }
 
         /// <summary>
-        /// Parses the selected string.
+        /// Parses the provided string.
         /// </summary>
-        /// <returns></returns>
         public TTarget Parse(string rawString, out IEnumerable<string> extra)
         {
             Queue<bool> quoteInfo;
@@ -237,11 +239,11 @@ namespace RCommandLine
 
         public int GetRequiredParameterCount()
         {
-            return _flags.Cast<CommonParameterElement>().Union(_parameters).Count(p => p.Required);
+            return AllParameters.Count(p => p.Required);
         }
 
         /// <summary>
-        /// Whether the options object belonging to this ParameterParser has any subcommands
+        /// Whether the options object belonging to this ParameterParser lacks subcommands
         /// </summary>
         public bool IsTerminal { get; private set; }
 

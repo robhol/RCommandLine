@@ -12,6 +12,9 @@ namespace RCommandLine
 
         public ParserOptions ParserOptions { get; set; }
 
+        /// <summary>
+        /// Whether or not the command associated with this parent is childless.
+        /// </summary>
         public bool IsTerminal { get { return _commands.Count == 0; } }
 
         private readonly List<CommandElement> _commands;
