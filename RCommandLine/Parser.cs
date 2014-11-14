@@ -22,9 +22,12 @@ namespace RCommandLine
 
         public Parser(ParserOptions options = null, string baseCommandName = null)
         {
-            Options = options ?? new ParserOptions(baseCommandName);
+            Options = options ?? new ParserOptions(baseCommandName: baseCommandName);
             OutputTarget = ConsoleOutputChannel.Instance;
         }
+
+        public Parser(ParserOptions.Template parserOptionsTemplate, string baseCommandName) : this(new ParserOptions(parserOptionsTemplate, baseCommandName))
+        { }
 
         /// <summary>
         /// Parses the input arguments.

@@ -99,7 +99,8 @@ namespace TestRCommandLine
         public void Should_ExposeExtraArguments()
         {
             var pr = _parser.Parse("argOne -s flagValue 42 -bi 44 extra1 extra2");
-            var opts = pr.Options as BasicOptions;
+            var opts = pr.Options;
+
             Assert.IsNotNull(opts);
 
             Assert.AreEqual("argOne", opts.StringArgument);
