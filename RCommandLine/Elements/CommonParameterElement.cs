@@ -16,6 +16,8 @@ namespace RCommandLine
         public PropertyInfo TargetProperty { get; private set; }
         public Type TargetType { get; private set; }
 
+        public Type EncounteredInType { get; private set; }
+
         protected CommonParameterElement(ElementAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
         {
             Name = attribute.Name;
@@ -23,6 +25,8 @@ namespace RCommandLine
 
             TargetProperty = property;
             TargetType = property.PropertyType;
+
+            EncounteredInType = property.DeclaringType;
             
             Required = true;
 

@@ -46,6 +46,7 @@ namespace RCommandLine
 
         /// <summary>
         /// Specifies the possible strings that may separate a flag from its value.
+        /// Note that space is mandatory (and separate from this list).
         /// </summary>
         public List<string> FlagValueSeparators
         {

@@ -50,7 +50,7 @@ namespace TestRCommandLine
         public class BarBazOptions : MyOptions
         {
 
-            [OrderedParameter(0)]
+            [OrderedParameter(1)]
             public int BazIntegerArg { get; set; }
 
         }
@@ -102,7 +102,7 @@ namespace TestRCommandLine
         public void Should_MapArguments_On_NestedCommands()
         {
             var bar = _parser.Parse("bar-name commonString barString -X 55.4321").Options as BarOptions;
-            var bazResult = _parser.Parse("bar-name baz 999");
+            var bazResult = _parser.Parse("bar-name baz commonStringValue 999");
             var baz = bazResult.Options as BarBazOptions;
 
             Assert.IsNotNull(bar);
