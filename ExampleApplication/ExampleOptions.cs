@@ -8,7 +8,7 @@ namespace ExampleApplication
     ] 
     class ExampleOptions
     {
-        public abstract class FileOptions
+        public abstract class FileOptions : ExampleOptions
         {
             [OrderedParameter(0, Description = "The file to act upon")] //Name default: Path
             public string Path { get; set; }

@@ -41,7 +41,7 @@ namespace RCommandLine
             }
         }
 
-        public IParameterParser<object> GetParser(IEnumerable<string> inputArgs, out Type parserType, out IEnumerable<string> remainingArgs, out string commandName)
+        public IParameterParser<TOptions> GetParser<TOptions>(IEnumerable<string> inputArgs, out Type parserType, out IEnumerable<string> remainingArgs, out string commandName)
         {
             var optType = _topType;
 
@@ -78,7 +78,7 @@ namespace RCommandLine
             remainingArgs = argQueue;
             commandName = string.Join(" ", commandPathList.Select(c => c.Name));
 
-            return (IParameterParser<object>)Activator.CreateInstance(parserType, ParserOptions, isTerminal);
+            return (IParameterParser<TOptions>)Activator.CreateInstance(parserType, ParserOptions, isTerminal);
         }
 
         public string GetCommandList()

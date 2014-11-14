@@ -7,13 +7,13 @@ namespace TestRCommandLine
     using System.Collections.Generic;
 
     [TestClass]
-    public class ControlCharacterTests
+    public class FlagHeaderTests
     {
         private readonly Parser<BasicOptionsTests.BasicOptions> _defaultParser;
         private readonly Parser<BasicOptionsTests.BasicOptions> _windowsStyleParser;
         private readonly Parser<BasicOptionsTests.BasicOptions> _unixStyleParser;
 
-        public ControlCharacterTests()
+        public FlagHeaderTests()
         {
             //default is to accept any character
             _defaultParser = new Parser<BasicOptionsTests.BasicOptions>();
@@ -33,7 +33,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_ReturnExpectedData_For_DefaultControlCharacterSet()
         {
-            var opt = (BasicOptionsTests.BasicOptions)_defaultParser.Parse("--str required /b -i 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
+            var opt = _defaultParser.Parse("--str required /b -i 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
 
             Assert.AreEqual(opt.BooleanFlag, true);
             Assert.AreEqual(opt.StringFlag, "required");
@@ -43,7 +43,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_ReturnExpectedData_For_WindowsControlCharacterSet()
         {
-            var opt = (BasicOptionsTests.BasicOptions)_windowsStyleParser.Parse("/str required /b /i 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
+            var opt = _windowsStyleParser.Parse("/str required /b /i 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
 
             Assert.AreEqual(opt.BooleanFlag, true);
             Assert.AreEqual(opt.StringFlag, "required");
@@ -53,7 +53,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_ReturnExpectedData_For_WindowsControlCharacterSet_On_CombinedShortFlags()
         {
-            var opt = (BasicOptionsTests.BasicOptions)_windowsStyleParser.Parse("/str required /bi 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
+            var opt = _windowsStyleParser.Parse("/str required /bi 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
 
             Assert.AreEqual(opt.BooleanFlag, true);
             Assert.AreEqual(opt.StringFlag, "required");
@@ -68,7 +68,7 @@ namespace TestRCommandLine
             
             try
             {
-                var opt = (BasicOptionsTests.BasicOptions) _windowsStyleParser.Parse("/str required /bi9 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
+                var opt = _windowsStyleParser.Parse("/str required /bi9 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
                 Assert.Fail("Expected exception was not thrown.");
             }
             catch (UnrecognizedFlagException e)
@@ -85,7 +85,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_ReturnExpectedData_For_UnixControlCharacterSet()
         {
-            var opt = (BasicOptionsTests.BasicOptions)_unixStyleParser.Parse("--str required -bi 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
+            var opt = _unixStyleParser.Parse("--str required -bi 33 DUMMY_REQ_ARGUMENTS-> 9001").Options;
 
             Assert.AreEqual(opt.BooleanFlag, true);
             Assert.AreEqual(opt.StringFlag, "required");

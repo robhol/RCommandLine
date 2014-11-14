@@ -5,13 +5,13 @@ using RCommandLine.Output;
 
 namespace RCommandLine
 {
-    public class Parser<TTarget>
+    public class Parser<TTarget> where TTarget : class
     {
 
         public ParserOptions Options { get; set; }
 
         private ICommandParser _commandParser;
-        private IParameterParser _parameterParser;
+        private IParameterParser<TTarget> _parameterParser;
 
         private string _commandName;
 
@@ -32,7 +32,7 @@ namespace RCommandLine
         /// <param name="args"></param>
         /// <param name="joinStringSegments">If true, quoted string segments containing spaces will be joined before parsing.</param>
         /// <returns></returns>
-        public ParseResult Parse(IEnumerable<string> args, bool joinStringSegments = true)
+        public ParseResult<TTarget> Parse(IEnumerable<string> args, bool joinStringSegments = true)
         {
 
             _commandParser = new CommandParser<TTarget>(Options);
@@ -58,7 +58,7 @@ namespace RCommandLine
             try
             {
                 Type parserType;
-                _parameterParser = _commandParser.GetParser(argList, out parserType, out remainingArgs, out _commandName);
+                _parameterParser = _commandParser.GetParser<TTarget>(argList, out parserType, out remainingArgs, out _commandName);
                 
             }
             catch (ArgumentException) //option type has no default constructor
@@ -79,14 +79,14 @@ namespace RCommandLine
                     else
                         PrintHelpScreen();
 
-                return new ParseResult(null, _commandName, null, _commandParser, _parameterParser, false);
+                return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
             }
 
             try
             {
-                var pparser = (IParameterParser<object>) _parameterParser;
+                var pparser = _parameterParser;
                 IEnumerable<string> extra;
-                object options;
+                TTarget options;
                 if (joinStringSegments)
                 {
                     Queue<bool> stringQuoteInfo;
@@ -96,7 +96,7 @@ namespace RCommandLine
                 else
                     options = pparser.ParseQueue(new Queue<string>(remainingArgsList), out extra);
 
-                return new ParseResult(options, _commandName, extra.ToList(), _commandParser, _parameterParser, true);
+                return new ParseResult<TTarget>(options, _commandName, extra.ToList(), _commandParser, _parameterParser, true);
             }
             catch (UnrecognizedFlagException e)
             {
@@ -136,18 +136,18 @@ namespace RCommandLine
                 ));
         }
 
-        void ErrorAndUsage(string err, string cmd, IParameterParser p)
+        void ErrorAndUsage(string err, string cmd, IParameterParser<TTarget> p)
         {
             OutputTarget.WriteLine(err + Environment.NewLine + "Usage for command " + cmd);
             OutputTarget.WriteLine(p.GetUsage(cmd));
         }
 
-        ParseResult ErrorParseResult()
+        ParseResult<TTarget> ErrorParseResult()
         {
-            return new ParseResult(null, _commandName, null, _commandParser, _parameterParser, false);
+            return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
         }
 
-        public ParseResult Parse(string args = null)
+        public ParseResult<TTarget> Parse(string args = null)
         {
             return Parse((args != null ? args.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : Environment.GetCommandLineArgs().Skip(1)));
         }

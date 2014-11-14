@@ -23,7 +23,7 @@ namespace TestRCommandLine
 
         }
 
-        public class FooOptions : CommonOptions
+        public class FooOptions : MyOptions
         {
 
             [Flag('X')]
@@ -36,7 +36,7 @@ namespace TestRCommandLine
 
         [HasCommand(typeof(BarBazOptions), "baz")]
         [HasCommand(typeof(BarHiddenCmdOptions), "(HIDDEN)", Hidden = true)]
-        public class BarOptions : CommonOptions
+        public class BarOptions : MyOptions
         {
 
             [Flag('X')]
@@ -47,7 +47,7 @@ namespace TestRCommandLine
 
         }
 
-        public class BarBazOptions
+        public class BarBazOptions : MyOptions
         {
 
             [OrderedParameter(0)]

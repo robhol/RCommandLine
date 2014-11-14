@@ -2,10 +2,14 @@
 
 namespace RCommandLine
 {
-
-    public interface IParameterParser
+    public interface IParameterParser<out TTarget>
     {
-        string GetUsage(string command);
+        /// <summary>
+        /// Gets an automatically generated help text explaining all parameters.
+        /// </summary>
+        /// <param name="shownCommand"></param>
+        /// <returns></returns>
+        string GetUsage(string shownCommand);
 
         string GetArgumentList();
 
@@ -15,11 +19,9 @@ namespace RCommandLine
         /// Whether or not this command has any children.
         /// </summary>
         bool IsTerminal { get; }
-    }
 
-    public interface IParameterParser<out TTarget> : IParameterParser
-    {
         TTarget ParseQueue(Queue<string> inputQueue, out IEnumerable<string> remaining, Queue<bool> stringQuoteStatus = null);
+
         TTarget Parse(string str, out IEnumerable<string> extra);
     }
 }

@@ -24,7 +24,7 @@ namespace RCommandLine
         /// <param name="remainingArgs">(out) any args that were not used for named properties on the output Options object</param>
         /// <param name="commandName">(out) the full name of the command that was invoked</param>
         /// <returns></returns>
-        IParameterParser<object> GetParser(IEnumerable<string> inputArgs, out Type parserType,
+        IParameterParser<TOptions> GetParser<TOptions>(IEnumerable<string> inputArgs, out Type parserType,
             out IEnumerable<string> remainingArgs, out string commandName);
 
     }
