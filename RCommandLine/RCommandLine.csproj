@@ -39,9 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentConverters.cs" />
     <Compile Include="Attributes\HasCommandAttribute.cs" />
     <Compile Include="Attributes\OptionalAttribute.cs" />
+    <Compile Include="Exceptions\AmbiguousDirectAssignmentException.cs" />
     <Compile Include="Exceptions\MissingArgumentException.cs" />
+    <Compile Include="ParsedFlagArgumentInfo.cs" />
     <Compile Include="ParserInfo\ParseResult.cs" />
     <Compile Include="Elements\OrderedParameterElement.cs" />
     <Compile Include="Elements\CommandElement.cs" />

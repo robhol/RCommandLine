@@ -6,6 +6,9 @@ using System.Text;
 
 namespace RCommandLine
 {
+    using System.Collections;
+    using System.Reflection.Emit;
+    using System.Text.RegularExpressions;
 
     public class ParameterParser<TTarget> : IParameterParser<TTarget> where TTarget : new()
     {
@@ -48,66 +51,39 @@ namespace RCommandLine
             while (inputQueue.Count > 0)
             {
                 //get flag(s)
-                var discovered = new List<FlagElement>();
+                var discovered = new List<ParsedFlagArgumentInfo>();
 
-                //if input queue is not empty and next is a string
+                IEnumerable<ParsedFlagArgumentInfo> flagInfo;
+
                 while (inputQueue.Count > 0 && 
-                    (!stringQuoteStatus.Peek() && IsFlag(inputQueue.Peek())))
+                    (!stringQuoteStatus.Peek() && (flagInfo = ParseFlagArgument(inputQueue.Peek())).Any()))
                 {
-                    var arg = inputQueue.Dequeue();
+                    discovered.AddRange(flagInfo);
+                    inputQueue.Dequeue();
                     stringQuoteStatus.Dequeue();
-
-                    //try to match as either kind of flag string
-                    var longFlagString = GetFlagName(arg, true, false);
-                    var shortFlagString = GetFlagName(arg, false, true);
-
-                    FlagElement flag;
-
-                    if (longFlagString != null)
-                    {
-                        flag =
-                            _flags.FirstOrDefault(
-                                f =>
-                                    f.Name != null &&
-                                    f.Name.Equals(longFlagString, StringComparison.InvariantCultureIgnoreCase));
-
-                        if (flag != null)
-                        {
-                            discovered.Add(flag);
-                            continue;
-                        }
-                    }
-
-                    var shortFlagsFail = false;
-                    if (shortFlagString != null)
-                        foreach (var sfc in shortFlagString)
-                        {
-                            var fe = _flags.SingleOrDefault(f => f.ShortName == sfc);
-
-                            if (fe == null)
-                            {
-                                shortFlagsFail = true;
-                                break;
-                            }
-
-                            discovered.Add(fe);
-                        }
-                            
-                    if (shortFlagsFail || !discovered.Any())
-                        throw new UnrecognizedFlagException(ParserOptions.DefaultLongFlagHeader + longFlagString);
-
                 }
 
                 //process new flags
-                foreach (var flag in discovered)
+                foreach (var fi in discovered)
                 {
-                    if (flag.TargetType == typeof(bool))
+
+                    var flag = fi.Element;
+
+                    if (!string.IsNullOrEmpty(fi.AssignmentValue))
                     {
-                        //boolean flags don't get values, they're just marked as present and forgotten
-                        flag.SetValue(targetObject, true);
+                        flag.SetValue(targetObject,
+                            flag.TargetType == typeof (bool)
+                                ? ArgumentConverters.BooleanConverter(fi.AssignmentValue)
+                                : ArgumentConverters.DefaultConverter(fi.AssignmentValue, flag.TargetType));
                     }
                     else
-                        flagQueue.Enqueue(flag);
+                        if (flag.TargetType == typeof(bool))
+                        {
+                            //boolean flags default to true and only take values through explicit assignment.
+                            flag.SetValue(targetObject, true);
+                        }
+                        else
+                            flagQueue.Enqueue(flag);
                 }
 
                 while (inputQueue.Count > 0 &&
@@ -171,14 +147,67 @@ namespace RCommandLine
                 .Any(f.StartsWith);
         }
 
-        string GetFlagName(string f, bool checkLong, bool checkShort)
+        IEnumerable<ParsedFlagArgumentInfo> ParseFlagArgument(string arg)
         {
-            var match = Enumerable.Empty<string>()
-                .Union(checkLong  ? ParserOptions.LongFlagHeaders  : Enumerable.Empty<string>())
-                .Union(checkShort ? ParserOptions.ShortFlagHeaders : Enumerable.Empty<string>())
-                .FirstOrDefault(f.StartsWith);
 
-            return match != null ? f.Substring(match.Length) : null;
+            var match = Regex.Match(arg, string.Format("{0}(.+?)({1}(.*))?$",
+                Util.RegexForAnyLiteral(ParserOptions.LongFlagHeaders.Union(ParserOptions.ShortFlagHeaders)),
+                Util.RegexForAnyLiteral(ParserOptions.FlagValueSeparators)
+                ));
+
+            if (match.Success)
+            {
+                var info = new ParsedFlagArgumentInfo
+                {
+                    Header = match.Groups[1].Value,
+                    FlagName = match.Groups[2].Value,
+                    AssignmentOperator = match.Groups.Count >= 5 ? match.Groups[4].Value : null,
+                    AssignmentValue = match.Groups.Count >= 6 ? match.Groups[5].Value : null,
+                };
+
+                var isLong = ParserOptions.LongFlagHeaders.Contains(info.Header);
+                if (isLong)
+                    info.Element = _flags.SingleOrDefault(f => f.Name.Equals(info.FlagName, StringComparison.InvariantCultureIgnoreCase));
+                if (info.Element != null)
+                    return new[] {info};
+
+                var isShort = ParserOptions.ShortFlagHeaders.Contains(info.Header);
+                if (!isShort)
+                    throw new UnrecognizedFlagException(info.Header + info.FlagName);
+
+                var rv = new List<ParsedFlagArgumentInfo>();
+
+                foreach (var c in info.FlagName)
+                {
+                    var fi = new ParsedFlagArgumentInfo
+                    {
+                        Header = info.Header,
+                        FlagName = c.ToString(),
+                        AssignmentOperator = info.AssignmentOperator,
+                        AssignmentValue = info.AssignmentValue,
+                        Element = _flags.SingleOrDefault(f => f.ShortName == c)
+                    };
+
+                    if (fi.Element == null)
+                        throw new UnrecognizedFlagException(string.Format("{0}{1}{2}",
+                            fi.Header, fi.FlagName,
+                            (isLong ? (" (" + info.Header + info.FlagName + ")") : "")));
+                            // if one char isn't found and the item is also valid as a long flag, also include the latter in case of user typo.
+
+                    rv.Add(fi);
+                }
+
+                if (string.IsNullOrEmpty(info.AssignmentOperator)) return rv;
+                
+                if (rv.Count(fi => fi.Element.TargetType != typeof (bool)) > 1)
+                    throw new AmbiguousDirectAssignmentException(info.Header + info.FlagName, 
+                        "Can not directly assign more than one flag at a time.");
+
+                return rv;
+
+            }
+
+            return new ParsedFlagArgumentInfo[] {};
         }
 
         /// <summary>

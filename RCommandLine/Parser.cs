@@ -26,7 +26,7 @@ namespace RCommandLine
             OutputTarget = ConsoleOutputChannel.Instance;
         }
 
-        public Parser(ParserOptions.Template parserOptionsTemplate, string baseCommandName) : this(new ParserOptions(parserOptionsTemplate, baseCommandName))
+        public Parser(ParserOptions.Template parserOptionsTemplate, string baseCommandName = null) : this(new ParserOptions(parserOptionsTemplate, baseCommandName))
         { }
 
         /// <summary>

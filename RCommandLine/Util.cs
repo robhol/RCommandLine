@@ -5,6 +5,8 @@ using System.Text;
 
 namespace RCommandLine
 {
+    using System.Text.RegularExpressions;
+
     public static class Util
     {
 
@@ -60,6 +62,7 @@ namespace RCommandLine
             if (currentString.Count > 0)
             {
                 output.Add(Quote + string.Join(" ", currentString));
+                stringQuoteInfo.Enqueue(false);
             }
 
             return output;
@@ -120,6 +123,11 @@ namespace RCommandLine
         public static string JoinNotNulls(string separator, IEnumerable<string> str)
         {
             return string.Join(separator, str.Where((s => s != null)));
+        }
+
+        public static string RegexForAnyLiteral(IEnumerable<string> literals)
+        {
+            return string.Format("({0})", string.Join("|", literals.Select(Regex.Escape)));
         }
 
     }
