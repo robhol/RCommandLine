@@ -8,7 +8,8 @@
     public class FlagDirectAssignment
     {
         private readonly Parser<Options> _parser;
-        private Parser<Options> _windowsStyleParser;
+        private readonly Parser<Options> _windowsStyleParser;
+        private readonly Parser<BooleanOptions> _booleanOptionParser;
 
         class Options
         {
@@ -27,10 +28,32 @@
 
         }
 
+        class BooleanOptions
+        {
+            [Flag('a')]
+            public bool a { get; set; }
+
+            [Flag('b')]
+            public bool b { get; set; }
+
+            [Flag('c')]
+            public bool c { get; set; }
+
+            [Flag('d')]
+            public bool d { get; set; }
+
+            [Flag('e')]
+            public bool e { get; set; }
+
+            [Flag('f')]
+            public bool f { get; set; }
+        }
+
         public FlagDirectAssignment()
         {
             _parser = new Parser<Options>();
             _windowsStyleParser = new Parser<Options>(ParserOptions.Template.Windows);
+            _booleanOptionParser = new Parser<BooleanOptions>();
         }
 
         [TestMethod]
@@ -43,7 +66,7 @@
             Assert.AreEqual("test", opts.CValue);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [TestMethod, ExpectedException(typeof(FormatException))]
         public void Should_Throw_On_ShortFlagAssignment_If_TypeIsInvalid()
         {
             _parser.Parse("-a:3 -b=q -c=test");
@@ -75,7 +98,23 @@
             Assert.Fail("Expected AmbiguousDirectAssignmentException");
         }
 
+        [TestMethod]
+        public void Should_Assign_ExpectedValue_Given_BooleanAlias()
+        {
+            var result = _booleanOptionParser.Parse("/a:no /b:1 /c:ON /D=yes /e=0 /f=oFf").Options;
+            
+            Assert.IsFalse(result.a);
+            Assert.IsTrue(result.b);
+            Assert.IsTrue(result.c);
+            Assert.IsTrue(result.d);
+            Assert.IsFalse(result.e);
+        }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void Should_Throw_On_BooleanFlagAssignment_If_ValueIsInvalid()
+        {
+            _booleanOptionParser.Parse("/a:foo_is_not_a_boolean");
+        }
 
 
     }
