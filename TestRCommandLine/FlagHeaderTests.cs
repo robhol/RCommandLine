@@ -73,7 +73,7 @@ namespace TestRCommandLine
             }
             catch (UnrecognizedFlagException e)
             {
-                Assert.AreEqual("/bi9" , e.Flag, "Expected reference to unknown flag.");
+                Assert.IsTrue(e.Flag.Contains("/bi9"), "Expected reference to unknown flag.");
             }
             finally
             {

@@ -58,6 +58,7 @@
     <Compile Include="ParserFrontendTests.cs" />
     <Compile Include="FlagHeaderTests.cs" />
     <Compile Include="UtilTests.cs" />
+    <Compile Include="FlagDirectAssignment.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RCommandLine\RCommandLine.csproj">
