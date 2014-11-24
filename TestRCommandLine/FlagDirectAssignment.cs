@@ -45,8 +45,15 @@
             [Flag('e')]
             public bool e { get; set; }
 
-            [Flag('f')]
+            [Flag('f'), Optional(Default = true)]
             public bool f { get; set; }
+
+            [Flag('g')]
+            public bool g { get; set; }
+
+            [Flag('h')]
+            public bool h { get; set; }
+
         }
 
         public FlagDirectAssignment()
@@ -101,13 +108,16 @@
         [TestMethod]
         public void Should_Assign_ExpectedValue_Given_BooleanAlias()
         {
-            var result = _booleanOptionParser.Parse("/a:no /b:1 /c:ON /D=yes /e=0 /f=oFf").Options;
+            var result = _booleanOptionParser.Parse("/a:no /b:1 /c:ON /D=yes /e=0 /f=oFf /g=True /h:false").Options;
             
             Assert.IsFalse(result.a);
             Assert.IsTrue(result.b);
             Assert.IsTrue(result.c);
             Assert.IsTrue(result.d);
             Assert.IsFalse(result.e);
+            Assert.IsFalse(result.f); //defaults to true
+            Assert.IsTrue(result.g);
+            Assert.IsFalse(result.h);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
