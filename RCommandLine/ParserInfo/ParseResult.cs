@@ -3,7 +3,36 @@ using System.Collections.Generic;
 
 namespace RCommandLine
 {
-    public class ParseResult<TOptions> where TOptions : class
+
+    public class ParseResult
+    {
+
+        /// <summary>
+        /// The complete command name, individual commands separated by space
+        /// </summary>
+        public string Command { get; protected set; }
+
+        /// <summary>
+        /// Any user-supplied arguments that were not read as part of the usual parsing process
+        /// </summary>
+        public IList<string> ExtraArguments { get; protected set; }
+
+        public bool Success { get; protected set; }
+
+        protected readonly ICommandParser _commandParser;
+
+        internal ParseResult(string cmd, IList<string> extraArgs, ICommandParser commandParser, bool success)
+        {
+            Command = cmd;
+            ExtraArguments = extraArgs;
+            Success = success;
+
+            _commandParser = commandParser;
+        }
+
+    }
+
+    public class ParseResult<TOptions> : ParseResult where TOptions : class
     {
 
         /// <summary>
@@ -11,30 +40,13 @@ namespace RCommandLine
         /// </summary>
         public TOptions Options { get; private set; }
 
-        /// <summary>
-        /// The complete command name, individual commands separated by space
-        /// </summary>
-        public string Command { get; private set; }
-
-        /// <summary>
-        /// Any user-supplied arguments that were not read as part of the usual parsing process
-        /// </summary>
-        public IList<string> ExtraArguments { get; private set; }
-
-        public bool Success { get; private set; }
-
-        private readonly ICommandParser _commandParser;
+        
         private readonly IParameterParser<TOptions> _parameterParser;
 
         internal ParseResult(TOptions finalOptions, string cmd, IList<string> extraArgs, ICommandParser commandParser, IParameterParser<TOptions> parameterParser,
-            bool success)
+            bool success) : base(cmd, extraArgs, commandParser, success)
         {
             Options = finalOptions;
-            Command = cmd;
-            ExtraArguments = extraArgs;
-            Success = success;
-
-            _commandParser = commandParser;
             _parameterParser = parameterParser;
         }
 
