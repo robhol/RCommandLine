@@ -19,7 +19,7 @@ namespace RCommandLine
 
         public bool Success { get; protected set; }
 
-        protected readonly ICommandParser _commandParser;
+        protected readonly ICommandParser CommandParser;
 
         internal ParseResult(string cmd, IList<string> extraArgs, ICommandParser commandParser, bool success)
         {
@@ -27,7 +27,7 @@ namespace RCommandLine
             ExtraArguments = extraArgs;
             Success = success;
 
-            _commandParser = commandParser;
+            CommandParser = commandParser;
         }
 
     }
@@ -52,7 +52,7 @@ namespace RCommandLine
 
         public string GetCommandList()
         {
-            return string.Format("Available commands:\n{0}", _commandParser.GetCommandList());
+            return string.Format("Available commands:\n{0}", CommandParser.GetCommandList());
         }
 
         public void ShowCommandList()

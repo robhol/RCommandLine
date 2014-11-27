@@ -17,10 +17,9 @@ namespace RCommandLine
         /// </summary>
         public Type CommandOptionsType { get { return _commandOptionsType; } }
 
-        public HasCommandAttribute(Type commandOptionsType, string name = null)
+        public HasCommandAttribute(Type commandOptionsType, string name = null) : base(name)
         {
             _commandOptionsType = commandOptionsType;
-            _name = name;
         }
     }
 }

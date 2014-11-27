@@ -8,10 +8,13 @@ namespace RCommandLine
     public abstract class ElementAttribute : Attribute
     {
 
+        internal ElementAttribute(string name = null)
+        {
+            Name = name;
+        }
 
-        protected string _name;
-        public string Name { get { return _name; } }
-        
+        public string Name { get; private set; }
+
         public string Description { get; set; }
 
     }

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
 namespace RCommandLine
 {
-    using System.Collections;
-    using System.Reflection.Emit;
-    using System.Text.RegularExpressions;
-
     public class ParameterParser<TTarget> : IParameterParser<TTarget> where TTarget : new()
     {
 
@@ -183,7 +180,7 @@ namespace RCommandLine
                     rv.Add(new ParsedFlagArgumentInfo
                     {
                         Element = element,
-                        Match = info.Match.Clone(c.ToString())
+                        Match = info.Match.Clone(c.ToString(CultureInfo.InvariantCulture))
                     });
                 }
 

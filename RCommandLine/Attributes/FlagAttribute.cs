@@ -15,10 +15,9 @@ namespace RCommandLine
         /// </summary>
         private readonly char _shortName;
 
-        public FlagAttribute(char shortName, string longName)
+        public FlagAttribute(char shortName, string longName) : base(longName)
         {
             _shortName = shortName;
-            _name = longName;
         }
 
         public FlagAttribute(char shortName) : this(shortName, null) { }
