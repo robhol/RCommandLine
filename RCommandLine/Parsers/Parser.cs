@@ -72,17 +72,18 @@ namespace RCommandLine
             
             var remainingArgsList = remainingArgs.ToList();
 
-            //TODO use GetFlagName
-            if (Options.AutomaticHelp && remainingArgsList.Count == 1 && new[] { "-?", "--help" }.Contains(remainingArgsList.First().ToLower()))
+            if (Options.AutomaticHelp && remainingArgsList.Count == 1)
             {
-
-                if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
-                    if (!_commandParser.IsTerminal)
+                var autoHelpFlag = FlagMatch.FromArgumentString(remainingArgsList.First().ToLower(), Options);
+                if (autoHelpFlag != null && (autoHelpFlag.MatchesFlag("help", FlagType.Long, false) || autoHelpFlag.MatchesFlag("?", FlagType.Short, false)) )
+                {
+                    if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
                         PrintCommandList();
-                    else
+                    else if (_parameterParser.IsTerminal)
                         PrintHelpScreen();
 
-                return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
+                    return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
+                }
             }
 
             try

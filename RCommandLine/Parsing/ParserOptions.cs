@@ -130,5 +130,6 @@ namespace RCommandLine
             get { return _defaultShortFlagHeader ?? ShortFlagHeaders.First(); }
             set { _defaultShortFlagHeader = value; }
         }
+
     }
 }

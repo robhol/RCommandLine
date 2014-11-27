@@ -50,6 +50,26 @@ namespace TestRCommandLine
             Assert.IsTrue(op.Contains("BazIntegerArg"));
         }
 
+        [TestMethod]
+        public void Should_PrintCommandList_On_AutoHelpFlag_And_NonTerminalCommand()
+        {
+            var parser = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
+            parser.Parse("");
+
+            Assert.IsTrue(parser.OutputTarget.ToString().Contains("Available commands"));
+        }
+
+        [TestMethod]
+        public void Should_PrintArgumentList_On_AutoHelpFlag_And_TerminalCommand()
+        {
+            var parser = new Parser<CommandTests.MyOptions> { OutputTarget = new InMemoryOutputChannel() };
+            parser.Parse("bar-name baz --help");
+
+            var op = parser.OutputTarget.ToString();
+            Assert.IsFalse(op.Contains("Available commands"));
+            Assert.IsTrue(op.Contains("BazIntegerArg"));
+        }
+
     }
 
     internal class InMemoryOutputChannel : RCommandLine.Output.IOutputTarget

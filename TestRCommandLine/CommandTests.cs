@@ -70,7 +70,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_MapArguments_Without_Command()
         {
-            var opt = _parser.Parse("commonString").Options as MyOptions;
+            var opt = _parser.Parse("commonString").Options;
 
             Assert.IsNotNull(opt);
             Assert.AreEqual("commonString", opt.CommonStringArg);

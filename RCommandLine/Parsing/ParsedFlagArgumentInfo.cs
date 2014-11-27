@@ -11,20 +11,13 @@ namespace RCommandLine
     /// </summary>
     class ParsedFlagArgumentInfo
     {
-
-        public string Header { get; set; }
-
-        public string FlagName { get; set; }
-
-        public string AssignmentOperator { get; set; }
-
-        public string AssignmentValue { get; set; }
-
         public FlagElement Element { get; set; }
+
+        public FlagMatch Match { get; set; }
 
         public override string ToString()
         {
-            return Header + FlagName;
+            return Match.Header + Match.FlagName;
         }
     }
 }
