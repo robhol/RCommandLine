@@ -82,13 +82,7 @@ namespace RCommandLine
 
         public virtual string GetHelpTextRepresentation()
         {
-            string value = null;
-            if (TargetType != typeof(bool))
-                value = (DefaultValue ?? (string.Format("<{0}>", TargetType.Name))).ToString();
-
-            var rep = Util.JoinNotNulls("=", new[] { HelpTextIdentifier, value });
-
-            return string.Format(Required ? "{0}" : "[{0}]", rep);
+            return string.Format(Required ? "{0}" : "[{0}]", HelpTextIdentifier);
         }
 
         public override string ToString()
