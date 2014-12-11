@@ -35,7 +35,7 @@ namespace RCommandLine
             }
         }
 
-        private readonly bool _isNullable = false;
+        private readonly bool _isNullable;
 
         public bool Required { get { return !DefaultValue.HasValue && !_isNullable; } }
 

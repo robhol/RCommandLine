@@ -31,28 +31,28 @@
         class BooleanOptions
         {
             [Flag('a')]
-            public bool a { get; set; }
+            public bool A { get; set; }
 
             [Flag('b')]
-            public bool b { get; set; }
+            public bool B { get; set; }
 
             [Flag('c')]
-            public bool c { get; set; }
+            public bool C { get; set; }
 
             [Flag('d')]
-            public bool d { get; set; }
+            public bool D { get; set; }
 
             [Flag('e')]
-            public bool e { get; set; }
+            public bool E { get; set; }
 
             [Flag('f'), Optional(Default = true)]
-            public bool f { get; set; }
+            public bool F { get; set; }
 
             [Flag('g')]
-            public bool g { get; set; }
+            public bool G { get; set; }
 
             [Flag('h')]
-            public bool h { get; set; }
+            public bool H { get; set; }
 
         }
 
@@ -110,14 +110,14 @@
         {
             var result = _booleanOptionParser.Parse("/a:no /b:1 /c:ON /D=yes /e=0 /f=oFf /g=True /h:false").Options;
             
-            Assert.IsFalse(result.a);
-            Assert.IsTrue(result.b);
-            Assert.IsTrue(result.c);
-            Assert.IsTrue(result.d);
-            Assert.IsFalse(result.e);
-            Assert.IsFalse(result.f); //defaults to true
-            Assert.IsTrue(result.g);
-            Assert.IsFalse(result.h);
+            Assert.IsFalse(result.A);
+            Assert.IsTrue(result.B);
+            Assert.IsTrue(result.C);
+            Assert.IsTrue(result.D);
+            Assert.IsFalse(result.E);
+            Assert.IsFalse(result.F); //defaults to true
+            Assert.IsTrue(result.G);
+            Assert.IsFalse(result.H);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]

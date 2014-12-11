@@ -7,7 +7,7 @@
     internal class AttributeModelBuilder<TOptions>
     {
 
-        private Type _topType;
+        private readonly Type _topType;
 
         public AttributeModelBuilder()
         {

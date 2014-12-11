@@ -30,7 +30,7 @@ namespace RCommandLine
 
     public class ParseResult<TOptions> : ParseResult where TOptions : class, new()
     {
-        private Parser<TOptions> _parser;
+        private readonly Parser<TOptions> _parser;
 
         /// <summary>
         /// The ultimate options object

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RCommandLine;
 
 namespace TestRCommandLine
 {
-    using System.Collections.Generic;
-
     [TestClass]
     public class BasicOptionsTests
     {
