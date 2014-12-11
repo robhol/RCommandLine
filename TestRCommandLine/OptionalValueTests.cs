@@ -3,8 +3,6 @@ using RCommandLine;
 
 namespace TestRCommandLine
 {
-
-    
     /// <summary>
     /// Tests the function of OptionalAttribute (no default value given) and Nullable values.
     /// </summary>
@@ -22,46 +20,46 @@ namespace TestRCommandLine
             [Flag('i')]
             public int? OptionalInteger { get; set; }
 
-            [OrderedParameter(0)]
+            [Argument(0)]
             public string RequiredArgument { get; set; }
 
-            [OrderedParameter(1), Optional]
+            [Argument(1), Optional]
             public string OptionalArgument { get; set; }
         }
 
-        private readonly ParameterParser<OptionalValueOptions> _parameterParser;
+        private readonly ConsolidatedParser<OptionalValueOptions> _parser;
         public OptionalValueTests()
         {
-            _parameterParser = new ParameterParser<OptionalValueOptions>();
+            _parser = ConsolidatedParser.FromAttributes<OptionalValueOptions>();
         }
 
         [TestMethod]
         [ExpectedException(typeof(MissingArgumentException))]
         public void Should_Throw_On_MissingRequiredArgument()
         {
-            _parameterParser.Parse("-s flag");
+            _parser.Parse("-s flag");
         }
 
         [TestMethod]
         [ExpectedException(typeof(MissingArgumentException))]
         public void Should_Throw_On_MissingRequiredFlag()
         {
-            _parameterParser.Parse("arg");
+            _parser.Parse("arg");
         }
 
         [TestMethod]
         [ExpectedException(typeof(MissingValueException))]
         public void Should_Throw_On_MissingFlagValue()
         {
-            _parameterParser.Parse("arg --required-string reqstr --optional-string");
+            _parser.Parse("arg --required-string reqstr --optional-string");
             Assert.Fail("Expected MissingValueException. MissingMissingValuesExceptionException?");
         }
 
         [TestMethod]
         public void Should_MapTypeDefaultValues()
         {
-            var optsNull = _parameterParser.Parse("reqArg -s reqString");
-            var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");
+            var optsNull = _parser.Parse("reqArg -s reqString").Options;
+            var optsGiven = _parser.Parse("reqArg -s reqString -Ai hello 42 something").Options;
 
             Assert.IsNull(optsNull.OptionalString);
             Assert.IsNull(optsNull.OptionalInteger);
@@ -71,7 +69,5 @@ namespace TestRCommandLine
             Assert.AreEqual(42, optsGiven.OptionalInteger);
             Assert.AreEqual("something", optsGiven.OptionalArgument);
         }
-
-
     }
 }

@@ -5,10 +5,9 @@ namespace RCommandLine
     /// <summary>
     /// Contains common properties for command line element attributes.
     /// </summary>
-    public abstract class ElementAttribute : Attribute
+    public abstract class ParameterAttribute : Attribute
     {
-
-        internal ElementAttribute(string name = null)
+        internal ParameterAttribute(string name = null)
         {
             Name = name;
         }
@@ -16,6 +15,5 @@ namespace RCommandLine
         public string Name { get; private set; }
 
         public string Description { get; set; }
-
     }
 }

@@ -34,7 +34,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModelConversion\AttributeModelBuilder.cs" />
+    <Compile Include="Util\Maybe.cs" />
+    <Compile Include="Models\SharedParameterCollection.cs" />
+    <Compile Include="Parsers\ConsolidatedParser.cs" />
+    <Compile Include="Parsers\ConsolidatedParser.Factory.cs" />
+    <Compile Include="Parsers\ParameterParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parsers\ParserOptions.TemplateDefinitions.cs" />
+    <Compile Include="Parsing\InputArgument.cs" />
     <Compile Include="Parsing\ArgumentConverters.cs" />
     <Compile Include="Attributes\HasCommandAttribute.cs" />
     <Compile Include="Attributes\OptionalAttribute.cs" />
@@ -44,28 +53,29 @@
     <Compile Include="Parsing\FlagType.cs" />
     <Compile Include="Parsing\ParsedFlagArgumentInfo.cs" />
     <Compile Include="Parsing\ParseResult.cs" />
-    <Compile Include="Elements\OrderedParameterElement.cs" />
-    <Compile Include="Elements\CommandElement.cs" />
-    <Compile Include="Elements\Element.cs" />
-    <Compile Include="Elements\CommonParameterElement.cs" />
+    <Compile Include="Models\Argument.cs" />
+    <Compile Include="Models\Command.cs" />
+    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Parameter.cs" />
     <Compile Include="Parsers\CommandParser.cs" />
-    <Compile Include="Attributes\OrderedParameterAttribute.cs" />
-    <Compile Include="Attributes\ElementAttribute.cs" />
+    <Compile Include="Attributes\ArgumentAttribute.cs" />
+    <Compile Include="Attributes\ParameterAttribute.cs" />
     <Compile Include="Attributes\FlagAttribute.cs" />
-    <Compile Include="Elements\FlagElement.cs" />
+    <Compile Include="Models\Flag.cs" />
     <Compile Include="Exceptions\MissingValueException.cs" />
     <Compile Include="Exceptions\UnrecognizedFlagException.cs" />
     <Compile Include="Interfaces\ICommandParser.cs" />
     <Compile Include="Interfaces\IParameterParser.cs" />
-    <Compile Include="Parsers\ParameterParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Output\ConsoleOutputChannel.cs" />
     <Compile Include="Output\IOutputTarget.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Util\Util.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Parsers\ConsolidatedParser.TextGen.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -12,7 +12,7 @@ namespace TestRCommandLine
             [Flag('v')]
             public bool CommonBool { get; set; }
 
-            [OrderedParameter(0)]
+            [Argument(0)]
             public string CommonStringArg { get; set; }
         }
 
@@ -29,7 +29,7 @@ namespace TestRCommandLine
             [Flag('X')]
             public double FooDouble { get; set; }
 
-            [OrderedParameter(1)]
+            [Argument(1)]
             public int FooIntArg { get; set; }
 
         }
@@ -42,7 +42,7 @@ namespace TestRCommandLine
             [Flag('X')]
             public string BarString { get; set; }
 
-            [OrderedParameter(1), Optional]
+            [Argument(1), Optional]
             public string BarStringArg { get; set; }
 
         }
@@ -50,7 +50,7 @@ namespace TestRCommandLine
         public class BarBazOptions : MyOptions
         {
 
-            [OrderedParameter(1)]
+            [Argument(1)]
             public int BazIntegerArg { get; set; }
 
         }
@@ -60,11 +60,11 @@ namespace TestRCommandLine
             
         }
         
-        private readonly Parser<MyOptions> _parser;
+        private readonly ConsolidatedParser<MyOptions> _parser;
 
         public CommandTests()
         {
-            _parser = new Parser<MyOptions>();
+            _parser = ConsolidatedParser.FromAttributes<MyOptions>();
         }
 
         [TestMethod]

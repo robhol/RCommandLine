@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,75 +18,23 @@ namespace RCommandLine
         /// </summary>
         public bool IsTerminal { get { return _commands.Count == 0; } }
 
-        private readonly List<CommandElement> _commands;
+        private readonly List<Command> _commands;
         private readonly Type _topType;
 
         public CommandParser(ParserOptions options = null)
         {
             ParserOptions = options ?? new ParserOptions();
 
-            _commands = new List<CommandElement>();
+            _commands = new List<Command>();
             _topType = typeof(TTarget);
-
-            ExploreCommandTree(_topType);
-        }
-        
-        private void ExploreCommandTree(MemberInfo t, CommandElement parent = null)
-        {
-            foreach (var cmd in t.GetCustomAttributes<HasCommandAttribute>(false).Select(attr => new CommandElement(attr, parent)))
-            {
-                if (parent == null)
-                    _commands.Add(cmd);
-
-                ExploreCommandTree(cmd.CommandOptionsType, cmd);
-            }
         }
 
-        public IParameterParser<TOptions> GetParser<TOptions>(IEnumerable<string> inputArgs, out Type parserType, out IEnumerable<string> remainingArgs, out string commandName)
-        {
-            var optType = _topType;
-
-            CommandElement currentCommand = null;
-            var commandPathList = new List<CommandElement>();
-
-            var argQueue = new Queue<string>(inputArgs);
-            
-            while (argQueue.Count > 0)
-            {
-                var name = argQueue.Peek();
-
-                var cmdSource = (currentCommand == null ? _commands : currentCommand.Children);
-                var next =
-                    cmdSource.FirstOrDefault(e => name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase));
-
-                //no matching HasCommandAttribute property
-                if (next == null)
-                    break;
-
-                currentCommand = next;
-                commandPathList.Add(currentCommand);
-
-                argQueue.Dequeue();
-            }
-
-            if (currentCommand != null)
-                optType = currentCommand.CommandOptionsType;
-
-            //will throw ArgumentException if the optType has no default constructor
-            parserType = typeof(ParameterParser<>).MakeGenericType(optType);
-            var isTerminal = currentCommand != null ? !currentCommand.Children.Any() : !optType.GetCustomAttributes<HasCommandAttribute>().Any();
-
-            remainingArgs = argQueue;
-            commandName = string.Join(" ", commandPathList.Select(c => c.Name));
-
-            return (IParameterParser<TOptions>)Activator.CreateInstance(parserType, ParserOptions, isTerminal);
-        }
 
         public string GetCommandList()
         {
             var sb = new StringBuilder();
 
-            Action<CommandElement, string> walk = null;
+            Action<Command, string> walk = null;
             walk = (c, prefix) =>
             {
                 if (!c.Hidden)
@@ -104,3 +53,4 @@ namespace RCommandLine
     }
 
 }
+*/

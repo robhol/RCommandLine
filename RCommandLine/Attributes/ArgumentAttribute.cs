@@ -8,12 +8,12 @@ namespace RCommandLine
     /// If a Name is not provided, it will default to the property name.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class OrderedParameterAttribute : ElementAttribute
+    public class ArgumentAttribute : ParameterAttribute
     {
 
         private readonly int _order;
 
-        public OrderedParameterAttribute(int order)
+        public ArgumentAttribute(int order)
         {
             _order = order;
         }

@@ -7,7 +7,7 @@ namespace RCommandLine
     /// If a Name is not provided (null), it will default to a "flagified" version of the assigned Property's name. (MyProperty => --my-property)
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlagAttribute : ElementAttribute
+    public class FlagAttribute : ParameterAttribute
     {
 
         /// <summary>

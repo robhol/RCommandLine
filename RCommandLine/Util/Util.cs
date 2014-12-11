@@ -14,16 +14,16 @@ namespace RCommandLine
 
         public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable)
         {
-            Queue<bool> stringQuoteInfo;
+            IEnumerable<bool> stringQuoteInfo;
             return JoinQuotedStringSegments(strEnumerable, out stringQuoteInfo);
         }
 
-        public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable, out Queue<bool> stringQuoteInfo)
+        public static IEnumerable<string> JoinQuotedStringSegments(IEnumerable<string> strEnumerable, out IEnumerable<bool> quoteEnumerable)
         {
             var output = new List<string>();
-            stringQuoteInfo = new Queue<bool>();
+            var stringQuoteInfo = new List<bool>();
             var queue = new Queue<string>(strEnumerable);
-
+            
             var currentString = new List<string>();
 
             while (queue.Count > 0)
@@ -36,7 +36,7 @@ namespace RCommandLine
                     {
                         currentString.Add(s.Substring(0, s.Length - 1));
                         output.Add(string.Join(" ", currentString));
-                        stringQuoteInfo.Enqueue(true);
+                        stringQuoteInfo.Add(true);
                         currentString.Clear();
                     }
                     else
@@ -46,7 +46,7 @@ namespace RCommandLine
                     if (s.EndsWith(Quote))
                     {
                         output.Add(s.Substring(1, s.Length - 2));
-                        stringQuoteInfo.Enqueue(true);
+                        stringQuoteInfo.Add(true);
                     }
                     else
                         currentString.Add(s.Substring(1));
@@ -54,7 +54,7 @@ namespace RCommandLine
                 else
                 {
                     output.Add(s);
-                    stringQuoteInfo.Enqueue(false);
+                    stringQuoteInfo.Add(false);
                 }
 
             }
@@ -62,9 +62,10 @@ namespace RCommandLine
             if (currentString.Count > 0)
             {
                 output.Add(Quote + string.Join(" ", currentString));
-                stringQuoteInfo.Enqueue(false);
+                stringQuoteInfo.Add(false);
             }
 
+            quoteEnumerable = stringQuoteInfo;
             return output;
         }
 

@@ -10,9 +10,12 @@ namespace ExampleApplication
             
             //Step 1: define Options classes (see ExampleOptions.cs)
             //Step 2: instantiate Parser with desired Options type and settings
-            var parser = new Parser<ExampleOptions>(
-                baseCommandName:
-                    System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location)
+            var parser = ConsolidatedParser.FromAttributes<ExampleOptions>(
+                new ParserOptions
+                {
+                    BaseCommandName =
+                        System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location)
+                }
                 );
                 
 

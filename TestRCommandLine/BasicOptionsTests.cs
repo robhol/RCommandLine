@@ -23,26 +23,26 @@ namespace TestRCommandLine
             [Flag('s', "str")]
             public string StringFlag { get; set; }
 
-            [OrderedParameter(0)]
+            [Argument(0)]
             public string StringArgument { get; set; }
 
-            [OrderedParameter(1)]
+            [Argument(1)]
             public int IntegerArgument { get; set; }
 
         }
 
-        private readonly Parser<BasicOptions> _parser;
+        private readonly ConsolidatedParser<BasicOptions> _parser;
 
         public BasicOptionsTests()
         {
-            _parser = new Parser<BasicOptions>();
+            _parser = ConsolidatedParser.FromAttributes<BasicOptions>();
         }
 
         [TestMethod]
         public void Should_ParseFlags()
         {
             var result = _parser.Parse("--str -bi grell 8 arg 9001");
-            var opts = result.Options as BasicOptions;
+            var opts = result.Options;
 
             Assert.IsTrue(result.Success);
             Assert.IsNotNull(opts);

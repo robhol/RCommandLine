@@ -19,40 +19,34 @@ namespace RCommandLine
 
         public bool Success { get; protected set; }
 
-        protected readonly ICommandParser CommandParser;
-
-        internal ParseResult(string cmd, IList<string> extraArgs, ICommandParser commandParser, bool success)
+        internal ParseResult(string cmd, IList<string> extraArgs, bool success)
         {
             Command = cmd;
             ExtraArguments = extraArgs;
             Success = success;
-
-            CommandParser = commandParser;
         }
 
     }
 
-    public class ParseResult<TOptions> : ParseResult where TOptions : class
+    public class ParseResult<TOptions> : ParseResult where TOptions : class, new()
     {
+        private ConsolidatedParser<TOptions> _parser;
 
         /// <summary>
         /// The ultimate options object
         /// </summary>
         public TOptions Options { get; private set; }
 
-        
-        private readonly IParameterParser<TOptions> _parameterParser;
-
-        internal ParseResult(TOptions finalOptions, string cmd, IList<string> extraArgs, ICommandParser commandParser, IParameterParser<TOptions> parameterParser,
-            bool success) : base(cmd, extraArgs, commandParser, success)
+        internal ParseResult(TOptions finalOptions, string cmd, IList<string> extraArgs, ConsolidatedParser<TOptions> parser,
+            bool success) : base(cmd, extraArgs, success)
         {
+            _parser = parser;
             Options = finalOptions;
-            _parameterParser = parameterParser;
         }
 
         public string GetCommandList()
         {
-            return string.Format("Available commands:\n{0}", CommandParser.GetCommandList());
+            return string.Format("Available commands:\n{0}", _parser.GetCommandList());
         }
 
         public void ShowCommandList()
@@ -63,8 +57,8 @@ namespace RCommandLine
         public string GetHelpText()
         {
             return string.Format("{0}\n\n{1}",
-                _parameterParser.GetUsage(string.IsNullOrEmpty(Command) ? "" : Command),
-                _parameterParser.GetArgumentList()
+                _parser.GetUsage(string.IsNullOrEmpty(Command) ? "" : Command),
+                _parser.GetArgumentList()
                 );
         }
 

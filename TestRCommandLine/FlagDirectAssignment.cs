@@ -7,9 +7,9 @@
     [TestClass]
     public class FlagDirectAssignment
     {
-        private readonly Parser<Options> _parser;
-        private readonly Parser<Options> _windowsStyleParser;
-        private readonly Parser<BooleanOptions> _booleanOptionParser;
+        private readonly ConsolidatedParser<Options> _parser;
+        private readonly ConsolidatedParser<Options> _windowsStyleParser;
+        private readonly ConsolidatedParser<BooleanOptions> _booleanOptionParser;
 
         class Options
         {
@@ -58,9 +58,9 @@
 
         public FlagDirectAssignment()
         {
-            _parser = new Parser<Options>();
-            _windowsStyleParser = new Parser<Options>(ParserOptions.Template.Windows);
-            _booleanOptionParser = new Parser<BooleanOptions>();
+            _parser = ConsolidatedParser.FromAttributes<Options>();
+            _windowsStyleParser = ConsolidatedParser.FromAttributes<Options>(ParserOptions.Templates.Windows);
+            _booleanOptionParser = ConsolidatedParser.FromAttributes<BooleanOptions>();
         }
 
         [TestMethod]

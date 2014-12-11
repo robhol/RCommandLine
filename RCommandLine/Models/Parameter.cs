@@ -7,50 +7,45 @@ namespace RCommandLine
     /// <summary>
     /// Either a named argument or a flag (subtype)
     /// </summary>
-    abstract class CommonParameterElement : Element
+    abstract class Parameter : Model
     {
-        public bool Required { get; set; }
-        public object DefaultValue { get; set; }
+        
+
+        public Maybe<object> DefaultValue { get; private set; }
         public bool HasValue { get; private set; }
 
         public PropertyInfo TargetProperty { get; private set; }
+
         public Type TargetType { get; private set; }
-
-        public Type EncounteredInType { get; private set; }
-
-        protected CommonParameterElement(ElementAttribute attribute, PropertyInfo property, OptionalAttribute optionalAttributeInfo)
+        
+        protected Parameter(string name, PropertyInfo property, Maybe<object> defaultValue) : base(property.DeclaringType)
         {
-            Name = attribute.Name;
-            Description = attribute.Description;
+            Name = name;
 
             TargetProperty = property;
             TargetType = property.PropertyType;
 
-            EncounteredInType = property.DeclaringType;
-            
-            Required = true;
+            DefaultValue = defaultValue;
 
             var nullableType = Nullable.GetUnderlyingType(TargetType);
             if (nullableType != null)
             {
                 TargetType = nullableType;
-                Required = false;
+                _isNullable = true;
             }
-
-            if (optionalAttributeInfo == null) 
-                return;
-            
-            DefaultValue = optionalAttributeInfo.Default;
-            Required = false;
         }
+
+        private readonly bool _isNullable = false;
+
+        public bool Required { get { return !DefaultValue.HasValue && !_isNullable; } }
 
         /// <summary>
         /// Provides the element with an opportunity to initialize, given the prospective output object
         /// </summary>
-        public void Hydrate(object target)
+        public void ApplyDefaultValue(object target)
         {
-            if (DefaultValue != null)
-                SetValue(target, DefaultValue, false);
+            if (DefaultValue.HasValue)
+                SetValue(target, DefaultValue.Value, false);
         }
 
         public void ConvertAndSetValue(object target, string arg)
@@ -74,7 +69,7 @@ namespace RCommandLine
 
         public void SetValue(object target, object value, bool updateHasValue = true)
         {
-            TargetProperty.SetValue(target, value);
+            TargetProperty.SetValue(target, value, null);
             HasValue = HasValue || updateHasValue;
         }
 

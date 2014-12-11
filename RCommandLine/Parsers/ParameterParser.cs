@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Text;
 
 namespace RCommandLine
 {
-    public class ParameterParser<TTarget> : IParameterParser<TTarget> where TTarget : new()
+    public class ParameterParser<TTarget> where TTarget : new()
     {
 
         public ParserOptions ParserOptions { get; set; }
             
-        List<FlagElement> _flags;
-        List<OrderedParameterElement> _parameters;
+        List<Flag> _flags;
+        List<Argument> _parameters;
 
-        IEnumerable<CommonParameterElement> AllParameters { get { return _flags.Union<CommonParameterElement>(_parameters); } } 
+        IEnumerable<Parameter> AllParameters { get { return _flags.Union<Parameter>(_parameters); } } 
 
         readonly Type _optionsType;
 
@@ -37,11 +38,11 @@ namespace RCommandLine
 
             var targetObject = new TTarget();
             foreach (var e in AllParameters)
-                e.Hydrate(targetObject);
+                e.ApplyDefaultValue(targetObject);
 
             //Queues for "waiting" flags and parameters - ie. the next ones to receive a value.
-            var flagQueue = new Queue<FlagElement>();
-            var parameterQueue = new Queue<OrderedParameterElement>(_parameters.OrderBy(element => element.Order));
+            var flagQueue = new Queue<Flag>();
+            var parameterQueue = new Queue<Argument>(_parameters.OrderBy(element => element.Order));
 
             var extraArguments = new List<string>();
             
@@ -205,12 +206,12 @@ namespace RCommandLine
         public string GetUsage(string shownCommand)
         {
             return shownCommand + " " +
-                string.Join(" ", 
+                string.Join(" ",
                 AllParameters
                     .OrderBy(f => f.GetType().Name)
                     .ThenByDescending(f => f.Required)
-                    .ThenBy(f => (f is OrderedParameterElement) ? ((OrderedParameterElement)f).Order : 0)
-                    .Select(f => f.GetHelpTextRepresentation() ));
+                    .ThenBy(f => (f is Argument) ? ((Argument)f).Order : 0)
+                    .Select(f => f.GetHelpTextRepresentation()));
         }
 
         public string GetArgumentList()
@@ -257,34 +258,6 @@ namespace RCommandLine
         {
             return AllParameters.Count(p => p.Required);
         }
-
-        /// <summary>
-        /// Whether the options object belonging to this ParameterParser lacks subcommands
-        /// </summary>
-        public bool IsTerminal { get; private set; }
-
-        void ExploreType()
-        {
-            _flags = new List<FlagElement>();
-            _parameters = new List<OrderedParameterElement>();
-
-            foreach (var prop in _optionsType.GetProperties())
-            {
-                var attribute = prop.GetCustomAttribute<ElementAttribute>();
-
-                if (attribute == null)
-                    continue;
-
-                var optionalInfo = prop.GetCustomAttribute<OptionalAttribute>();
-
-                var flag = attribute as FlagAttribute;
-                if (flag != null)
-                    _flags.Add(new FlagElement(flag, prop, optionalInfo));
-                else
-                    _parameters.Add(new OrderedParameterElement((OrderedParameterAttribute)attribute, prop, optionalInfo));
-            }
-
-        }
-
     }
 }
+*/

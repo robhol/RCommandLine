@@ -3,7 +3,7 @@
 namespace RCommandLine
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class HasCommandAttribute : ElementAttribute
+    public class HasCommandAttribute : ParameterAttribute
     {
         private readonly Type _commandOptionsType;
 

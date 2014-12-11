@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace RCommandLine
 {
+    using Output;
+
     public partial class ParserOptions
     {
         private List<string> _flagValueSeparators;
@@ -11,22 +13,19 @@ namespace RCommandLine
         private string _defaultLongFlagHeader;
         private string _defaultShortFlagHeader;
 
-        public ParserOptions(Template optionsTemplate = Template.Default, string baseCommandName = null)
+        public ParserOptions(string baseCommandName = null)
         {
-            AutomaticCommandList = true;
             AutomaticUsage = true;
             AutomaticHelp = true;
 
-            BaseCommandName     = baseCommandName;
-            FlagValueSeparators = DefaultFlagValueSeparators[optionsTemplate];
-            LongFlagHeaders     = DefaultLongFlagHeaders[optionsTemplate];
-            ShortFlagHeaders    = DefaultShortFlagHeaders[optionsTemplate];
-        }
+            BaseCommandName = baseCommandName;
 
-        /// <summary>
-        /// Whether or not to show a list of acceptable commands when input is empty.
-        /// </summary>
-        public bool AutomaticCommandList { get; set; }
+            OutputTarget = ConsoleOutputChannel.Instance;
+
+            FlagValueSeparators = new List<string> {"=", ":"};
+            LongFlagHeaders = new List<string> {"--", "/"};
+            ShortFlagHeaders = new List<string> {"-", "/"};
+        }
 
         /// <summary>
         /// Whether or not to display a command's usage when given arguments are insufficient or incorrect
@@ -90,6 +89,7 @@ namespace RCommandLine
             get { return _defaultShortFlagHeader ?? ShortFlagHeaders.First(); }
             set { _defaultShortFlagHeader = value; }
         }
-        
+
+        public IOutputTarget OutputTarget { get; set; }
     }
 }

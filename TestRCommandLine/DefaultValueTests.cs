@@ -21,24 +21,24 @@ namespace TestRCommandLine
             [Flag('i'), Optional(Default = 1024)]
             public int OptionalInteger { get; set; }
 
-            [OrderedParameter(0)]
+            [Argument(0)]
             public string RequiredArgument { get; set; }
 
-            [OrderedParameter(1), Optional(Default = "nothing")]
+            [Argument(1), Optional(Default = "nothing")]
             public string OptionalArgument { get; set; }
         }
 
-        private readonly ParameterParser<DefaultValueOptions> _parameterParser;
+        private readonly ConsolidatedParser<DefaultValueOptions> _parameterParser;
         public DefaultValueTests()
         {
-            _parameterParser = new ParameterParser<DefaultValueOptions>();
+            _parameterParser = ConsolidatedParser.FromAttributes<DefaultValueOptions>();
         }
 
         [TestMethod]
         public void Should_MapGivenDefaultValues()
         {
-            var optsDefault = _parameterParser.Parse("reqArg -s reqString");
-            var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something");
+            var optsDefault = _parameterParser.Parse("reqArg -s reqString").Options;
+            var optsGiven = _parameterParser.Parse("reqArg -s reqString -Ai hello 42 something").Options;
 
             Assert.AreEqual("none", optsDefault.OptionalString);
             Assert.AreEqual(1024, optsDefault.OptionalInteger);

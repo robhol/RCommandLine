@@ -4,41 +4,44 @@ namespace RCommandLine
 {
     partial class ParserOptions
     {
-        private static readonly Dictionary<Template, List<string>> DefaultFlagValueSeparators = new Dictionary<Template, List<string>>
-        {
-            {Template.Default,  new List<string>{"=", ":"}},
-            {Template.Unix,     new List<string>()},
-            {Template.Windows,  new List<string>{"=", ":"}},
-        };
 
-        private static readonly Dictionary<Template, List<string>> DefaultLongFlagHeaders = new Dictionary<Template, List<string>>
-        {
-            {Template.Default,  new List<string>{"--", "/"}},
-            {Template.Unix,     new List<string>{"--"}},
-            {Template.Windows,  new List<string>{"/"}},
-        };
+        private static readonly ParserOptionsTemplates TemplatesObject = new ParserOptionsTemplates();
+        public static ParserOptionsTemplates Templates { get { return TemplatesObject; }}
 
-        private static readonly Dictionary<Template, List<string>> DefaultShortFlagHeaders = new Dictionary<Template, List<string>>
+        public class ParserOptionsTemplates
         {
-            {Template.Default,  new List<string>{"-", "/"}},
-            {Template.Unix,     new List<string>{"-"}},
-            {Template.Windows,  new List<string>{"/"}},
-        };
 
-        public enum Template
-        {
+            internal ParserOptionsTemplates()
+            {
+                Default = new ParserOptions();
+
+                Unix = new ParserOptions
+                {
+                    FlagValueSeparators = new List<string>(),
+                    LongFlagHeaders = new List<string> { "--" },
+                    ShortFlagHeaders = new List<string> { "-" }
+                };
+
+                Windows = new ParserOptions
+                {
+                    FlagValueSeparators = new List<string>{"=", ":"},
+                    LongFlagHeaders = new List<string> { "/" },
+                    ShortFlagHeaders = new List<string> { "/" }
+                };
+            }
+
             /// <summary>
             /// Accepts GNU/Unix-style as well as DOS/Windows-style arguments
             /// </summary>
-            Default,
+            public ParserOptions Default { get; private set; }
             /// <summary>
             /// Accepts GNU/Unix-style arguments (--flag, -f), no joined assignment (-f 3 ok, -f:3 error)
             /// </summary>
-            Unix,
+            public ParserOptions Unix { get; private set; }
             /// <summary>
             /// Accepts DOS/Windows-style arguments (/flag, /f), accepts joined assignment (/f 3 = /f=3 or /f:3) 
             /// </summary>
-            Windows
+            public ParserOptions Windows { get; private set; }
         }
 
     }
