@@ -7,7 +7,7 @@
     partial class Parser<TTarget>
     {
 
-        /* Text Generation */
+        /* Text generation */
 
         public string GetCommandList()
         {

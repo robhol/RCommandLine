@@ -29,7 +29,6 @@ namespace RCommandLine
 
             Type |= options.ShortFlagHeaders.Contains(Header) ? FlagType.Short : 0;
             Type |= options.LongFlagHeaders.Contains(Header)  ? FlagType.Long  : 0;
-
         }
 
         public static FlagMatch FromArgumentString(string arg, ParserOptions options)
@@ -57,7 +56,6 @@ namespace RCommandLine
         {
             return Type.HasFlag(type) && FlagName.Equals(name, caseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
         }
-
 
     }
 }

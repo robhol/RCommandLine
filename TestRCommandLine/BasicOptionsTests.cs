@@ -79,7 +79,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_Throw_On_InvalidFlagName()
         {
-            _parser.Options.AutomaticUsage = false; // this option "swallows" the exception
+            _parser.Options.AutomaticUsage = false; //this option "swallows" the exception
             try
             {
                 _parser.Parse("--str required --this-flag-doesnt-even-exist");
