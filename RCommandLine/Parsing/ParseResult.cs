@@ -30,14 +30,14 @@ namespace RCommandLine
 
     public class ParseResult<TOptions> : ParseResult where TOptions : class, new()
     {
-        private ConsolidatedParser<TOptions> _parser;
+        private Parser<TOptions> _parser;
 
         /// <summary>
         /// The ultimate options object
         /// </summary>
         public TOptions Options { get; private set; }
 
-        internal ParseResult(TOptions finalOptions, string cmd, IList<string> extraArgs, ConsolidatedParser<TOptions> parser,
+        internal ParseResult(TOptions finalOptions, string cmd, IList<string> extraArgs, Parser<TOptions> parser,
             bool success) : base(cmd, extraArgs, success)
         {
             _parser = parser;

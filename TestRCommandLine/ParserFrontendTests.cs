@@ -27,7 +27,7 @@ namespace TestRCommandLine
         public void Should_PrintArgumentList_On_ValidCommand_And_MissingArguments()
         {
             var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = ConsolidatedParser.FromAttributes<CommandTests.MyOptions>(parserOptions);
+            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
             parser.Parse("bar-name baz");
 
             var op = parserOptions.OutputTarget.ToString();
@@ -39,7 +39,7 @@ namespace TestRCommandLine
         public void Should_PrintCommandList_On_AutoHelpFlag_And_NonTerminalCommand()
         {
             var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = ConsolidatedParser.FromAttributes<CommandTests.MyOptions>(parserOptions);
+            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
             parser.Parse("");
 
             Assert.IsTrue(parserOptions.OutputTarget.ToString().Contains("Available commands"));
@@ -49,7 +49,7 @@ namespace TestRCommandLine
         public void Should_PrintArgumentList_On_AutoHelpFlag_And_TerminalCommand()
         {
             var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = ConsolidatedParser.FromAttributes<CommandTests.MyOptions>(parserOptions);
+            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
             parser.Parse("bar-name baz --help");
 
             var op = parserOptions.OutputTarget.ToString();

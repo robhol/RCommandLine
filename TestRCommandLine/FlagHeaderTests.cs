@@ -9,21 +9,21 @@ namespace TestRCommandLine
     [TestClass]
     public class FlagHeaderTests
     {
-        private readonly ConsolidatedParser<BasicOptionsTests.BasicOptions> _defaultParser;
-        private readonly ConsolidatedParser<BasicOptionsTests.BasicOptions> _windowsStyleParser;
-        private readonly ConsolidatedParser<BasicOptionsTests.BasicOptions> _unixStyleParser;
+        private readonly Parser<BasicOptionsTests.BasicOptions> _defaultParser;
+        private readonly Parser<BasicOptionsTests.BasicOptions> _windowsStyleParser;
+        private readonly Parser<BasicOptionsTests.BasicOptions> _unixStyleParser;
 
         public FlagHeaderTests()
         {
             //default is to accept any character
-            _defaultParser = ConsolidatedParser.FromAttributes<BasicOptionsTests.BasicOptions>();
+            _defaultParser = Parser.FromAttributes<BasicOptionsTests.BasicOptions>();
 
-            _windowsStyleParser = ConsolidatedParser.FromAttributes<BasicOptionsTests.BasicOptions>(new ParserOptions
+            _windowsStyleParser = Parser.FromAttributes<BasicOptionsTests.BasicOptions>(new ParserOptions
             {
                 ShortFlagHeaders = new List<string> {"/"},
                 LongFlagHeaders = new List<string> {"/"}
             });
-            _unixStyleParser = ConsolidatedParser.FromAttributes<BasicOptionsTests.BasicOptions>(new ParserOptions
+            _unixStyleParser = Parser.FromAttributes<BasicOptionsTests.BasicOptions>(new ParserOptions
             {
                 ShortFlagHeaders = new List<string> {"-"},
                 LongFlagHeaders = new List<string> {"--"}

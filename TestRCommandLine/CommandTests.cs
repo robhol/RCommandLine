@@ -60,11 +60,11 @@ namespace TestRCommandLine
             
         }
         
-        private readonly ConsolidatedParser<MyOptions> _parser;
+        private readonly Parser<MyOptions> _parser;
 
         public CommandTests()
         {
-            _parser = ConsolidatedParser.FromAttributes<MyOptions>();
+            _parser = Parser.FromAttributes<MyOptions>();
         }
 
         [TestMethod]

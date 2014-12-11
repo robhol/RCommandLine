@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Text;
 
-    partial class ConsolidatedParser<TTarget>
+    partial class Parser<TTarget>
     {
 
         /* Text Generation */

@@ -1,162 +1,286 @@
-﻿/*
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RCommandLine.Output;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RCommandLine
 {
-    public class Parser<TTarget> where TTarget : class
+    using System.Globalization;
+
+    public partial class Parser<TTarget> where TTarget : class, new()
     {
 
         public ParserOptions Options { get; set; }
 
-        private ICommandParser _commandParser;
-        private IParameterParser<TTarget> _parameterParser;
+        internal Command RootCommand { get; private set; }
 
-        private string _commandName;
-
-        /// <summary>
-        /// The target to which output should be written.
-        /// </summary>
-        public IOutputTarget OutputTarget { get; set; }
-
-        public Parser(ParserOptions options = null, string baseCommandName = null)
+        internal Parser(ParserOptions options, Command cmd)
         {
-            Options = options ?? new ParserOptions(baseCommandName: baseCommandName);
-            OutputTarget = ConsoleOutputChannel.Instance;
+            Options = options;
+            RootCommand = cmd;
         }
 
-        public Parser(ParserOptions.Template parserOptionsTemplate, string baseCommandName = null) : this(new ParserOptions(parserOptionsTemplate, baseCommandName))
-        { }
+        public ParseResult<TTarget> Parse(string argString, bool joinQuotedStrings = true)
+        {
+            return joinQuotedStrings 
+                ? Parse(StringToArguments(argString)) 
+                : Parse(argString.Split(' '));
+        }
 
-        /// <summary>
-        /// Parses the input arguments.
-        /// </summary>
-        /// <param name="args"></param>
-        /// <param name="joinStringSegments">If true, quoted string segments containing spaces will be joined before parsing.</param>
-        /// <returns></returns>
-        public ParseResult<TTarget> Parse(IEnumerable<string> args, bool joinStringSegments = true)
+        public ParseResult<TTarget> Parse(IEnumerable<string> args = null)
+        {
+            args = args ?? Environment.GetCommandLineArgs().Skip(1);
+
+            return Parse(args.Select(arg => new InputArgument {Value = arg}).ToList());
+        }
+
+        ParseResult<TTarget> Parse(IList<InputArgument> inputArguments)
         {
 
-            _commandParser = new CommandParser<TTarget>(Options);
-
-            var argList = args.ToList();
-
 #if DEBUG
-            if (argList.LastOrDefault() == "/!debug")
+            if (inputArguments.Any() && inputArguments.Last().Value == "/!debug")
             {
                 Console.WriteLine(">> Debug mode <<");
                 Console.ReadKey(true);
-                argList.RemoveAt(argList.Count - 1);
+                inputArguments.RemoveAt(inputArguments.Count - 1);
             }
 #endif
 
-            if (Options.AutomaticCommandList && string.IsNullOrEmpty(argList.FirstOrDefault()) && !_commandParser.IsTerminal )
-            {
-                PrintCommandList();
-                return ErrorParseResult();
-            }
+            IEnumerable<InputArgument> commandArgs;
+            string commandName;
+            var command = GetCommand(inputArguments, out commandArgs, out commandName);
 
-            IEnumerable<string> remainingArgs;
-            try
-            {
-                Type parserType;
-                _parameterParser = _commandParser.GetParser<TTarget>(argList, out parserType, out remainingArgs, out _commandName);
-                
-            }
-            catch (ArgumentException) //option type has no default constructor
-            {
-                PrintCommandList();
-                return ErrorParseResult();
-            }
-            
-            var remainingArgsList = remainingArgs.ToList();
+            var commandArgsQueue = new Queue<InputArgument>(commandArgs);
 
-            if (Options.AutomaticHelp && remainingArgsList.Count == 1)
-            {
-                var autoHelpFlag = FlagMatch.FromArgumentString(remainingArgsList.First().ToLower(), Options);
-                if (autoHelpFlag != null && (autoHelpFlag.MatchesFlag("help", FlagType.Long, false) || autoHelpFlag.MatchesFlag("?", FlagType.Short, false)) )
-                {
-                    if (_parameterParser == null || string.IsNullOrWhiteSpace(_commandName))
-                        PrintCommandList();
-                    else if (_parameterParser.IsTerminal)
-                        PrintHelpScreen();
+            var showList = (command == RootCommand || command.Hidden);
+            var displayedCommand =
+                (string.IsNullOrEmpty(Options.BaseCommandName)
+                    ? ""
+                    : (Options.BaseCommandName + " " + commandName))
+                + commandName;
 
-                    return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
-                }
-            }
-
-            try
+            if (
+                (Options.AutomaticUsage && !commandArgsQueue.Any() && command.Parameters.Any(p => p.Required)) ||
+                (Options.AutomaticHelp && commandArgsQueue.Count == 1 && IsHelpFlagArgument(commandArgsQueue.Peek())))
             {
-                var pparser = _parameterParser;
-                IEnumerable<string> extra;
-                TTarget options;
-                if (joinStringSegments)
-                {
-                    Queue<bool> stringQuoteInfo;
-                    var x = Util.JoinQuotedStringSegments(remainingArgsList, out stringQuoteInfo);
-                    options = pparser.ParseQueue(new Queue<string>(x), out extra, stringQuoteInfo);
-                }
+                if (showList)
+                    PrintCommandList();
                 else
-                    options = pparser.ParseQueue(new Queue<string>(remainingArgsList), out extra);
+                    PrintUsage(command, displayedCommand);
 
-                return new ParseResult<TTarget>(options, _commandName, extra.ToList(), _commandParser, _parameterParser, true);
-            }
-            catch (UnrecognizedFlagException e)
-            {
-                if (!Options.AutomaticUsage)
-                    throw;
-
-                ErrorAndUsage(string.Format("The flag {0} was not recognized.", e.Flag), _commandName, _parameterParser);
-                return ErrorParseResult();
-            }
-            catch (MissingArgumentException e)
-            {
-                if (!Options.AutomaticUsage)
-                    throw;
-
-                ErrorAndUsage(string.Format(e.Message + " " + string.Join(", ", e.Parameters)), _commandName, _parameterParser);
-                return ErrorParseResult();
-            }
-            catch (MissingValueException e)
-            {
-                ErrorAndUsage("Missing values for " + string.Join(", ", e.Parameters), _commandName, _parameterParser);
                 return ErrorParseResult();
             }
 
+            List<string> extraArguments;
+            var outputObject = ParseArguments(command, commandArgsQueue, out extraArguments);
+
+            return new ParseResult<TTarget>(outputObject, commandName, extraArguments, this, true);
         }
 
-        void PrintCommandList()
+        bool IsHelpFlagArgument(InputArgument ia)
         {
-            OutputTarget.WriteLine(string.Format("Available commands:\n{0}", _commandParser.GetCommandList()));
+            if (ia.Literal)
+                return false;
+
+            var helpFlag = FlagMatch.FromArgumentString(ia.Value, Options);
+            return
+                helpFlag != null
+                && (helpFlag.MatchesFlag("help", FlagType.Long, false) || helpFlag.MatchesFlag("?", FlagType.Short, true));
         }
 
-        void PrintHelpScreen()
+        List<InputArgument> StringToArguments(string s)
         {
-            OutputTarget.WriteLine(string.Format("{0}{1}\n\n{2}",
-                (Options.BaseCommandName == null ? "" : Options.BaseCommandName + " "),
-                _commandName,
-                _parameterParser.GetArgumentList()
-                ));
+            IEnumerable<bool> quotes;
+            var segments = Util.JoinQuotedStringSegments(s.Split(' ').Where(seg => !string.IsNullOrEmpty(seg)), out quotes);
+            return segments.Zip(quotes, (value, quoted) => new InputArgument {Value = value, Literal = quoted}).ToList();
         }
 
-        void ErrorAndUsage(string err, string cmd, IParameterParser<TTarget> p)
+        Command GetCommand(IEnumerable<InputArgument> inputArgs, out IEnumerable<InputArgument> remainingArgs, out string commandName)
         {
-            OutputTarget.WriteLine(err + Environment.NewLine + "Usage for command " + cmd);
-            OutputTarget.WriteLine(p.GetUsage(cmd));
+            var currentCommand = RootCommand;
+            var pathList = new List<Command>();
+
+            var argQueue = new Queue<InputArgument>(inputArgs);
+
+            while (argQueue.Any())
+            {
+                var name = argQueue.Peek();
+                var nextCommand = currentCommand.Children.FirstOrDefault(e => name.Value.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                if (nextCommand == null)
+                    break;
+
+                currentCommand = nextCommand;
+                pathList.Add(currentCommand);
+
+                argQueue.Dequeue();
+            }
+
+            remainingArgs = argQueue;
+            commandName = string.Join(" ", pathList.Select(c => c.Name));
+            return currentCommand;
         }
 
         ParseResult<TTarget> ErrorParseResult()
         {
-            return new ParseResult<TTarget>(null, _commandName, null, _commandParser, _parameterParser, false);
+            return new ParseResult<TTarget>(null, null, null, this, false);
         }
 
-        public ParseResult<TTarget> Parse(string args = null)
+        TTarget ParseArguments(Command cmd, Queue<InputArgument> inputArgs, out List<string> remaining)
         {
-            return Parse((args != null ? args.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : Environment.GetCommandLineArgs().Skip(1)));
+            var outputObject = (TTarget)Activator.CreateInstance(cmd.OutputType);
+
+            foreach (var parameter in cmd.Parameters)
+                parameter.ApplyDefaultValue(outputObject);
+
+            var flagQueue = new Queue<Flag>();
+            var argQueue = new Queue<Argument>(cmd.Arguments);
+
+            var extraArguments = new List<string>();
+
+            while (inputArgs.Any())
+            {
+                var discoveredFlags = new List<ParsedFlagArgumentInfo>();
+
+                //Find any consecutive flags in the queue
+                while (inputArgs.Any())
+                {
+                    var ia = inputArgs.Peek();
+
+                    if (!MatchesFlagSyntax(ia))
+                        break;
+
+                    var flagInfos = ParseFlagArgument(cmd, ia.Value);
+
+                    if (!flagInfos.Any()) 
+                        break;
+
+                    discoveredFlags.AddRange(flagInfos);
+                    inputArgs.Dequeue();
+                }
+
+                //"pre-handle" any discovered flags
+                foreach (var flagInfo in discoveredFlags)
+                {
+                    var flag = flagInfo.Element;
+
+                    //check if we have a directly assigned value /flag:val
+                    var val = flagInfo.Match.AssignmentValue;
+                    if (!string.IsNullOrEmpty(val))
+                    {
+                        flag.SetValue(outputObject, flag.TargetType == typeof (bool)
+                            ? ArgumentConverters.BooleanConverter(val)
+                            : ArgumentConverters.DefaultConverter(val, flag.TargetType));
+                    }
+                    else //no directly assigned value
+                    {
+                        if (flag.TargetType == typeof(bool))
+                            flag.SetValue(outputObject, true);
+                        else
+                            flagQueue.Enqueue(flag); //no value found - check later
+                    }
+                }
+
+                //find any consecutive non-flags
+                while (inputArgs.Any())
+                {
+                    var ia = inputArgs.Peek();
+
+                    if (MatchesFlagSyntax(ia))
+                        break;
+
+                    //find a flag or arg to populate
+                    if (flagQueue.Any())
+                        flagQueue.Dequeue().ConvertAndSetValue(outputObject, ia.Value);
+                    else
+                    {
+                        if (argQueue.Any())
+                            argQueue.Dequeue().ConvertAndSetValue(outputObject, ia.Value);
+                        else
+                            extraArguments.Add(ia.Value);
+                    }
+
+                    inputArgs.Dequeue();
+                }
+            }
+
+            var missing = cmd.Parameters.Where(parameter => parameter.Required && !parameter.HasValue).ToList();
+            if (missing.Any())
+                throw new MissingArgumentException("Missing required arguments.", missing.Select(p => p.Name));
+
+            if (flagQueue.Any())
+                throw new MissingValueException("Syntax error. Missing value for flag(s).", flagQueue.Select(f =>
+                    f.Name != null
+                    ? (Options.DefaultLongFlagHeader + f.Name) 
+                    : (Options.DefaultShortFlagHeader + f.ShortName)));
+
+            remaining = extraArguments;
+            return outputObject;
         }
+
+        bool MatchesFlagSyntax(InputArgument arg)
+        {
+            if (arg.Literal)
+                return false;
+
+            return Options.LongFlagHeaders
+                .Union(Options.ShortFlagHeaders)
+                .Any(arg.Value.StartsWith);
+        }
+
+        List<ParsedFlagArgumentInfo> ParseFlagArgument(Command cmd, string arg)
+        {
+
+            var info = new ParsedFlagArgumentInfo
+            {
+                Match = FlagMatch.FromArgumentString(arg, Options)
+            };
+
+            if (info.Match == null)
+                return new List<ParsedFlagArgumentInfo>();
+
+            var isLong = Options.LongFlagHeaders.Contains(info.Match.Header);
+            if (isLong)
+                info.Element = cmd.Flags.SingleOrDefault(f => f.Name.Equals(info.Match.FlagName, StringComparison.InvariantCultureIgnoreCase));
+            if (info.Element != null)
+                return new List<ParsedFlagArgumentInfo>(new[] {info});
+
+            var isShort = Options.ShortFlagHeaders.Contains(info.Match.Header);
+            if (!isShort)
+                throw new UnrecognizedFlagException(info.Match.Header + info.Match.FlagName);
+
+            var rv = new List<ParsedFlagArgumentInfo>();
+
+            foreach (var c in info.Match.FlagName)
+            {
+                var element = cmd.Flags.SingleOrDefault(f => f.ShortName == c);
+
+                if (element == null)
+                    throw new UnrecognizedFlagException(string.Format("{0}{1}{2}",
+                        info.Match.Header, info.Match.FlagName,
+                        (isLong ? (" (" + info.Match.Header + info.Match.FlagName + ")") : "")));
+                // if one char isn't found and the item is also valid as a long flag, also include the latter in case of user typo.
+
+                rv.Add(new ParsedFlagArgumentInfo
+                {
+                    Element = element,
+                    Match = info.Match.Clone(c.ToString(CultureInfo.InvariantCulture))
+                });
+            }
+
+            if (string.IsNullOrEmpty(info.Match.AssignmentOperator)) return rv;
+
+            if (rv.Count(fi => fi.Element.TargetType != typeof(bool)) > 1)
+                throw new AmbiguousDirectAssignmentException(info.Match.Header + info.Match.FlagName,
+                    "Can not directly assign more than one flag at a time.");
+
+            return rv;
+        }
+
+        
 
     }
+
+
 }
-*/

@@ -31,11 +31,11 @@ namespace TestRCommandLine
 
         }
 
-        private readonly ConsolidatedParser<BasicOptions> _parser;
+        private readonly Parser<BasicOptions> _parser;
 
         public BasicOptionsTests()
         {
-            _parser = ConsolidatedParser.FromAttributes<BasicOptions>();
+            _parser = Parser.FromAttributes<BasicOptions>();
         }
 
         [TestMethod]

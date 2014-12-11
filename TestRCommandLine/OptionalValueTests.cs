@@ -27,10 +27,10 @@ namespace TestRCommandLine
             public string OptionalArgument { get; set; }
         }
 
-        private readonly ConsolidatedParser<OptionalValueOptions> _parser;
+        private readonly Parser<OptionalValueOptions> _parser;
         public OptionalValueTests()
         {
-            _parser = ConsolidatedParser.FromAttributes<OptionalValueOptions>();
+            _parser = Parser.FromAttributes<OptionalValueOptions>();
         }
 
         [TestMethod]
