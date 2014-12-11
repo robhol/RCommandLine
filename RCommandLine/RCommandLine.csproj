@@ -39,9 +39,6 @@
     <Compile Include="Models\SharedParameterCollection.cs" />
     <Compile Include="Parsers\ConsolidatedParser.cs" />
     <Compile Include="Parsers\ConsolidatedParser.Factory.cs" />
-    <Compile Include="Parsers\ParameterParser.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Parsers\ParserOptions.TemplateDefinitions.cs" />
     <Compile Include="Parsing\InputArgument.cs" />
     <Compile Include="Parsing\ArgumentConverters.cs" />
@@ -57,15 +54,12 @@
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Parameter.cs" />
-    <Compile Include="Parsers\CommandParser.cs" />
     <Compile Include="Attributes\ArgumentAttribute.cs" />
     <Compile Include="Attributes\ParameterAttribute.cs" />
     <Compile Include="Attributes\FlagAttribute.cs" />
     <Compile Include="Models\Flag.cs" />
     <Compile Include="Exceptions\MissingValueException.cs" />
     <Compile Include="Exceptions\UnrecognizedFlagException.cs" />
-    <Compile Include="Interfaces\ICommandParser.cs" />
-    <Compile Include="Interfaces\IParameterParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

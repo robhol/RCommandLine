@@ -113,7 +113,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_Not_ProcessQuotedFlag()
         {
-            _parser.Options.AutomaticUsage = false; // this option "swallows" the exception
+            _parser.Options.AutomaticUsage = false; //this option "swallows" the exception
             try
             {
                 _parser.Parse("--str required -bi 33 \"--this-flag-doesnt-even-exist\" 22");
