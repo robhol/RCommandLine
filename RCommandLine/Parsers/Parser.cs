@@ -167,14 +167,14 @@ namespace RCommandLine
                     var val = flagInfo.Match.AssignmentValue;
                     if (!string.IsNullOrEmpty(val))
                     {
-                        flag.SetValue(outputObject, flag.TargetType == typeof (bool)
+                        flag.PushValue(outputObject, flag.TargetType == typeof (bool)
                             ? ArgumentConverters.BooleanConverter(val)
                             : ArgumentConverters.DefaultConverter(val, flag.TargetType));
                     }
                     else //no directly assigned value
                     {
                         if (flag.TargetType == typeof(bool))
-                            flag.SetValue(outputObject, true);
+                            flag.PushValue(outputObject, true);
                         else
                             flagQueue.Enqueue(flag); //no value found - check later
                     }
@@ -190,11 +190,11 @@ namespace RCommandLine
 
                     //find a flag or arg to populate
                     if (flagQueue.Any())
-                        flagQueue.Dequeue().ConvertAndSetValue(outputObject, ia.Value);
+                        flagQueue.Dequeue().ConvertAndPushValue(outputObject, ia.Value);
                     else
                     {
                         if (argQueue.Any())
-                            argQueue.Dequeue().ConvertAndSetValue(outputObject, ia.Value);
+                            argQueue.Dequeue().ConvertAndPushValue(outputObject, ia.Value);
                         else
                             extraArguments.Add(ia.Value);
                     }

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BasicOptionsTests.cs" />
     <Compile Include="CommandTests.cs" />
+    <Compile Include="FlagListTests.cs" />
     <Compile Include="OptionalValueTests.cs" />
     <Compile Include="DefaultValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

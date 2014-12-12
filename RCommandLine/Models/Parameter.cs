@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace RCommandLine
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Either a named argument or a flag (subtype)
@@ -12,12 +15,12 @@ namespace RCommandLine
         
 
         public Maybe<object> DefaultValue { get; private set; }
-        public bool HasValue { get; private set; }
+        public bool HasValue { get; protected set; }
 
         public PropertyInfo TargetProperty { get; private set; }
 
-        public Type TargetType { get; private set; }
-        
+        public Type TargetType { get; protected set; }
+
         protected Parameter(string name, PropertyInfo property, Maybe<object> defaultValue) : base(property.DeclaringType)
         {
             Name = name;
@@ -37,18 +40,15 @@ namespace RCommandLine
 
         private readonly bool _isNullable;
 
-        public bool Required { get { return !DefaultValue.HasValue && !_isNullable; } }
+        public virtual bool Required { get { return !DefaultValue.HasValue && !_isNullable; } }
 
-        /// <summary>
-        /// Provides the element with an opportunity to initialize, given the prospective output object
-        /// </summary>
         public void ApplyDefaultValue(object target)
         {
             if (DefaultValue.HasValue)
-                SetValue(target, DefaultValue.Value, false);
+                PushValue(target, DefaultValue.Value, false, true);
         }
 
-        public void ConvertAndSetValue(object target, string arg)
+        public void ConvertAndPushValue(object target, string arg)
         {
             object objectArg;
 
@@ -64,10 +64,10 @@ namespace RCommandLine
                     throw new InvalidCastException("Could not convert \"" + arg + "\" to " + TargetType.Name, e);
                 }
 
-            SetValue(target, objectArg);
+            PushValue(target, objectArg);
         }
 
-        public void SetValue(object target, object value, bool updateHasValue = true)
+        public virtual void PushValue(object target, object value, bool updateHasValue = true, bool direct = false)
         {
             TargetProperty.SetValue(target, value, null);
             HasValue = HasValue || updateHasValue;
