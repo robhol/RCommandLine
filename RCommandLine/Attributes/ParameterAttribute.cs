@@ -7,12 +7,17 @@ namespace RCommandLine
     /// </summary>
     public abstract class ParameterAttribute : Attribute
     {
+        private readonly string _name;
+
         internal ParameterAttribute(string name = null)
         {
-            Name = name;
+            _name = name;
         }
 
-        public string Name { get; private set; }
+        public string Name
+        {
+            get { return _name; }
+        }
 
         public string Description { get; set; }
     }

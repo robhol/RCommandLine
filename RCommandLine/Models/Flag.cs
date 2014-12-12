@@ -56,7 +56,19 @@ namespace RCommandLine
 
         public override string ToString()
         {
-            return (Name != null) ? ("--" + Name) : ("-" + ShortName);
+            return ToString("--", "-");
+        }
+
+        public string ToString(ParserOptions options, bool preferShort = false)
+        {
+            return ToString(options.DefaultLongFlagHeader, options.DefaultShortFlagHeader, preferShort);
+        }
+
+        public string ToString(string longNameHeader, string shortNameHeader, bool preferShort = false)
+        {
+            return !preferShort && !string.IsNullOrEmpty(longNameHeader) 
+                ? longNameHeader    + Name 
+                : shortNameHeader   + ShortName;
         }
 
         public override string DefaultName

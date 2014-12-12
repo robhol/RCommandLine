@@ -58,7 +58,7 @@ namespace RCommandLine
         {
             return string.Format("{0}\n\n{1}",
                 _parser.GetUsage(string.IsNullOrEmpty(Command) ? "" : Command),
-                _parser.GetArgumentList()
+                _parser.GetUsageDescription()
                 );
         }
 

@@ -16,12 +16,12 @@
 
         static IEnumerable<T> GetAttributes<T>(Type t, bool inherit = true)
         {
-            return t.GetCustomAttributes(inherit).Cast<T>();
+            return t.GetCustomAttributes(typeof(T), inherit).Cast<T>();
         }
 
         public Command Build()
         {
-            var topCommand = new Command(_topType, _topType, "(root)", true);
+            var topCommand = new Command(_topType, _topType, "(root)", false);
 
             Action<Command> visit = null;
             visit = command =>
@@ -33,6 +33,13 @@
                 {
                     command.Children.Add(ncmd);
                     visit(ncmd);
+                }
+
+                var extraAttrib = GetAttributes<LabelExtraArgumentsAttribute>(ctype, false).SingleOrDefault();
+                if (extraAttrib != null)
+                {
+                    command.ExtraArgumentName = extraAttrib.Name;
+                    command.ExtraArgumentDescription = extraAttrib.Description;
                 }
 
                 var props = ctype.GetProperties();

@@ -18,6 +18,7 @@ namespace TestRCommandLine
 
         [HasCommand(typeof(FooOptions))]
         [HasCommand(typeof(BarOptions), "bar-name")]
+        [LabelExtraArguments("ExtraArgsName", Description = "ExtraArgsDescription")]
         public class MyOptions : CommonOptions
         {
 

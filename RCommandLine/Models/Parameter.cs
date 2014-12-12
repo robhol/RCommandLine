@@ -77,7 +77,12 @@ namespace RCommandLine
 
         public virtual string GetHelpTextRepresentation()
         {
-            return string.Format(Required ? "{0}" : "[{0}]", HelpTextIdentifier);
+            return GetHelpTextRepresentation(Required, HelpTextIdentifier);
+        }
+
+        public static string GetHelpTextRepresentation(bool required, string identifier)
+        {
+            return string.Format(required ? "{0}" : "[{0}]", identifier);
         }
 
         public override string ToString()

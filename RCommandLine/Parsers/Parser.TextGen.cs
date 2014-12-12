@@ -1,6 +1,8 @@
 ﻿namespace RCommandLine
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -51,33 +53,45 @@
 
         static string GetUsage(Command c, string shownCommand)
         {
-            return shownCommand + " " +
-                string.Join(" ",
-                c.Parameters
-                    .OrderBy(f => f.GetType().Name)
-                    .ThenByDescending(f => f.Required)
-                    .ThenBy(f => (f is Argument) ? ((Argument)f).Order : 0)
-                    .Select(f => f.GetHelpTextRepresentation()));
+            var parameters = c.Parameters
+                .OrderByDescending(p => p is Flag)
+                .ThenByDescending(f => f.Required)
+                .ThenBy(f => (f is Argument) ? ((Argument) f).Order : 0).ToList();
+
+            var usage = shownCommand + " " +
+                        Util.JoinNotNulls(" ", parameters.Select(p => p.GetHelpTextRepresentation()));
+
+            if (!string.IsNullOrEmpty(c.ExtraArgumentName))
+                usage += " " + Parameter.GetHelpTextRepresentation(false, c.ExtraArgumentName);
+
+            return usage;
         }
 
-        public string GetArgumentList()
+        public string GetUsageDescription()
         {
-            return GetArgumentList(RootCommand);
+            return GetUsageDescription(RootCommand);
         }
 
-        string GetArgumentList(Command command)
+        string GetUsageDescription(Command command)
         {
             var sb = new StringBuilder();
 
             var flags = command.Flags.ToList();
-            var nameWidth = flags.Any() ? flags.Max(f => (f.Name ?? "").Length) + 2 : 0;
+
+            var shortNameWidth = flags.Any() 
+                ? Options.DefaultShortFlagHeader.Length + 2 
+                : 0;
+
+            var nameWidth = flags.Any() 
+                ? Options.DefaultLongFlagHeader.Length + flags.Max(f => (!string.IsNullOrEmpty(f.Name) ? f.Name.Length : 0)) 
+                : 0;
+
             foreach (var e in flags)
             {
                 sb
-                    .Append("  ")
-                    .Append((e.ShortName != default(char) ? (Options.DefaultShortFlagHeader + e.ShortName) : "").PadLeft(2))
-                    .Append("  ")
-                    .Append((e.Name != null ? (Options.DefaultLongFlagHeader + e.Name) : "").PadRight(nameWidth));
+                    .Append(e.Required ? "* " : "  ")
+                    .Append((e.ShortName != default(char) ? (Options.DefaultShortFlagHeader + e.ShortName) : "").PadRight(shortNameWidth))
+                    .Append((!string.IsNullOrEmpty(e.Name) ? (Options.DefaultLongFlagHeader + e.Name) : "").PadRight(nameWidth));
 
                 if (e.Description != null)
                     sb
@@ -87,12 +101,16 @@
                 sb.AppendLine();
             }
 
-            sb.AppendLine();
+            if (flags.Any())
+                sb.AppendLine();
 
-            nameWidth = command.Arguments.Any() ? command.Arguments.Max(a => a.Name.Length) : 0;
-            foreach (var e in command.Arguments)
+            var args = command.Arguments.ToList();
+
+            nameWidth = args.Any() ? args.Max(a => a.Name.Length) : 0;
+            foreach (var e in args)
             {
                 sb
+                    .Append(e.Required ? "* " : "  ")
                     .Append(e.Name.PadRight(nameWidth));
 
                 if (e.Description != null)
@@ -103,6 +121,20 @@
                 sb.AppendLine();
             }
 
+            if (!string.IsNullOrEmpty(command.ExtraArgumentName))
+            {
+                sb
+                    .Append("  ")
+                    .Append(command.ExtraArgumentName.PadRight(nameWidth));
+
+                if (!string.IsNullOrEmpty(command.ExtraArgumentDescription))
+                    sb
+                        .Append(" - ")
+                        .Append(command.ExtraArgumentDescription);
+            }
+
+
+
             return sb.ToString();
         }
 
@@ -110,7 +142,7 @@
         {
             Options.OutputTarget.WriteLine(string.Format("Usage:\n{0}\n{1}", 
                 GetUsage(command, displayedCommand),
-                GetArgumentList(command)));
+                GetUsageDescription(command)));
         }
     }
 }

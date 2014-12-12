@@ -34,6 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\LabelExtraArgumentsAttribute.cs" />
     <Compile Include="ModelConversion\AttributeModelBuilder.cs" />
     <Compile Include="Util\Maybe.cs" />
     <Compile Include="Models\SharedParameterCollection.cs" />

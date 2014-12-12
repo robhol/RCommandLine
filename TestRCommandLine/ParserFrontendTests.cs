@@ -7,29 +7,30 @@ namespace TestRCommandLine
     [TestClass]
     public class ParserFrontendTests
     {
-
-        public class SimpleOptions
-        {
-            [Flag('y')]
-            public bool Yes { get; set; }
-
-            [Argument(1, Description = "Maybe")]
-            public string Maybe { get; set; }
-        }
+        private Parser<CommandTests.MyOptions> _parser;
+        private InMemoryOutputChannel _output;
 
         public ParserFrontendTests()
         {
+            _output = new InMemoryOutputChannel();
+            var parserOptions = new ParserOptions { OutputTarget = _output };
+            _parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
 
+        }
+
+        string GetLastOutput()
+        {
+            var s = _output.ToString();
+            _output.Reset();
+            return s;
         }
 
         [TestMethod]
         public void Should_PrintArgumentList_On_ValidCommand_And_MissingArguments()
         {
-            var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
-            parser.Parse("bar-name baz");
+            _parser.Parse("bar-name baz");
 
-            var op = parserOptions.OutputTarget.ToString();
+            var op = GetLastOutput();
             Assert.IsFalse(op.Contains("Available commands"));
             Assert.IsTrue(op.Contains("BazIntegerArg"));
         }
@@ -37,24 +38,31 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_PrintCommandList_On_AutoHelpFlag_And_NonTerminalCommand()
         {
-            var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
-            parser.Parse("");
+            _parser.Parse("");
 
-            Assert.IsTrue(parserOptions.OutputTarget.ToString().Contains("Available commands"));
+            Assert.IsTrue(GetLastOutput().Contains("Available commands"));
         }
 
         [TestMethod]
         public void Should_PrintArgumentList_On_AutoHelpFlag_And_TerminalCommand()
         {
-            var parserOptions = new ParserOptions { OutputTarget = new InMemoryOutputChannel() };
-            var parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
-            parser.Parse("bar-name baz --help");
+            _parser.Parse("bar-name baz --help");
 
-            var op = parserOptions.OutputTarget.ToString();
+            var op = GetLastOutput();
             Assert.IsFalse(op.Contains("Available commands"));
             Assert.IsTrue(op.Contains("BazIntegerArg"));
         }
+
+        [TestMethod]
+        public void Should_ExposeExtraArgumentInformation_On_Help()
+        {
+            _parser.Parse("-?");
+
+            var op = GetLastOutput();
+            Assert.IsTrue(op.Contains("ExtraArgsName"));
+            Assert.IsTrue(op.Contains("ExtraArgsDescription"));
+        }
+
 
     }
 

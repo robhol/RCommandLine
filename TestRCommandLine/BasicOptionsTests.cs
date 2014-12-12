@@ -52,7 +52,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_ParseArguments()
         {
-            var opts = _parser.Parse("argOne -s flagValue 42 -bi 44").Options as BasicOptions;
+            var opts = _parser.Parse("argOne -s flagValue 42 -bi 44").Options;
             Assert.IsNotNull(opts);
 
             Assert.AreEqual("argOne", opts.StringArgument);
@@ -110,7 +110,7 @@ namespace TestRCommandLine
         [TestMethod]
         public void Should_Not_ProcessQuotedFlag()
         {
-            _parser.Options.AutomaticUsage = false; //this option "swallows" the exception
+            _parser.Options.AutomaticUsage = false;
             try
             {
                 _parser.Parse("--str required -bi 33 \"--this-flag-doesnt-even-exist\" 22");

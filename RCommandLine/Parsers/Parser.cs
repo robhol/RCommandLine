@@ -52,6 +52,8 @@ namespace RCommandLine
             var commandArgsQueue = new Queue<InputArgument>(commandArgs);
 
             var showList = (command == RootCommand || command.Hidden);
+            var showUsage = (!command.Hidden);
+
             var displayedCommand =
                 (string.IsNullOrEmpty(Options.BaseCommandName)
                     ? ""
@@ -64,7 +66,8 @@ namespace RCommandLine
             {
                 if (showList)
                     PrintCommandList();
-                else
+
+                if (showUsage)
                     PrintUsage(command, displayedCommand);
 
                 return ErrorParseResult();

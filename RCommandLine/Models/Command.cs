@@ -24,6 +24,9 @@ namespace RCommandLine
 
         public IEnumerable<Parameter> Parameters { get { return Flags.Cast<Parameter>().Union(Arguments); } }
 
+        public string ExtraArgumentName { get; set; }
+        public string ExtraArgumentDescription { get; set; }
+
         public Command(Type encounteredInType, Type outputType, string name, bool hidden, Command parentCommand = null) : base(encounteredInType)
         {
             Children = new List<Command>();
