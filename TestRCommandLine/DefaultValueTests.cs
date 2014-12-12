@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RCommandLine;
-
-namespace TestRCommandLine
+﻿namespace TestRCommandLine
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RCommandLine;
+    using RCommandLine.Attributes;
+    using RCommandLine.Parsers;
 
     /// <summary>
     /// Tests the function of explicitly defaulted optional values.

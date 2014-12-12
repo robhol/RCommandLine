@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Parsers
 {
+    using System.Collections.Generic;
+
     partial class ParserOptions
     {
 

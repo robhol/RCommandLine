@@ -1,11 +1,12 @@
-﻿using System.Reflection;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Models
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
+    using Parsers;
+    using Util;
 
     /// <summary>
     /// A flag can occur anywhere identified by a char or long name.

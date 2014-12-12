@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Exceptions
 {
+    using System;
+
     public class AmbiguousDirectAssignmentException : Exception
     {
         public string Argument { get; private set; }

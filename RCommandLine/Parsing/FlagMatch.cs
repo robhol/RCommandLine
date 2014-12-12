@@ -1,8 +1,10 @@
-namespace RCommandLine
+namespace RCommandLine.Parsing
 {
     using System;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Parsers;
+    using Util;
 
     class FlagMatch
     {

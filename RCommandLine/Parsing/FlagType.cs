@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Parsing
 {
+    using System;
+
     [Flags]
     enum FlagType
     {

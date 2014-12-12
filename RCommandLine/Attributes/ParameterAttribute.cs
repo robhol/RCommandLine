@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Attributes
 {
+    using System;
+
     /// <summary>
     /// Contains common properties for command line element attributes.
     /// </summary>

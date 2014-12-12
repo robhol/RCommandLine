@@ -1,7 +1,11 @@
-﻿using System;
-
-namespace RCommandLine.Output
+﻿namespace RCommandLine.Output
 {
+    #region
+
+    using System;
+
+    #endregion
+
     internal class ConsoleOutputChannel : IOutputTarget
     {
         private static readonly ConsoleOutputChannel CocInstance = new ConsoleOutputChannel();

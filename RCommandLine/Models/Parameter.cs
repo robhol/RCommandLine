@@ -1,11 +1,8 @@
-﻿using System;
-using System.Reflection;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Models
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
+    using System;
+    using System.Reflection;
+    using Util;
 
     /// <summary>
     /// Either a named argument or a flag (subtype)

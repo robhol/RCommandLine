@@ -1,5 +1,5 @@
 ﻿
-namespace RCommandLine
+namespace RCommandLine.Models
 {
     using System;
 

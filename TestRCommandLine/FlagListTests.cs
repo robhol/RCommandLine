@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TestRCommandLine
+﻿namespace TestRCommandLine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
+    using RCommandLine.Attributes;
+    using RCommandLine.Parsers;
 
     [TestClass]
     public class FlagListTests

@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Parsers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
+    using Exceptions;
+    using Models;
+    using Parsing;
+    using Util;
 
     public partial class Parser<TTarget> where TTarget : class, new()
     {

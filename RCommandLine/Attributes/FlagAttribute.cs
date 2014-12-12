@@ -1,6 +1,7 @@
-﻿using System;
-namespace RCommandLine
+﻿namespace RCommandLine.Attributes
 {
+    using System;
+
     /// <summary>
     /// A flag can occur anywhere in the argument string.
     /// It is identified by a char (-f) or a long Name. (--name)

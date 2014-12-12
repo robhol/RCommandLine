@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using Parsers;
 
     public class ParseResult
     {

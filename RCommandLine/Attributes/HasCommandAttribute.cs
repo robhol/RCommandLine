@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Attributes
 {
+    using System;
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class HasCommandAttribute : ParameterAttribute
     {

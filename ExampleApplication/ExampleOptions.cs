@@ -1,7 +1,8 @@
-﻿using RCommandLine;
-
-namespace ExampleApplication
+﻿namespace ExampleApplication
 {
+    using RCommandLine;
+    using RCommandLine.Attributes;
+
     [
     HasCommand(typeof(ReadOptions), Description = "Read a file"), //Name default: read
     HasCommand(typeof(WriteOptions), Description = "Write a file") //Name default: write

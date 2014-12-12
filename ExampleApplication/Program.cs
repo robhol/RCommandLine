@@ -1,8 +1,9 @@
-﻿using System.Reflection;
-using RCommandLine;
-
-namespace ExampleApplication
+﻿namespace ExampleApplication
 {
+    using System.Reflection;
+    using RCommandLine;
+    using RCommandLine.Parsers;
+
     class Program
     {
         static void Main()

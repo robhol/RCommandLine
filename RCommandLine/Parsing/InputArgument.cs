@@ -1,4 +1,4 @@
-﻿namespace RCommandLine
+﻿namespace RCommandLine.Parsing
 {
     class InputArgument
     {

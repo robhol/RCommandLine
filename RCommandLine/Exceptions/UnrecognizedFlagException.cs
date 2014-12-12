@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Exceptions
 {
+    using System;
+
     public class UnrecognizedFlagException : Exception
     {
         public string Flag { get; private set; }

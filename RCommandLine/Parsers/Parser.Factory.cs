@@ -1,5 +1,7 @@
-﻿namespace RCommandLine
+﻿namespace RCommandLine.Parsers
 {
+    using ModelConversion;
+
     public class Parser
     {
 

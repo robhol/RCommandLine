@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Exceptions
 {
+    using System;
+    using System.Collections.Generic;
+
     public class MissingValueException : Exception
     {
 

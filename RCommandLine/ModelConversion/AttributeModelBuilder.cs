@@ -1,8 +1,11 @@
-﻿namespace RCommandLine
+﻿namespace RCommandLine.ModelConversion
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Attributes;
+    using Models;
+    using Util;
 
     internal class AttributeModelBuilder<TOptions>
     {

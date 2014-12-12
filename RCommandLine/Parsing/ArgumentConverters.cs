@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+
     public static class ArgumentConverters
     {
         private static readonly Dictionary<string, bool> BooleanValueNames = new Dictionary<string, bool>

@@ -1,9 +1,10 @@
-﻿using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RCommandLine;
-
-namespace TestRCommandLine
+﻿namespace TestRCommandLine
 {
+    using System.Text;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RCommandLine;
+    using RCommandLine.Parsers;
+
     [TestClass]
     public class ParserFrontendTests
     {

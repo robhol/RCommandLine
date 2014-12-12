@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Util
 {
+    using System;
+
     class Maybe<T>
     {
 

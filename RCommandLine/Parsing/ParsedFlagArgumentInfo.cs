@@ -1,5 +1,7 @@
-﻿namespace RCommandLine
+﻿namespace RCommandLine.Parsing
 {
+    using Models;
+
     /// <summary>
     /// Temporary information object used in parsing
     /// </summary>

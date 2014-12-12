@@ -1,7 +1,8 @@
-﻿using System.Reflection;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Models
 {
+    using System.Reflection;
+    using Util;
+
     /// <summary>
     /// Arguments occur in attr fixed order after all the flags are dealt with.
     /// </summary>

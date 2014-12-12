@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RCommandLine
+﻿namespace RCommandLine.Attributes
 {
+    using System;
+
     /// <summary>
     /// Arguments occur in a fixed order after all the flags are dealt with.
     /// The fixed order means that more than one optional OrderedParameterAttribute should be avoided.
