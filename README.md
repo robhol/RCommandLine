@@ -59,6 +59,13 @@ In addition to handling parameters to your programs, RCommandLine will also simp
 
 Commands can be defined in as many "layers" as you want, are tied to separate Options classes (which may be unrelated or organized in an inheritance structure). 
 
+### Automatic help text
+
+By default, RCommandLine will try to detect some common error situations and will do its best to help your users. 
+If the user is missing required parameters, entered an invalid command or other invalid input, they will be provided with an automatically generated help screen.
+
+RCommandLine also supports a standard "help" or "?" flag like many utilities in most environments. This can be turned off if you want to handle it yourself.
+
 ### Details
 
 For more details, refer to the wiki on https://github.com/robhol/RCommandLine/wiki - although the primary authority is the actual code and tests.
