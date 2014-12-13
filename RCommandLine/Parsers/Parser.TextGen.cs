@@ -19,6 +19,7 @@
         string GetCommandList(Command startFrom)
         {
             var sb = new StringBuilder();
+            startFrom = startFrom ?? RootCommand;
 
             Action<Command, string> walk = null;
             walk = (c, prefix) =>
@@ -30,7 +31,7 @@
                     walk(cc, prefix + c.Name + " ");
             };
 
-            foreach (var command in RootCommand.Children)
+            foreach (var command in startFrom.Children)
                 walk(command, Options.BaseCommandName != null ? Options.BaseCommandName + " " : "");
 
             return sb.ToString();

@@ -7,7 +7,7 @@
 
         /* Factory methods */
 
-        public static Parser<T> FromAttributes<T>(ParserOptions options = null) where T : class, new()
+        public static Parser<T> FromAttributes<T>(ParserOptions options = null) where T : class
         {
             var root = new AttributeModelBuilder<T>().Build();
             return new Parser<T>(options ?? ParserOptions.Templates.Default, root);

@@ -4,5 +4,7 @@ bin/
 obj/
 *.DotSettings
 .nuget/
+.wiki/
+.gitignore
 packages
 TestResults/

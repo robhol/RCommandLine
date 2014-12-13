@@ -28,7 +28,7 @@
 
     }
 
-    public class ParseResult<TOptions> : ParseResult where TOptions : class, new()
+    public class ParseResult<TOptions> : ParseResult where TOptions : class
     {
         private readonly Parser<TOptions> _parser;
 

@@ -9,7 +9,7 @@
     using Parsing;
     using Util;
 
-    public partial class Parser<TTarget> where TTarget : class, new()
+    public partial class Parser<TTarget> where TTarget : class
     {
 
         public ParserOptions Options { get; set; }
