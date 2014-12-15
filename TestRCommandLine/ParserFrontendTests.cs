@@ -1,22 +1,36 @@
 ﻿namespace TestRCommandLine
 {
+    using System;
     using System.Text;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
+    using RCommandLine.Attributes;
     using RCommandLine.Parsers;
 
     [TestClass]
     public class ParserFrontendTests
     {
         private Parser<CommandTests.MyOptions> _parser;
+        private Parser<AbstractOptions> _abstractParser;
         private InMemoryOutputChannel _output;
+
+        [HasCommand(typeof(ActualOptions))]
+        abstract class AbstractOptions
+        {
+
+            class ActualOptions
+            {
+            
+            }
+
+        }
 
         public ParserFrontendTests()
         {
             _output = new InMemoryOutputChannel();
             var parserOptions = new ParserOptions { OutputTarget = _output };
             _parser = Parser.FromAttributes<CommandTests.MyOptions>(parserOptions);
-
+            _abstractParser = Parser.FromAttributes<AbstractOptions>(parserOptions);
         }
 
         string GetLastOutput()
@@ -62,6 +76,29 @@
             var op = GetLastOutput();
             Assert.IsTrue(op.Contains("ExtraArgsName"));
             Assert.IsTrue(op.Contains("ExtraArgsDescription"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MissingMethodException))]
+        public void Should_Throw_On_InstantiatingAbstractOptions_And_AutoUsageDisabled()
+        {
+            _abstractParser.Options.AutomaticUsage = false;
+            try
+            {
+                _abstractParser.Parse("");
+            }
+            finally
+            {
+                _abstractParser.Options.AutomaticUsage = true;
+                _output.Reset();
+            }
+        }
+
+        [TestMethod]
+        public void Should_PrintCommandList_On_InstantiatingAbstractOptions_And_AutoUsageEnabled()
+        {
+            _abstractParser.Parse("");
+            Assert.IsTrue(GetLastOutput().Contains("Available commands"));
         }
 
 

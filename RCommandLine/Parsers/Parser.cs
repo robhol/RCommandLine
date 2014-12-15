@@ -54,8 +54,8 @@
 
             var commandArgsQueue = new Queue<InputArgument>(commandArgs);
 
-            var showList = (command == RootCommand || command.Hidden);
-            var showUsage = (!command.Hidden);
+            var showList = (command == RootCommand || command.Hidden || command.OutputType.IsAbstract);
+            var showUsage = !(command.Hidden || command.OutputType.IsAbstract);
 
             var displayedCommand =
                 (string.IsNullOrEmpty(Options.BaseCommandName)
@@ -63,7 +63,7 @@
                     : (Options.BaseCommandName + " " + commandName))
                 + commandName;
 
-            if (
+            if ( (Options.AutomaticUsage && command.OutputType.IsAbstract) ||
                 (Options.AutomaticUsage && !commandArgsQueue.Any() && command.Parameters.Any(p => p.Required)) ||
                 (Options.AutomaticHelp && commandArgsQueue.Count == 1 && IsHelpFlagArgument(commandArgsQueue.Peek())))
             {
@@ -76,8 +76,22 @@
                 return ErrorParseResult();
             }
 
-            List<string> extraArguments;
-            var outputObject = ParseArguments(command, commandArgsQueue, out extraArguments);
+            List<string> extraArguments = null;
+            TTarget outputObject = null;
+
+            try
+            {
+                outputObject = ParseArguments(command, commandArgsQueue, out extraArguments);
+            }
+            catch (MissingMethodException)
+            {
+                //Couldn't create output because it's abstract
+                if (!Options.AutomaticUsage)
+                    throw;
+
+                PrintUsage(command, displayedCommand);
+                return ErrorParseResult();
+            }
 
             return new ParseResult<TTarget>(outputObject, commandName, extraArguments, this, true);
         }
@@ -133,8 +147,9 @@
 
         TTarget ParseArguments(Command cmd, Queue<InputArgument> inputArgs, out List<string> remaining)
         {
-            var outputObject = (TTarget)Activator.CreateInstance(cmd.OutputType);
 
+            var outputObject = (TTarget)Activator.CreateInstance(cmd.OutputType);
+            
             foreach (var parameter in cmd.Parameters)
                 parameter.ApplyDefaultValue(outputObject);
 

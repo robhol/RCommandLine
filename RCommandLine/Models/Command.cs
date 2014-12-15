@@ -31,7 +31,7 @@
             Children = new List<Command>();
             OutputType = outputType;
             Name = name;
-            Hidden = hidden;
+            Hidden = hidden || outputType.IsAbstract;
 
             Parent = parentCommand;
 
