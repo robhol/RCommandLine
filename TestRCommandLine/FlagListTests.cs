@@ -36,8 +36,23 @@
             Assert.IsNotNull(opt.Added);
             Assert.IsNotNull(opt.Numbers);
 
-            Assert.IsTrue(opt.Added.SequenceEqual(new[] {"foo", "bar", "baz"}));
-            Assert.IsTrue(opt.Numbers.SequenceEqual(new[] {32, 128}));
+            Assert.IsTrue(opt.Added.SequenceEqual(new[] { "foo", "bar", "baz" }));
+            Assert.IsTrue(opt.Numbers.SequenceEqual(new[] { 32, 128 }));
+        }
+
+        [TestMethod]
+        public void Should_ReturnSeparateLists()
+        {
+            var opt = _parser.Parse("-aai foo bar 11").Options;
+
+            Assert.IsTrue(opt.Added.SequenceEqual(new[] { "foo", "bar" }));
+            Assert.IsTrue(opt.Numbers.SequenceEqual(new[] {11}));
+
+            opt = _parser.Parse("-i 42").Options;
+
+            Assert.IsTrue(opt.Added.SequenceEqual(Enumerable.Empty<string>()));
+            Assert.IsTrue(opt.Numbers.SequenceEqual(new[]{42}));
+
         }
 
         [TestMethod, ExpectedException(typeof(InvalidCastException))]

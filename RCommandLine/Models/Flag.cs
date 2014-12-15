@@ -24,13 +24,18 @@
 
             if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
             {
-                DefaultValue.Value = Activator.CreateInstance(property.PropertyType);
+                DefaultValueProvider.Value = GetEmptyListProvider(property.PropertyType);
                 TargetType = property.PropertyType.GetGenericArguments().Single();
                 IsList = true;
             }
 
-            if (property.PropertyType == typeof (bool) && !DefaultValue.HasValue)
-                DefaultValue.Value = false;
+            if (property.PropertyType == typeof (bool) && !DefaultValueProvider.HasValue)
+                DefaultValueProvider.Value = () => false;
+        }
+
+        static Func<object> GetEmptyListProvider(Type listType)
+        {
+            return () => Activator.CreateInstance(listType);
         }
 
         public override string HelpTextIdentifier

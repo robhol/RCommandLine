@@ -2,6 +2,7 @@
 {
     using System;
     using System.Reflection;
+    using System.Runtime.Remoting.Messaging;
     using Util;
 
     /// <summary>
@@ -11,7 +12,7 @@
     {
         
 
-        public Maybe<object> DefaultValue { get; private set; }
+        public Maybe<Func<object>> DefaultValueProvider { get; private set; }
         public bool HasValue { get; protected set; }
 
         public PropertyInfo TargetProperty { get; private set; }
@@ -25,7 +26,9 @@
             TargetProperty = property;
             TargetType = property.PropertyType;
 
-            DefaultValue = defaultValue;
+            DefaultValueProvider = new Maybe<Func<object>>();
+            if (defaultValue.HasValue)
+                DefaultValueProvider.Value = () => defaultValue.Value;
 
             var nullableType = Nullable.GetUnderlyingType(TargetType);
             if (nullableType != null)
@@ -37,12 +40,12 @@
 
         private readonly bool _isNullable;
 
-        public virtual bool Required { get { return !DefaultValue.HasValue && !_isNullable; } }
+        public virtual bool Required { get { return !DefaultValueProvider.HasValue && !_isNullable; } }
 
         public void ApplyDefaultValue(object target)
         {
-            if (DefaultValue.HasValue)
-                PushValue(target, DefaultValue.Value, false, true);
+            if (DefaultValueProvider.HasValue)
+                PushValue(target, DefaultValueProvider.Value(), false, true);
         }
 
         public void ConvertAndPushValue(object target, string arg)
