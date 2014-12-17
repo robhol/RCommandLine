@@ -5,6 +5,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
     using RCommandLine.Attributes;
+    using RCommandLine.Exceptions;
     using RCommandLine.Parsers;
 
     [TestClass]
@@ -101,6 +102,21 @@
             Assert.IsTrue(GetLastOutput().Contains("Available commands"));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <seealso cref="OptionalValueTests.Should_Throw_On_MissingRequiredArgument"/>
+        [TestMethod]
+        public void Should_Not_Throw_On_MissingArgument_And_AutomaticUsageEnabled()
+        {
+            _parser.Parse("");
+        }
+
+        [TestMethod]
+        public void Should_Not_Throw_On_UnrecognizedFlag_And_AutomaticUsageEnabled()
+        {
+            _parser.Parse("--unrecognized-flag");
+        }
 
     }
 

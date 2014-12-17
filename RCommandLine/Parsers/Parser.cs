@@ -89,11 +89,40 @@
                 if (!Options.AutomaticUsage)
                     throw;
 
-                PrintUsage(command, displayedCommand);
+                return ErrorAndUsage(command, displayedCommand);
+            }
+            catch (UnrecognizedFlagException e)
+            {
+                if (!Options.AutomaticUsage)
+                    throw;
+
+                Console.WriteLine("The flag {0} was not recognized.", e.Flag);
+                return ErrorAndUsage(command, displayedCommand);
+            }
+            catch (MissingValueException e)
+            {
+                if (!Options.AutomaticUsage)
+                    throw;
+
+                Console.WriteLine("Syntax error: the flag(s) {0} were not assigned a value.", string.Join(", ", e.Parameters));
                 return ErrorParseResult();
+            }
+            catch (MissingArgumentException e)
+            {
+                if (!Options.AutomaticUsage)
+                    throw;
+
+                Console.WriteLine("Missing required argument(s) {0}", string.Join(", ", e.Parameters));
+                return ErrorAndUsage(command, displayedCommand);
             }
 
             return new ParseResult<TTarget>(outputObject, commandName, extraArguments, this, true);
+        }
+
+        ParseResult<TTarget> ErrorAndUsage(Command cmd, string displayedCommand)
+        {
+            PrintUsage(cmd, displayedCommand);
+            return ErrorParseResult();
         }
 
         bool IsHelpFlagArgument(InputArgument ia)

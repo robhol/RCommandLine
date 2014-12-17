@@ -1,4 +1,6 @@
-﻿namespace TestRCommandLine
+﻿using System.Security.Authentication;
+
+namespace TestRCommandLine
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
@@ -33,7 +35,12 @@
         private readonly Parser<OptionalValueOptions> _parser;
         public OptionalValueTests()
         {
-            _parser = Parser.FromAttributes<OptionalValueOptions>();
+            _parser = Parser.FromAttributes<OptionalValueOptions>(
+                new ParserOptions
+                {
+                    AutomaticHelp = false,
+                    AutomaticUsage = false
+                });
         }
 
         [TestMethod]
