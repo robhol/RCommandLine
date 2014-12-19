@@ -134,7 +134,21 @@
                         .Append(command.ExtraArgumentDescription);
             }
 
+            if (command.UsageExamples.Any())
+            {
+                sb
+                    .AppendLine()
+                    .AppendLine("Example:");
 
+                foreach (var ex in command.UsageExamples)
+                {
+                    sb
+                        .Append("")
+                        .AppendLine(ex.Usage)
+                        .Append("  ")
+                        .AppendLine(ex.Description);
+                }
+            }
 
             return sb.ToString();
         }

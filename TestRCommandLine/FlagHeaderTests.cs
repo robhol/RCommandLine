@@ -1,5 +1,6 @@
 ﻿namespace TestRCommandLine
 {
+    using System;
     using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
@@ -23,6 +24,7 @@
                 ShortFlagHeaders = new List<string> {"/"},
                 LongFlagHeaders = new List<string> {"/"}
             });
+
             _unixStyleParser = Parser.FromAttributes<BasicOptionsTests.BasicOptions>(new ParserOptions
             {
                 ShortFlagHeaders = new List<string> {"-"},

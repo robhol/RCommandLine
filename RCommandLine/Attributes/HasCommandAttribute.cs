@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// Defines a "subcommand" for the current command/options object.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class HasCommandAttribute : ParameterAttribute
     {

@@ -14,6 +14,7 @@
     class Flag : Parameter
     {
         public char ShortName { get; private set; }
+        public bool HasShortName { get; private set; }
 
         public bool IsList { get; private set; }
 
@@ -21,7 +22,9 @@
             : base(name, property, defaultValue)
         {
             ShortName = shortName;
-
+            HasShortName = shortName != default(char);
+            Name = name;
+        
             if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 DefaultValueProvider.Value = GetEmptyListProvider(property.PropertyType);

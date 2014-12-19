@@ -1,5 +1,6 @@
 ﻿namespace ExampleApplication
 {
+    using System;
     using System.Reflection;
     using RCommandLine;
     using RCommandLine.Parsers;
@@ -21,33 +22,37 @@
                 
 
             //Step 3: Parse() and output consumption!
-            var result = parser.Parse();
-            if (result.Success) 
-            {
-                switch (result.Command)
-                {
-                    case "read":
-                    {
-                        var x = result.Options as ExampleOptions.ReadOptions;
-                        // your logic here
-                        break;
-                    }
-                    case "write":
-                    {
-                        var x = result.Options as ExampleOptions.WriteOptions;
+            var result = parser.Parse(Console.ReadLine());
 
-                        break;
-                    }
-                    default:
-                    {
-                        //by design, AutomaticCommandList doesn't catch "invalid" commands, just empty ones.
-                        result.GetCommandList();
-                        break;
-                    }
-                }
+            if (!result.Success)
+            {
+                return;
             }
 
+            switch (result.Command) //"simplest" (but not necessarily recommended) way - see Wiki for other options.
+            {
+                case "read":
+                {
+                    var x = result.Options as ExampleOptions.ReadOptions;
+                    // your logic here
+                    break;
+                }
+                case "write":
+                {
+                    var x = result.Options as ExampleOptions.WriteOptions;
+
+                    break;
+                }
+                default:
+                {
+                    //by design, AutomaticCommandList doesn't catch "invalid" commands, just empty ones.
+                    result.GetCommandList();
+                    break;
+                }
+            }
         }
+
+
 
     }
 }

@@ -26,6 +26,13 @@
         public string ExtraArgumentName { get; set; }
         public string ExtraArgumentDescription { get; set; }
 
+        private readonly List<CommandUsage> _usageExampleList;
+
+        public IReadOnlyList<CommandUsage> UsageExamples
+        {
+            get { return _usageExampleList; }
+        }
+
         public Command(Type encounteredInType, Type outputType, string name, bool hidden, Command parentCommand = null) : base(encounteredInType)
         {
             Children = new List<Command>();
@@ -37,6 +44,7 @@
 
             _flagList = new List<Flag>();
             _argumentList = new List<Argument>();
+            _usageExampleList = new List<CommandUsage>();
         }
 
         public void AddFlag(Flag f)
@@ -49,6 +57,11 @@
             _argumentList.Add(a);
         }
 
+        public void AddUsageExample(CommandUsage commandUsage)
+        {
+            _usageExampleList.Add(commandUsage);
+        }
+
         public override string ToString()
         {
             return string.Format("{0}/{1}", Name, OutputType.Name);
@@ -58,5 +71,6 @@
         {
             get { return Regex.Replace(OutputType.Name.ToLower(), "(options|command)?$", ""); }
         }
+
     }
 }

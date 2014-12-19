@@ -60,7 +60,7 @@
             var displayedCommand =
                 (string.IsNullOrEmpty(Options.BaseCommandName)
                     ? ""
-                    : (Options.BaseCommandName + " " + commandName))
+                    : (Options.BaseCommandName + " "))
                 + commandName;
 
             if ( (Options.AutomaticUsage && command.OutputType.IsAbstract) ||

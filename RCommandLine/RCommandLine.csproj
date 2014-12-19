@@ -35,7 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\LabelExtraArgumentsAttribute.cs" />
+    <Compile Include="Attributes\UsageAttribute.cs" />
     <Compile Include="ModelConversion\AttributeModelBuilder.cs" />
+    <Compile Include="Models\CommandUsage.cs" />
     <Compile Include="Util\Maybe.cs" />
     <Compile Include="Models\SharedParameterCollection.cs" />
     <Compile Include="Parsers\Parser.cs" />

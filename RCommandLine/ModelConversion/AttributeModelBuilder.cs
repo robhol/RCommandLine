@@ -38,6 +38,10 @@
                     visit(ncmd);
                 }
 
+                foreach (var u in GetAttributes<UsageAttribute>(ctype, inherit: false)
+                    .Select(attr => new CommandUsage(attr.Usage, attr.Description)))
+                    command.AddUsageExample(u);
+
                 var extraAttrib = GetAttributes<LabelExtraArgumentsAttribute>(ctype, false).SingleOrDefault();
                 if (extraAttrib != null)
                 {
