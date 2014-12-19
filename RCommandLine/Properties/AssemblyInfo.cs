@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RCommandLine")]
 [assembly: AssemblyDescription("Simplified command line handling in .NET")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://github.com/")]
+[assembly: AssemblyCompany("http://github.com/robhol")]
 [assembly: AssemblyProduct("RCommandLine")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright © robhol.net 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,6 +34,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.2.*")]
-[assembly: AssemblyFileVersion("2.1.1")]
+[assembly: AssemblyVersion("2.1.3.*")]
+[assembly: AssemblyFileVersion("2.1.3")]
