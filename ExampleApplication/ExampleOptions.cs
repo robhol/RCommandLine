@@ -18,14 +18,16 @@
             public string Format { get; set; }
         }
 
-        [Usage(@"read ""input.txt"" -cF 4096 ASCII", "Reads a file using a given format and chunk size.")]
+        [Usage(0, @"""input file.txt""", "Reads a file using the default settings for format and chunk size.")]
+        [Usage(1, @"""input file.txt"" -cF 4096 ASCII", "Reads a file using format ASCII and chunk size 4096.")]
         public class ReadOptions : FileOptions
         {
             [Flag('c'), Optional(Default = 2048)] // (--chunk-size)
             public int ChunkSize { get; set; }
         }
 
-        [Usage(@"write ""output.txt"" -dF ASCII", "Reads a file using a given format, including debug information.")]
+        [Usage(1, @"""output file.txt"" -dF XML", "Writes a file in XML format, including debug information.")]
+        [Usage(0, @"""output file.txt""", "Writes a file with standard settings.")]
         public class WriteOptions : FileOptions
         {
             [Flag('d', Description = "Whether or not to include debug information in the output")]

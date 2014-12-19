@@ -73,7 +73,7 @@
             return GetUsageDescription(RootCommand);
         }
 
-        string GetUsageDescription(Command command)
+        string GetUsageDescription(Command command, string displayedCommand = "")
         {
             var sb = new StringBuilder();
 
@@ -140,12 +140,13 @@
                     .AppendLine()
                     .AppendLine("Example:");
 
-                foreach (var ex in command.UsageExamples)
+                foreach (var ex in command.UsageExamples.OrderBy(u => u.Order))
                 {
                     sb
-                        .Append("")
+                        .Append(" ")
+                        .Append(!string.IsNullOrEmpty(displayedCommand) ? (displayedCommand + " ") : "")
                         .AppendLine(ex.Usage)
-                        .Append("  ")
+                        .Append("   ")
                         .AppendLine(ex.Description);
                 }
             }
@@ -157,7 +158,7 @@
         {
             Options.OutputTarget.WriteLine(string.Format("Usage:\n{0}\n{1}", 
                 GetUsage(command, displayedCommand),
-                GetUsageDescription(command)));
+                GetUsageDescription(command, displayedCommand)));
         }
     }
 }

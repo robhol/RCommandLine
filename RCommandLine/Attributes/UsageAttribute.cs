@@ -9,7 +9,7 @@ namespace RCommandLine.Attributes
     /// <summary>
     /// Provides a human-readable example invocation of this command with an optional description.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class UsageAttribute : Attribute
     {
 

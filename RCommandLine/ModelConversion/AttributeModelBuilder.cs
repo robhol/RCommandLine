@@ -39,7 +39,11 @@
                 }
 
                 foreach (var u in GetAttributes<UsageAttribute>(ctype, inherit: false)
-                    .Select(attr => new CommandUsage(attr.Usage, attr.Description)))
+                    .Select(attr => new CommandUsage(attr.Usage)
+                    {
+                        Description = attr.Description,
+                        Order = attr.Order
+                    }))
                     command.AddUsageExample(u);
 
                 var extraAttrib = GetAttributes<LabelExtraArgumentsAttribute>(ctype, false).SingleOrDefault();

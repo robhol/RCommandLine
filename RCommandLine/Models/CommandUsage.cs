@@ -13,10 +13,11 @@ namespace RCommandLine.Models
 
         public string Description { get; set; }
 
-        public CommandUsage(string usage, string description)
+        public int Order { get; set; }
+
+        public CommandUsage(string usage)
         {
             Usage = usage;
-            Description = description;
         }
 
     }
