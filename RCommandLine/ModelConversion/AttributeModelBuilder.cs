@@ -46,6 +46,13 @@
                     }))
                     command.AddUsageExample(u);
 
+                foreach (var r in GetAttributes<RemarkAttribute>(ctype, false)
+                    .Select(attr => new CommandRemark(attr.Remark)
+                    {
+                        Order = attr.Order
+                    }))
+                    command.AddRemark(r);
+
                 var extraAttrib = GetAttributes<LabelExtraArgumentsAttribute>(ctype, false).SingleOrDefault();
                 if (extraAttrib != null)
                 {

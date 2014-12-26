@@ -151,6 +151,13 @@
                 }
             }
 
+            foreach (var rem in command.Remarks.OrderBy(r => r.Order))
+            {
+                sb
+                    .Append(" ")
+                    .AppendLine(rem.Remark);
+            }
+
             return sb.ToString();
         }
 

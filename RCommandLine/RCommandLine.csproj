@@ -34,9 +34,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\RemarkAttribute.cs" />
     <Compile Include="Attributes\LabelExtraArgumentsAttribute.cs" />
     <Compile Include="Attributes\UsageAttribute.cs" />
     <Compile Include="ModelConversion\AttributeModelBuilder.cs" />
+    <Compile Include="Models\CommandRemark.cs" />
     <Compile Include="Models\CommandUsage.cs" />
     <Compile Include="Util\Maybe.cs" />
     <Compile Include="Models\SharedParameterCollection.cs" />

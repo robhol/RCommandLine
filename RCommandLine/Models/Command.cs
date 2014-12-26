@@ -27,6 +27,7 @@
         public string ExtraArgumentDescription { get; set; }
 
         private readonly List<CommandUsage> _usageExampleList;
+        private readonly List<CommandRemark> _remarkList; 
 
         public IReadOnlyList<CommandUsage> UsageExamples
         {
@@ -45,6 +46,7 @@
             _flagList = new List<Flag>();
             _argumentList = new List<Argument>();
             _usageExampleList = new List<CommandUsage>();
+            _remarkList = new List<CommandRemark>();
         }
 
         public void AddFlag(Flag f)
@@ -62,6 +64,11 @@
             _usageExampleList.Add(commandUsage);
         }
 
+        public void AddRemark(CommandRemark remark)
+        {
+            _remarkList.Add(remark);
+        }
+
         public override string ToString()
         {
             return string.Format("{0}/{1}", Name, OutputType.Name);
@@ -72,5 +79,8 @@
             get { return Regex.Replace(OutputType.Name.ToLower(), "(options|command)?$", ""); }
         }
 
+        public IEnumerable<CommandRemark> Remarks {
+            get { return _remarkList; }
+        }
     }
 }
