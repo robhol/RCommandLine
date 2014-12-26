@@ -20,7 +20,6 @@
                 }
                 );
                 
-
             //Step 3: Parse() and output consumption!
             var result = parser.Parse(Console.ReadLine());
 
