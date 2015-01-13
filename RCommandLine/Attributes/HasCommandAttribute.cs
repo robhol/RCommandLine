@@ -11,7 +11,7 @@
         private readonly Type _commandOptionsType;
 
         /// <summary>
-        /// Whether or not this should be hidden from the CommandParser.GetUsage method.
+        /// Whether or not this should be hidden from the Parser.GetUsage method.
         /// </summary>
         public bool Hidden { get; set; }
 

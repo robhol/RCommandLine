@@ -11,7 +11,7 @@
         public List<Command> Children { get; private set; }
         public Command Parent { get; private set; }
 
-        public bool Hidden { get; private set; }
+        public bool Hidden { get; set; }
 
         public Type OutputType { get; private set; }
 
@@ -34,7 +34,7 @@
             get { return _usageExampleList; }
         }
 
-        public Command(Type encounteredInType, Type outputType, string name, bool hidden, Command parentCommand = null) : base(encounteredInType)
+        public Command(Type encounteredInType, Type outputType, string name = null, bool hidden = false, Command parentCommand = null) : base(encounteredInType)
         {
             Children = new List<Command>();
             OutputType = outputType;

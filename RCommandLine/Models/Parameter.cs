@@ -12,7 +12,7 @@
     {
         
 
-        public Maybe<Func<object>> DefaultValueProvider { get; private set; }
+        public Maybe<Func<object>> DefaultValueProvider { get; set; }
         public bool HasValue { get; protected set; }
 
         public PropertyInfo TargetProperty { get; private set; }
@@ -90,6 +90,29 @@
             return Name;
         }
 
+        internal static bool Equals(Parameter a, Parameter b)
+        {
+            return a._isNullable == b._isNullable
+                && a.TargetProperty.Equals(b.TargetProperty)
+                && Model.Equals(a, b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var p = obj as Parameter;
+            return p != null && Equals(this, p);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = _isNullable.GetHashCode();
+                hashCode = (hashCode*397) ^ (TargetProperty != null ? TargetProperty.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (TargetType != null ? TargetType.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
     }
     
 }

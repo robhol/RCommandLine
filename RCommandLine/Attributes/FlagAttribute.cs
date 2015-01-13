@@ -12,7 +12,7 @@
     {
 
         /// <summary>
-        /// A unique single-character case-sensitive identifier for this flag, to be used with a hyphen in the argument string.
+        /// A unique single-character case-sensitive identifier for this flag.
         /// </summary>
         private readonly char _shortName;
 

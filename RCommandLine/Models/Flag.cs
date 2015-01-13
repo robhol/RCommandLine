@@ -11,10 +11,10 @@
     /// <summary>
     /// A flag can occur anywhere identified by a char or long name.
     /// </summary>
-    class Flag : Parameter
+    internal class Flag : Parameter
     {
-        public char ShortName { get; private set; }
-        public bool HasShortName { get; private set; }
+        public char ShortName { get; set; }
+        public bool HasShortName { get { return ShortName != default(char); } }
 
         public bool IsList { get; private set; }
 
@@ -22,7 +22,6 @@
             : base(name, property, defaultValue)
         {
             ShortName = shortName;
-            HasShortName = shortName != default(char);
             Name = name;
         
             if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
@@ -83,6 +82,33 @@
         public override string DefaultName
         {
             get { return Util.BumpyCaseToHyphenate(TargetProperty.Name); }
+        }
+
+        protected bool Equals(Flag other)
+        {
+            return base.Equals(other) && ShortName == other.ShortName && HasShortName.Equals(other.HasShortName) && IsList.Equals(other.IsList);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Flag;
+
+            if (other == null)
+                return false;
+
+            return ShortName == other.ShortName && ((Parameter) this).Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = base.GetHashCode();
+                hashCode = (hashCode*397) ^ ShortName.GetHashCode();
+                hashCode = (hashCode*397) ^ HasShortName.GetHashCode();
+                hashCode = (hashCode*397) ^ IsList.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

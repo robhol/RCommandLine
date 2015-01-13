@@ -2,7 +2,7 @@
 {
     using System;
 
-    class Maybe<T>
+    public class Maybe<T>
     {
 
         public Maybe()
@@ -14,7 +14,7 @@
         {
             Value = value;
         }
-
+        
         public bool HasValue { get; private set; }
 
         private T _value;
@@ -45,4 +45,5 @@
             return HasValue ? Value.ToString() : "(NONE)";
         }
     }
+
 }

@@ -326,8 +326,17 @@
             return rv;
         }
 
-        
+        public override int GetHashCode()
+        {
+            return GetType().GetHashCode()<<2 + RootCommand.GetHashCode()<<1 + 47;
+        }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as Parser<TTarget>;
+
+            return other != null && RootCommand.Equals(other.RootCommand);
+        }
     }
 
 

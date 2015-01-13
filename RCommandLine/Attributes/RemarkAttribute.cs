@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RCommandLine.Attributes
 {
+    /// <summary>
+    /// Provides your user with a remark to be printed in your help text.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class RemarkAttribute : Attribute
     {

@@ -21,5 +21,25 @@ namespace RCommandLine.Models
         {
             EncounteredInType = encounteredInType;
         }
+
+        internal static bool Equals(Model a, Model b)
+        {
+            return string.Equals(a._name, b._name) && a.EncounteredInType == b.EncounteredInType;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var b = obj as Model;
+            return b != null && Model.Equals(this, b);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = 397 ^ EncounteredInType.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 }
