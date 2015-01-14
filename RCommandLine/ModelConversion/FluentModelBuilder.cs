@@ -34,7 +34,7 @@ namespace RCommandLine.ModelConversion
             TopType = typeof(TOptions);
         }
 
-        public FluentModelBuilder<TOptions> BaseCommand<TBase>(Action<IFluentCommand<TBase, TOptions>> configurator) where TBase : class
+        public FluentModelBuilder<TOptions> BaseCommand<TBase>(Action<IParameterContainer<TBase, TOptions>> configurator) where TBase : class
         {
             var stub = new CommandMixin<TBase, TOptions>(this);
             configurator(stub);
@@ -44,7 +44,7 @@ namespace RCommandLine.ModelConversion
             return this;
         }
 
-        public FluentModelBuilder<TOptions> Command<TCommand>(Action<IFluentCommandBranchable<TCommand, TOptions>> configurator) where TCommand : class
+        public FluentModelBuilder<TOptions> Command<TCommand>(Action<IFluentCommand<TCommand, TOptions>> configurator) where TCommand : class
         {
             var wrapper = NewWrapper<TCommand>();
             configurator(wrapper);

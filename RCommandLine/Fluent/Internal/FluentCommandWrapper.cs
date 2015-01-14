@@ -5,7 +5,7 @@ namespace RCommandLine.Fluent
     using ModelConversion;
     using Models;
 
-    internal class FluentCommandWrapper<T, TOptions> : ParameterOwner<T, TOptions>, IFluentCommandBranchable<T, TOptions>, IMixinInjectionTarget where T : class where TOptions : class
+    internal class FluentCommandWrapper<T, TOptions> : ParameterOwner<T, TOptions>, IFluentCommand<T, TOptions>, IMixinInjectionTarget where T : class where TOptions : class
     {
 
         private readonly FluentModelBuilder<TOptions> _builder;
@@ -34,7 +34,7 @@ namespace RCommandLine.Fluent
             return _command;
         }
 
-        public IFluentCommandBranchable<T, TOptions> Name(NameType nameType)
+        public IFluentCommand<T, TOptions> Name(NameType nameType)
         {
             switch (nameType)
             {
@@ -47,32 +47,32 @@ namespace RCommandLine.Fluent
             return this;
         }
 
-        public IFluentCommandBranchable<T, TOptions> Name(string name)
+        public IFluentCommand<T, TOptions> Name(string name)
         {
             _command.Name = name;
             return this;
         }
 
-        public IFluentCommandBranchable<T, TOptions> Description(string description)
+        public IFluentCommand<T, TOptions> Description(string description)
         {
             _command.Description = description;
             return this;
         }
 
-        public IFluentCommandBranchable<T, TOptions> Hidden(bool hidden = true)
+        public IFluentCommand<T, TOptions> Hidden(bool hidden = true)
         {
             _command.Hidden = true;
             return this;
         }
 
-        public IFluentCommandBranchable<T, TOptions> LabelExtraArguments(string name, string description)
+        public IFluentCommand<T, TOptions> LabelExtraArguments(string name, string description)
         {
             _command.ExtraArgumentName = name;
             _command.ExtraArgumentDescription = description;
             return this;
         }
 
-        public IFluentCommandBranchable<T, TOptions> Command<TCommand>(Action<IFluentCommandBranchable<TCommand, TOptions>> configurator) where TCommand : class
+        public IFluentCommand<T, TOptions> Command<TCommand>(Action<IFluentCommand<TCommand, TOptions>> configurator) where TCommand : class
         {
             var newWrapper = _builder.NewWrapper<TCommand>(_command);
             configurator(newWrapper);
@@ -81,14 +81,14 @@ namespace RCommandLine.Fluent
         }
 
         private int _usageOrder = 0;
-        public IFluentCommandBranchable<T, TOptions> Usage(string invocation, string description = null)
+        public IFluentCommand<T, TOptions> Usage(string invocation, string description = null)
         {
             _command.AddUsageExample(new CommandUsage(invocation) {Description = description, Order = _usageOrder++});
             return this;
         }
 
         private int _remarkOrder = 0;
-        public IFluentCommandBranchable<T, TOptions> Remark(string remark)
+        public IFluentCommand<T, TOptions> Remark(string remark)
         {
             _command.AddRemark(new CommandRemark(remark) {Order = _remarkOrder++});
             return this;

@@ -10,7 +10,7 @@ namespace RCommandLine.Fluent
     using Parsers;
     using Util;
 
-    internal abstract class ParameterOwner<T, TOptions> : IFluentCommand<T, TOptions> where T : class where TOptions : class
+    internal abstract class ParameterOwner<T, TOptions> : IParameterContainer<T, TOptions> where T : class where TOptions : class
     {
         private readonly FluentModelBuilder<TOptions> _builder;
         public List<Argument> Arguments { get; private set; }
@@ -23,14 +23,14 @@ namespace RCommandLine.Fluent
             Flags = new List<Flag>();
         }
 
-        public IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentParameterWrapper<TTarget>> configurator = null)
+        public IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentParameterWrapper<TTarget>> configurator = null)
         {
             Arguments.Add(BuildArgument<TTarget>(Arguments.Count, property, configurator));
             return this;
         }
 
         //long name autodetected
-        public IFluentCommand<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentFlagWrapper<TTarget>> configurator = null)
+        public IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentFlagWrapper<TTarget>> configurator = null)
         {
             Flags.Add(BuildFlag<TTarget>(property, configurator));
             return this;
