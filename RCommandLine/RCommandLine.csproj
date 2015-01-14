@@ -43,8 +43,8 @@
     <Compile Include="Fluent\Internal\CommandMixin.cs" />
     <Compile Include="Fluent\External\FluentFlagWrapper.cs" />
     <Compile Include="Fluent\External\FluentParameterWrapper.cs" />
-    <Compile Include="Fluent\External\IFluentCommandBranchable.cs" />
     <Compile Include="Fluent\External\IFluentCommand.cs" />
+    <Compile Include="Fluent\External\IParameterContainer.cs" />
     <Compile Include="Fluent\Internal\IMixinInjectionTarget.cs" />
     <Compile Include="Fluent\Internal\IMixin.cs" />
     <Compile Include="Fluent\External\NameType.cs" />
