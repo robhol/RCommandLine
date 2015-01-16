@@ -23,14 +23,14 @@ namespace RCommandLine.Fluent
             Flags = new List<Flag>();
         }
 
-        public IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentParameterWrapper<TTarget>> configurator = null)
+        public IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null)
         {
             Arguments.Add(BuildArgument<TTarget>(Arguments.Count, property, configurator));
             return this;
         }
 
         //long name autodetected
-        public IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentFlagWrapper<TTarget>> configurator = null)
+        public IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentFlag<TTarget>> configurator = null)
         {
             Flags.Add(BuildFlag<TTarget>(property, configurator));
             return this;
@@ -61,7 +61,7 @@ namespace RCommandLine.Fluent
             return propertyInfo;
         }
 
-        public static Argument BuildArgument<TTarget>(int order, Expression<Func<T, TTarget>> expr, Action<FluentParameterWrapper<TTarget>> configurator)
+        public static Argument BuildArgument<TTarget>(int order, Expression<Func<T, TTarget>> expr, Action<IFluentParameter<TTarget>> configurator)
         {
             var property = GetPropertyInfoFromExpression(expr);
             var arg = new Argument(order, null, property, new Maybe<object>());
@@ -71,7 +71,7 @@ namespace RCommandLine.Fluent
             return arg;
         }
 
-        public static Flag BuildFlag<TTarget>(Expression<Func<T, TTarget>> expr, Action<FluentFlagWrapper<TTarget>> configurator)
+        public static Flag BuildFlag<TTarget>(Expression<Func<T, TTarget>> expr, Action<IFluentFlag<TTarget>> configurator)
         {
             var property = GetPropertyInfoFromExpression(expr);
             var flag = new Flag(default(char), null, property, new Maybe<object>());

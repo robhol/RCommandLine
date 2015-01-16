@@ -12,14 +12,14 @@
         /// </summary>
         /// <param name="property">Select target property for this argument</param>
         /// <param name="configurator">Lambda expression for configuring the argument</param>
-        IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentParameterWrapper<TTarget>> configurator = null);
+        IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null);
 
         /// <summary>
         /// Define a new flag on this command/options type.
         /// </summary>
         /// <param name="property">Select target property for this flag</param>
         /// <param name="configurator">Lambda expression for configuring the flag</param>
-        IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<FluentFlagWrapper<TTarget>> configurator = null);
+        IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentFlag<TTarget>> configurator = null);
 
         /// <summary>
         /// Produce a usable Parser object.

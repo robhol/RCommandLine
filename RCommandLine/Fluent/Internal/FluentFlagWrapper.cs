@@ -2,7 +2,7 @@
 {
     using Models;
 
-    public class FluentFlagWrapper<TTarget> : FluentParameterWrapper<TTarget>, IFluentFlag<TTarget>
+    class FluentFlagWrapper<TTarget> : FluentParameterWrapper<TTarget>, IFluentFlag<TTarget>
     {
 
         private readonly Flag _flag;

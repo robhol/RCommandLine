@@ -4,7 +4,7 @@
     using Models;
     using Util;
 
-    public class FluentParameterWrapper<TTarget> : IFluentParameter<TTarget>
+    class FluentParameterWrapper<TTarget> : IFluentParameter<TTarget>
     {
         private readonly Parameter _parameter;
 
