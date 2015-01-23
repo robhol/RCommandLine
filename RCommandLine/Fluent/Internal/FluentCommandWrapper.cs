@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using RCommandLine.Parsers;
 
 namespace RCommandLine.Fluent
 {
     using ModelConversion;
     using Models;
 
-    internal class FluentCommandWrapper<T, TOptions> : ParameterOwner<T, TOptions>, IFluentCommand<T, TOptions>, IMixinInjectionTarget where T : class where TOptions : class
+    internal class FluentCommandWrapper<T, TOptions> : IFluentCommand<T, TOptions>, IMixinInjectionTarget where T : class where TOptions : class
     {
 
         private readonly FluentModelBuilder<TOptions> _builder;
 
         private readonly Command _command;
 
-        internal FluentCommandWrapper(FluentModelBuilder<TOptions> builder, Command parent = null) : base(builder)
+        internal FluentCommandWrapper(FluentModelBuilder<TOptions> builder, Command parent = null)
         {
             _builder = builder;
 
@@ -92,6 +95,23 @@ namespace RCommandLine.Fluent
         {
             _command.AddRemark(new CommandRemark(remark) {Order = _remarkOrder++});
             return this;
+        }
+
+        public IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null)
+        {
+            _command.AddArgument(ParameterOwner<T, TOptions>.BuildArgument(_command.Arguments.Count(), property, configurator));
+            return this;
+        }
+
+        public IFluentCommand<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentFlag<TTarget>> configurator = null)
+        {
+            _command.AddFlag(ParameterOwner<T, TOptions>.BuildFlag(property, configurator));
+            return this;
+        }
+
+        public Parser<TOptions> Build()
+        {
+            return _builder.Build();
         }
     }
 

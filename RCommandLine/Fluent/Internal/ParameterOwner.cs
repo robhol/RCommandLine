@@ -25,14 +25,13 @@ namespace RCommandLine.Fluent
 
         public IParameterContainer<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null)
         {
-            Arguments.Add(BuildArgument<TTarget>(Arguments.Count, property, configurator));
+            Arguments.Add(BuildArgument(Arguments.Count, property, configurator));
             return this;
         }
 
-        //long name autodetected
         public IParameterContainer<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentFlag<TTarget>> configurator = null)
         {
-            Flags.Add(BuildFlag<TTarget>(property, configurator));
+            Flags.Add(BuildFlag(property, configurator));
             return this;
         }
 
