@@ -14,7 +14,7 @@ namespace ExampleApplication
         public ExampleOptionsFluentDefinition()
         {
 
-            var parser = Parser.CreateFluently<ExampleOptions>()
+            var parser = Parser.CreateFluently<ExampleOptions>(builder => builder
                 .BaseCommand<ExampleOptions.FileOptions>(fo => fo
                     .Argument(x => x.Path, c => c
                         .Description("The file to act upon"))
@@ -44,8 +44,7 @@ namespace ExampleApplication
                     .Flag(x => x.DebugInfo, c => c
                         .ShortName('d')
                         .Description("Whether or not to include debug information in the output"))
-                )
-                .Build();
+                ));
 
         }
 

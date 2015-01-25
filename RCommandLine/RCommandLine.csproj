@@ -37,10 +37,12 @@
     <Compile Include="Attributes\RemarkAttribute.cs" />
     <Compile Include="Attributes\LabelExtraArgumentsAttribute.cs" />
     <Compile Include="Attributes\UsageAttribute.cs" />
+    <Compile Include="Fluent\External\IFluentArgument.cs" />
     <Compile Include="Fluent\External\IFluentFlag.cs" />
     <Compile Include="Fluent\External\IFluentParameter.cs" />
     <Compile Include="Fluent\Internal\FluentCommandWrapper.cs" />
     <Compile Include="Fluent\Internal\CommandMixin.cs" />
+    <Compile Include="Fluent\Internal\FluentArgumentWrapper.cs" />
     <Compile Include="Fluent\Internal\FluentFlagWrapper.cs" />
     <Compile Include="Fluent\Internal\FluentParameterWrapper.cs" />
     <Compile Include="Fluent\External\IFluentCommand.cs" />

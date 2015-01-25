@@ -97,7 +97,7 @@ namespace RCommandLine.Fluent
             return this;
         }
 
-        public IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null)
+        public IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentArgument<TTarget>> configurator = null)
         {
             _command.AddArgument(ParameterOwner<T, TOptions>.BuildArgument(_command.Arguments.Count(), property, configurator));
             return this;

@@ -9,7 +9,7 @@
     /// </summary>
     class Argument : Parameter
     {
-        public int Order { get; private set; }
+        public int Order { get; set; }
 
         public Argument(int order, string name, PropertyInfo property, Maybe<object> defaultValue) 
             : base(name, property, defaultValue)

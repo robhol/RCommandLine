@@ -58,7 +58,7 @@ namespace RCommandLine.Fluent
         /// </summary>
         /// <param name="property">Select target property for this argument</param>
         /// <param name="configurator">Lambda expression for configuring the argument</param>
-        IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentParameter<TTarget>> configurator = null);
+        IFluentCommand<T, TOptions> Argument<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentArgument<TTarget>> configurator = null);
 
         /// <summary>
         /// Define a new flag on this command/options type.

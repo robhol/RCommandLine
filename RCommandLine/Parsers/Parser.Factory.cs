@@ -1,4 +1,6 @@
-﻿namespace RCommandLine.Parsers
+﻿using System;
+
+namespace RCommandLine.Parsers
 {
     using System.Runtime.InteropServices.ComTypes;
     using Fluent;
@@ -21,9 +23,12 @@
             return FromCommand<T>(options, root);
         }
 
-        public static FluentModelBuilder<T> CreateFluently<T>(ParserOptions options = null) where T : class
+        public static Parser<T> CreateFluently<T>(Action<FluentModelBuilder<T>> configurator, ParserOptions options = null) where T : class
         {
-            return new FluentModelBuilder<T>(options);
+            var builder = new FluentModelBuilder<T>(options ?? ParserOptions.Templates.Default);
+            configurator(builder);
+
+            return builder.Build();
         }
 
     }

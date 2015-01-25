@@ -24,7 +24,7 @@ namespace TestRCommandLine
 
         Parser<CommandTests.MyOptions> GetFluentParser()
         {
-            return Parser.CreateFluently<CommandTests.MyOptions>()
+            return Parser.CreateFluently<CommandTests.MyOptions>(builder => builder
 
                 .BaseCommand<CommandTests.CommonOptions>(c => c
                     .Flag(x => x.CommonBool, x => x.ShortName('v'))
@@ -46,10 +46,7 @@ namespace TestRCommandLine
                     .Command<CommandTests.BarHiddenCmdOptions>(bhc => bhc
                         .Name("(HIDDEN)")
                         .Hidden())
-
-                )
-
-                .Build();
+                ));
         }
 
     }
