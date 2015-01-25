@@ -14,8 +14,6 @@ namespace RCommandLine.ModelConversion
 
     public class FluentModelBuilder<TOptions> where TOptions : class
     {
-        public Type TopType { get; private set; }
-        
         private readonly Dictionary<Type, IMixin> _mixins;
 
         private readonly ParserOptions _options;
@@ -23,15 +21,17 @@ namespace RCommandLine.ModelConversion
         private readonly FluentCommandWrapper<TOptions, TOptions> _root;
 
         internal Command RootCommand { get { return _root.GetCommand(); } }
+        internal Type TopType { get; private set; }
 
         internal FluentModelBuilder(ParserOptions options)
         {
             _options = options;
+
+            _mixins = new Dictionary<Type, IMixin>();
+            TopType = typeof(TOptions);
+
             _root = new FluentCommandWrapper<TOptions, TOptions>(this);
             _root.Name("(root)");
-            _mixins = new Dictionary<Type, IMixin>();
-
-            TopType = typeof(TOptions);
         }
 
         public FluentModelBuilder<TOptions> BaseCommand<TBase>(Action<IParameterContainer<TBase, TOptions>> configurator) where TBase : class

@@ -1,4 +1,6 @@
-﻿namespace TestRCommandLine
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace TestRCommandLine
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RCommandLine;
@@ -9,7 +11,7 @@
     public class CommandTests
     {
         
-        public class CommonOptions
+        public abstract class CommonOptions
         {
             [Flag('v')]
             public bool CommonBool { get; set; }
@@ -20,12 +22,12 @@
 
         [HasCommand(typeof(FooOptions))]
         [HasCommand(typeof(BarOptions), "bar-name")]
-        [LabelExtraArguments("ExtraArgsName", Description = "ExtraArgsDescription")]
         public class MyOptions : CommonOptions
         {
 
         }
 
+        [LabelExtraArguments("ExtraArgsName", Description = "ExtraArgsDescription")]
         public class FooOptions : MyOptions
         {
 
@@ -53,7 +55,7 @@
         public class BarBazOptions : MyOptions
         {
 
-            [Argument(1)]
+            [Argument(2)]
             public int BazIntegerArg { get; set; }
 
         }
@@ -127,6 +129,18 @@
             Assert.IsTrue(output.Contains("bar-name baz")); 
 
             Assert.IsFalse(output.Contains("(HIDDEN)"));
+        }
+
+        [TestMethod]
+        public void Should_Consider_Parsers_Equal()
+        {
+            Assert.IsTrue(_parser.Equals(Parser.FromAttributes<MyOptions>()));
+        }
+
+        [TestMethod]
+        public void Should_Not_Consider_Parsers_Equal()
+        {
+            Assert.IsFalse(_parser.Equals(Parser.FromAttributes<BasicOptionsTests.BasicOptions>()));
         }
     }
 }

@@ -8,7 +8,7 @@
     using RCommandLine.Parsers;
 
     [TestClass]
-    public class FlagDirectAssignment
+    public class FlagDirectAssignmentTests
     {
         private readonly Parser<Options> _parser;
         private readonly Parser<Options> _windowsStyleParser;
@@ -59,7 +59,7 @@
 
         }
 
-        public FlagDirectAssignment()
+        public FlagDirectAssignmentTests()
         {
             _parser = Parser.FromAttributes<Options>();
             _windowsStyleParser = Parser.FromAttributes<Options>(ParserOptions.Templates.Windows);

@@ -7,7 +7,7 @@
     HasCommand(typeof(ReadOptions), Description = "Read a file"), //Name default: read
     HasCommand(typeof(WriteOptions), Description = "Write a file"), //Name default: write
     ] 
-    class ExampleOptions
+    abstract class ExampleOptions
     {
         public abstract class FileOptions : ExampleOptions
         {

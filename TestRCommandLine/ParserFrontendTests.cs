@@ -72,7 +72,7 @@
         [TestMethod]
         public void Should_ExposeExtraArgumentInformation_On_Help()
         {
-            _parser.Parse("-?");
+            _parser.Parse("foo -?");
 
             var op = GetLastOutput();
             Assert.IsTrue(op.Contains("ExtraArgsName"));

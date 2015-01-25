@@ -65,7 +65,8 @@ namespace RCommandLine.Fluent
             var property = GetPropertyInfoFromExpression(expr);
             var arg = new Argument(order, null, property, new Maybe<object>());
 
-            configurator(new FluentParameterWrapper<TTarget>(arg));
+            if (configurator != null)
+                configurator(new FluentParameterWrapper<TTarget>(arg));
 
             return arg;
         }
@@ -75,7 +76,8 @@ namespace RCommandLine.Fluent
             var property = GetPropertyInfoFromExpression(expr);
             var flag = new Flag(default(char), null, property, new Maybe<object>());
 
-            configurator(new FluentFlagWrapper<TTarget>(flag));
+            if (configurator != null)
+                configurator(new FluentFlagWrapper<TTarget>(flag));
 
             return flag;
         }
