@@ -67,10 +67,5 @@ namespace RCommandLine.Fluent
         /// <param name="configurator">Lambda expression for configuring the flag</param>
         IFluentCommand<T, TOptions> Flag<TTarget>(Expression<Func<T, TTarget>> property, Action<IFluentFlag<TTarget>> configurator = null);
 
-        /// <summary>
-        /// Produce a usable Parser object.
-        /// </summary>
-        Parser<TOptions> Build();
-
     }
 }

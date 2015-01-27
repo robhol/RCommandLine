@@ -1,6 +1,5 @@
 ﻿namespace RCommandLine.Models
 {
-    using System.Collections.Concurrent;
     using System.Reflection;
     using Util;
 
@@ -28,11 +27,9 @@
             get { return TargetProperty.Name; }
         }
 
-        internal static bool Equals(Argument a, Argument b)
+        private static bool Equals(Argument a, Argument b)
         {
-            //return a.Order == b.Order && Parameter.Equals(a, b);
-            //TODO: reinstate order checking after implementing IArgument
-            return Parameter.Equals(a, b);
+            return a.Order == b.Order && Parameter.Equals(a, b);
         }
 
         public override bool Equals(object obj)

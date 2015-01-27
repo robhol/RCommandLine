@@ -1,6 +1,6 @@
 ﻿namespace RCommandLine.Fluent
 {
-    public interface IFluentArgument<TTarget>
+    public interface IFluentArgument<in TTarget>
     {
         /// <summary>
         /// Explicitly set the ordering value for this argument.

@@ -1,6 +1,5 @@
 ﻿namespace ExampleApplication
 {
-    using RCommandLine;
     using RCommandLine.Attributes;
 
     [

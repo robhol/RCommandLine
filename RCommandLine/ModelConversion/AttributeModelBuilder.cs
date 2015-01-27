@@ -24,7 +24,7 @@
 
         public Command Build()
         {
-            var topCommand = new Command(_topType, _topType, "(root)", false);
+            var topCommand = new Command(_topType, _topType, "(root)");
 
             Action<Command> visit = null;
             visit = command =>

@@ -16,7 +16,7 @@
 
         public int Order { get; set; }
 
-        protected bool Equals(CommandRemark other)
+        private bool Equals(CommandRemark other)
         {
             return string.Equals(_remark, other._remark) && Order == other.Order;
         }

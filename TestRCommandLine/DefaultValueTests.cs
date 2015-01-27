@@ -1,7 +1,6 @@
 ﻿namespace TestRCommandLine
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RCommandLine;
     using RCommandLine.Attributes;
     using RCommandLine.Parsers;
 

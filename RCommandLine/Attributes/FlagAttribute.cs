@@ -16,12 +16,11 @@
         /// </summary>
         private readonly char _shortName;
 
-        public FlagAttribute(char shortName, string longName) : base(longName)
+        public FlagAttribute(char shortName, string longName = null) : base(longName)
         {
             _shortName = shortName;
         }
 
-        public FlagAttribute(char shortName) : this(shortName, null) { }
         public FlagAttribute(string longName) : this(default(char), longName) { }
 
         public char GetShortName() //non-property public getter for client code syntax purposes

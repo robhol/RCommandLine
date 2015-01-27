@@ -1,9 +1,7 @@
 ﻿namespace TestRCommandLine
 {
-    using System;
     using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RCommandLine;
     using RCommandLine.Exceptions;
     using RCommandLine.Parsers;
 

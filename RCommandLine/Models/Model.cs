@@ -30,7 +30,7 @@ namespace RCommandLine.Models
         public override bool Equals(object obj)
         {
             var b = obj as Model;
-            return b != null && Model.Equals(this, b);
+            return b != null && Equals(this, b);
         }
 
         public override int GetHashCode()

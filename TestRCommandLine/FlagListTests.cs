@@ -4,14 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RCommandLine;
     using RCommandLine.Attributes;
     using RCommandLine.Parsers;
 
     [TestClass]
     public class FlagListTests
     {
-        private Parser<ListOptions> _parser;
+        private readonly Parser<ListOptions> _parser;
 
         class ListOptions
         {

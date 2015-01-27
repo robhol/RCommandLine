@@ -62,7 +62,7 @@ namespace RCommandLine.Fluent
             return this;
         }
 
-        public IFluentCommand<T, TOptions> Hidden(bool hidden = true)
+        public IFluentCommand<T, TOptions> Hidden(bool hidden)
         {
             _command.Hidden = true;
             return this;
@@ -83,14 +83,14 @@ namespace RCommandLine.Fluent
             return this;
         }
 
-        private int _usageOrder = 0;
+        private int _usageOrder;
         public IFluentCommand<T, TOptions> Usage(string invocation, string description = null)
         {
             _command.AddUsageExample(new CommandUsage(invocation) {Description = description, Order = _usageOrder++});
             return this;
         }
 
-        private int _remarkOrder = 0;
+        private int _remarkOrder;
         public IFluentCommand<T, TOptions> Remark(string remark)
         {
             _command.AddRemark(new CommandRemark(remark) {Order = _remarkOrder++});

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using RCommandLine.Parsers;
 
 namespace RCommandLine.ModelConversion
@@ -20,7 +16,7 @@ namespace RCommandLine.ModelConversion
 
         private readonly FluentCommandWrapper<TOptions, TOptions> _root;
 
-        internal Command RootCommand { get { return _root.GetCommand(); } }
+        private Command RootCommand { get { return _root.GetCommand(); } }
         internal Type TopType { get; private set; }
 
         internal FluentModelBuilder(ParserOptions options)
@@ -57,7 +53,7 @@ namespace RCommandLine.ModelConversion
             return new Parser<TOptions>(_options, RootCommand);
         }
 
-        internal void ApplyMixins<TCommand>(FluentCommandWrapper<TCommand, TOptions> wrapper)
+        private void ApplyMixins<TCommand>(FluentCommandWrapper<TCommand, TOptions> wrapper)
             where TCommand : class
         {
             foreach (var mixin in GetAncestors(typeof(TCommand))
@@ -66,7 +62,7 @@ namespace RCommandLine.ModelConversion
                 mixin.Inject(wrapper);
         }
 
-        internal void AddMixin(Type type, IMixin mixin)
+        private void AddMixin(Type type, IMixin mixin)
         {
             _mixins.Add(type, mixin);
         }

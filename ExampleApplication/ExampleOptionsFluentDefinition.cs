@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExampleApplication
+﻿namespace ExampleApplication
 {
     using RCommandLine.Parsers;
 
@@ -14,7 +8,7 @@ namespace ExampleApplication
         public ExampleOptionsFluentDefinition()
         {
 
-            var parser = Parser.CreateFluently<ExampleOptions>(builder => builder
+            Parser.CreateFluently<ExampleOptions>(builder => builder
                 .BaseCommand<ExampleOptions.FileOptions>(fo => fo
                     .Argument(x => x.Path, c => c
                         .Description("The file to act upon"))

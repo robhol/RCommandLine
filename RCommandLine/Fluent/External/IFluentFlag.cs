@@ -1,6 +1,6 @@
 ﻿namespace RCommandLine.Fluent
 {
-    public interface IFluentFlag<TTarget>
+    public interface IFluentFlag<in TTarget>
     {
         /// <summary>
         /// Set a character that identifies this flag by itself or as part of a bundle.

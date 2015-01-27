@@ -2,12 +2,10 @@
 
 namespace RCommandLine.Parsers
 {
-    using System.Runtime.InteropServices.ComTypes;
-    using Fluent;
     using ModelConversion;
     using Models;
 
-    public class Parser
+    public static class Parser
     {
 
         /* Factory methods */

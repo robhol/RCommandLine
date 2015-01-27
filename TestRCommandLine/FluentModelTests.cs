@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RCommandLine.Parsers;
 
 namespace TestRCommandLine
@@ -7,8 +6,8 @@ namespace TestRCommandLine
     [TestClass]
     public class FluentModelTests
     {
-        private Parser<CommandTests.MyOptions> _attributeParser;
-        private Parser<CommandTests.MyOptions> _fluentParser;
+        private readonly Parser<CommandTests.MyOptions> _attributeParser;
+        private readonly Parser<CommandTests.MyOptions> _fluentParser;
 
         public FluentModelTests()
         {

@@ -3,17 +3,15 @@
     using System;
     using System.Text;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RCommandLine;
     using RCommandLine.Attributes;
-    using RCommandLine.Exceptions;
     using RCommandLine.Parsers;
 
     [TestClass]
     public class ParserFrontendTests
     {
-        private Parser<CommandTests.MyOptions> _parser;
-        private Parser<AbstractOptions> _abstractParser;
-        private InMemoryOutputChannel _output;
+        private readonly Parser<CommandTests.MyOptions> _parser;
+        private readonly Parser<AbstractOptions> _abstractParser;
+        private readonly InMemoryOutputChannel _output;
 
         [HasCommand(typeof(ActualOptions))]
         abstract class AbstractOptions

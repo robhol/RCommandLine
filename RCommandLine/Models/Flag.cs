@@ -55,9 +55,7 @@
         public override void PushValue(object target, object value, bool updateHasValue = true, bool direct = false)
         {
             if (IsList && !direct)
-            {
                 ((IList) TargetProperty.GetValue(target)).Add(value);
-            }
             else
                 base.PushValue(target, value, updateHasValue);
         }

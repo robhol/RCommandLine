@@ -9,7 +9,7 @@
     {
 
         public List<Command> Children { get; private set; }
-        public Command Parent { get; private set; }
+        private Command Parent { get; set; }
 
         public bool Hidden { get; set; }
 
@@ -29,7 +29,7 @@
         private readonly List<CommandUsage> _usageExampleList;
         private readonly List<CommandRemark> _remarkList; 
 
-        public IReadOnlyList<CommandUsage> UsageExamples
+        public IEnumerable<CommandUsage> UsageExamples
         {
             get { return _usageExampleList; }
         }

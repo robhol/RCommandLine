@@ -54,7 +54,7 @@
 
             var commandArgsQueue = new Queue<InputArgument>(commandArgs);
 
-            var showList = (command == RootCommand || command.Hidden || command.OutputType.IsAbstract);
+            var showList = (Equals(command, RootCommand) || command.Hidden || command.OutputType.IsAbstract);
             var showUsage = !(command.Hidden || command.OutputType.IsAbstract);
 
             var displayedCommand =
@@ -76,8 +76,8 @@
                 return ErrorParseResult();
             }
 
-            List<string> extraArguments = null;
-            TTarget outputObject = null;
+            List<string> extraArguments;
+            TTarget outputObject;
 
             try
             {

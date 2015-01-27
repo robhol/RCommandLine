@@ -1,9 +1,6 @@
-﻿using System.Security.Authentication;
-
-namespace TestRCommandLine
+﻿namespace TestRCommandLine
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RCommandLine;
     using RCommandLine.Attributes;
     using RCommandLine.Exceptions;
     using RCommandLine.Parsers;

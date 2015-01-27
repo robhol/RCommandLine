@@ -13,8 +13,8 @@ namespace RCommandLine.Fluent
     internal abstract class ParameterOwner<T, TOptions> : IParameterContainer<T, TOptions> where T : class where TOptions : class
     {
         private readonly FluentModelBuilder<TOptions> _builder;
-        public List<Argument> Arguments { get; private set; }
-        public List<Flag> Flags { get; private set; }
+        private List<Argument> Arguments { get; set; }
+        private List<Flag> Flags { get; set; }
 
         protected ParameterOwner(FluentModelBuilder<TOptions> builder)
         {
@@ -40,7 +40,7 @@ namespace RCommandLine.Fluent
             return _builder.Build();
         }
 
-        public static PropertyInfo GetPropertyInfoFromExpression<TSource, TTarget>(Expression<Func<TSource, TTarget>> exp)
+        private static PropertyInfo GetPropertyInfoFromExpression<TSource, TTarget>(Expression<Func<TSource, TTarget>> exp)
         {
             var body = exp as Expression;
             if (body is LambdaExpression)

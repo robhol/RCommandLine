@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RCommandLine.Models
+﻿namespace RCommandLine.Models
 {
     class CommandUsage
     {
 
-        public string Usage { get; set; }
+        public string Usage { get; private set; }
 
         public string Description { get; set; }
 
@@ -20,7 +14,7 @@ namespace RCommandLine.Models
             Usage = usage;
         }
 
-        protected bool Equals(CommandUsage other)
+        private bool Equals(CommandUsage other)
         {
             return string.Equals(Usage, other.Usage) && string.Equals(Description, other.Description) && Order == other.Order;
         }
