@@ -4,11 +4,11 @@
     using Models;
     using Util;
 
-    class FluentParameterWrapper<TTarget> : IFluentParameter<TTarget>
+    class FluentParameterWrapper<TTarget>
     {
         private readonly Parameter _parameter;
 
-        internal Parameter Parameter
+        private Parameter Parameter
         {
             get { return _parameter; }
         }
@@ -18,7 +18,7 @@
             _parameter = parameter;
         }
 
-        public IFluentParameter<TTarget> Name(NameType nameType)
+        public void Name(NameType nameType)
         {
             switch (nameType)
             {
@@ -30,32 +30,26 @@
                     Parameter.Name = null;
                     break;
             }
-
-            return this;
         }
 
-        public IFluentParameter<TTarget> Name(string name)
+        public void Name(string name)
         {
             Parameter.Name = name;
-            return this;
         }
 
-        public IFluentParameter<TTarget> Description(string description)
+        public void Description(string description)
         {
             Parameter.Description = description;
-            return this;
         }
 
-        public IFluentParameter<TTarget> Optional()
+        public void Optional()
         {
             Parameter.DefaultValueProvider = new Maybe<Func<object>>();
-            return this;
         }
 
-        public IFluentParameter<TTarget> Optional(TTarget @default)
+        public void Optional(TTarget @default)
         {
             Parameter.DefaultValueProvider = new Maybe<Func<object>>(() => @default);
-            return this;
         }
 
     }

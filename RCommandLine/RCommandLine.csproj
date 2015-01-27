@@ -39,7 +39,6 @@
     <Compile Include="Attributes\UsageAttribute.cs" />
     <Compile Include="Fluent\External\IFluentArgument.cs" />
     <Compile Include="Fluent\External\IFluentFlag.cs" />
-    <Compile Include="Fluent\Internal\IFluentParameter.cs" />
     <Compile Include="Fluent\Internal\FluentCommandWrapper.cs" />
     <Compile Include="Fluent\Internal\CommandMixin.cs" />
     <Compile Include="Fluent\Internal\FluentArgumentWrapper.cs" />
