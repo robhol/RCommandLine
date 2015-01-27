@@ -1,6 +1,6 @@
 namespace RCommandLine.Fluent
 {
-    public interface IFluentParameter<TTarget>
+    interface IFluentParameter<TTarget>
     {
         /// <summary>
         /// Sets the naming strategy for this parameter.
