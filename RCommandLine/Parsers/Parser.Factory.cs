@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace RCommandLine.Parsers
+﻿namespace RCommandLine
 {
+    using System;
     using ModelConversion;
     using Models;
 

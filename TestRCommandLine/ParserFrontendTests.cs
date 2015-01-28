@@ -3,8 +3,8 @@
     using System;
     using System.Text;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RCommandLine;
     using RCommandLine.Attributes;
-    using RCommandLine.Parsers;
 
     [TestClass]
     public class ParserFrontendTests

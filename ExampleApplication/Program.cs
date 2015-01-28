@@ -2,7 +2,7 @@
 {
     using System;
     using System.Reflection;
-    using RCommandLine.Parsers;
+    using RCommandLine;
 
     class Program
     {

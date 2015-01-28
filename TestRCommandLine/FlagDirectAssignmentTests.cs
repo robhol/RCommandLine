@@ -2,9 +2,9 @@
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RCommandLine;
     using RCommandLine.Attributes;
     using RCommandLine.Exceptions;
-    using RCommandLine.Parsers;
 
     [TestClass]
     public class FlagDirectAssignmentTests

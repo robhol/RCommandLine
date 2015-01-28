@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using RCommandLine.Parsers;
 
 namespace RCommandLine.Fluent
 {
     using ModelConversion;
     using Models;
+    using Parsing;
 
     internal class FluentCommandWrapper<T, TOptions> : IFluentCommand<T, TOptions>, IMixinInjectionTarget where T : class where TOptions : class
     {

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq.Expressions;
-    using Parsers;
 
     public interface IParameterContainer<T, TOptions> where T : class where TOptions : class
     {

@@ -1,5 +1,7 @@
 ﻿namespace RCommandLine.Fluent
 {
+    using Parsing;
+
     public interface IFluentArgument<in TTarget>
     {
         /// <summary>

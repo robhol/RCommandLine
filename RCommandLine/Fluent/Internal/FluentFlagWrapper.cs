@@ -1,6 +1,7 @@
 ﻿namespace RCommandLine.Fluent
 {
     using Models;
+    using Parsing;
 
     class FluentFlagWrapper<TTarget> : IFluentFlag<TTarget>
     {

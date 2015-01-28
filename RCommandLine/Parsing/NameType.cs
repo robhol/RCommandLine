@@ -1,4 +1,4 @@
-﻿namespace RCommandLine.Fluent
+﻿namespace RCommandLine.Parsing
 {
     public enum NameType
     {

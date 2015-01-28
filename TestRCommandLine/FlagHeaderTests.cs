@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RCommandLine;
     using RCommandLine.Exceptions;
-    using RCommandLine.Parsers;
 
     [TestClass]
     public class FlagHeaderTests

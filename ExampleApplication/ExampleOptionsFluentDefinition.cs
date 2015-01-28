@@ -1,6 +1,6 @@
 ﻿namespace ExampleApplication
 {
-    using RCommandLine.Parsers;
+    using RCommandLine;
 
     class ExampleOptionsFluentDefinition
     {

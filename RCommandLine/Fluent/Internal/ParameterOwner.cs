@@ -7,7 +7,6 @@ namespace RCommandLine.Fluent
     using System.Reflection;
     using ModelConversion;
     using Models;
-    using Parsers;
     using Util;
 
     internal abstract class ParameterOwner<T, TOptions> : IParameterContainer<T, TOptions> where T : class where TOptions : class

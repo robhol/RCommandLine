@@ -1,10 +1,9 @@
-﻿namespace RCommandLine.Parsers
+﻿namespace RCommandLine
 {
     using System;
     using System.Linq;
     using System.Text;
     using Models;
-    using Util;
 
     partial class Parser<TTarget>
     {
@@ -60,7 +59,7 @@
                 .ThenBy(f => (f is Argument) ? ((Argument) f).Order : 0).ToList();
 
             var usage = shownCommand + " " +
-                        Util.JoinNotNulls(" ", parameters.Select(p => p.GetHelpTextRepresentation()));
+                        Util.Util.JoinNotNulls(" ", parameters.Select(p => p.GetHelpTextRepresentation()));
 
             if (!string.IsNullOrEmpty(c.ExtraArgumentName))
                 usage += " " + Parameter.GetHelpTextRepresentation(false, c.ExtraArgumentName);

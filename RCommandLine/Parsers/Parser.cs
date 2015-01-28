@@ -1,4 +1,4 @@
-﻿namespace RCommandLine.Parsers
+﻿namespace RCommandLine
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,6 @@
     using Exceptions;
     using Models;
     using Parsing;
-    using Util;
 
     public partial class Parser<TTarget> where TTarget : class
     {
@@ -139,7 +138,7 @@
         List<InputArgument> StringToArguments(string s)
         {
             IEnumerable<bool> quotes;
-            var segments = Util.JoinQuotedStringSegments(s.Split(' ').Where(seg => !string.IsNullOrEmpty(seg)), out quotes);
+            var segments = Util.Util.JoinQuotedStringSegments(s.Split(' ').Where(seg => !string.IsNullOrEmpty(seg)), out quotes);
             return segments.Zip(quotes, (value, quoted) => new InputArgument {Value = value, Literal = quoted}).ToList();
         }
 

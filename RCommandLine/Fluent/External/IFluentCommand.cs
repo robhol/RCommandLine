@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
-using RCommandLine.Parsers;
 
 namespace RCommandLine.Fluent
 {
     using System;
+    using Parsing;
 
     public interface IFluentCommand<T, TOptions> where TOptions : class
     {

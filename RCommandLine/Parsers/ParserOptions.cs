@@ -1,4 +1,4 @@
-﻿namespace RCommandLine.Parsers
+﻿namespace RCommandLine
 {
     using System.Collections.Generic;
     using System.Linq;

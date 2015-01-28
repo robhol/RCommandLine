@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RCommandLine.Parsers;
 
 namespace TestRCommandLine
 {
+    using RCommandLine;
+
     [TestClass]
     public class FluentModelTests
     {

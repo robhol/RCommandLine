@@ -48,7 +48,7 @@
     <Compile Include="Fluent\External\IParameterContainer.cs" />
     <Compile Include="Fluent\Internal\IMixinInjectionTarget.cs" />
     <Compile Include="Fluent\Internal\IMixin.cs" />
-    <Compile Include="Fluent\External\NameType.cs" />
+    <Compile Include="Parsing\NameType.cs" />
     <Compile Include="Fluent\Internal\ParameterOwner.cs" />
     <Compile Include="ModelConversion\AttributeModelBuilder.cs" />
     <Compile Include="ModelConversion\FluentModelBuilder.cs" />
