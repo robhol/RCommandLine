@@ -17,12 +17,17 @@
         /// </summary>
         private readonly char _shortName;
 
-        public FlagAttribute(char shortName, string longName = null) : base(longName)
+        public FlagAttribute(char shortName, string longName) : base(longName)
         {
             _shortName = shortName;
         }
 
-        public FlagAttribute(NameType longName = NameType.Default) : this(default(char), null)
+        public FlagAttribute(char shortName, NameType longName = NameType.Default) : base(longName == NameType.None ? "" : null)
+        {
+            _shortName = shortName;
+        }
+
+        public FlagAttribute(NameType longName = NameType.Default) : this(default(char), longName)
         {
             if (longName == NameType.None)
                 throw new ArgumentException("Flags need at least one short or long name.");

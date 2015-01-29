@@ -140,7 +140,6 @@
         [TestMethod]
         public void Should_Consider_Parsers_Equal()
         {
-            //Assert.IsTrue(_parser.Equals(Parser.FromAttributes<BasicOptions>()));
             Assert.AreEqual(_parser, Parser.FromAttributes<BasicOptions>());
         }
 
