@@ -6,6 +6,7 @@
     using RCommandLine;
     using RCommandLine.Attributes;
     using RCommandLine.Exceptions;
+    using RCommandLine.Parsing;
 
     [TestClass]
     public class BasicOptionsTests
@@ -29,6 +30,19 @@
             public int IntegerArgument { get; set; }
 
         }
+
+        public class FlagNameTest
+        {
+            [Flag]
+            public int FlagTest { get; set; }
+        }
+
+        public class UnnamedFlagTest
+        {
+            [Flag(NameType.None)]
+            public bool Flag { get; set; }
+        }
+
 
         private readonly Parser<BasicOptions> _parser;
 
@@ -126,7 +140,20 @@
         [TestMethod]
         public void Should_Consider_Parsers_Equal()
         {
-            Assert.IsTrue(_parser.Equals(Parser.FromAttributes<BasicOptions>()));
+            //Assert.IsTrue(_parser.Equals(Parser.FromAttributes<BasicOptions>()));
+            Assert.AreEqual(_parser, Parser.FromAttributes<BasicOptions>());
+        }
+
+        [TestMethod]
+        public void Should_Assign_Expected_DefaultName_To_Flag()
+        {
+            Assert.AreEqual(Parser.FromAttributes<FlagNameTest>().Parse("--flag-test 33").Options.FlagTest, 33);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void Should_Throw_On_Unnamed_Flag()
+        {
+            Parser.FromAttributes<UnnamedFlagTest>();
         }
 
     }

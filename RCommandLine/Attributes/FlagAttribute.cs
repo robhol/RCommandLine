@@ -1,6 +1,7 @@
 ﻿namespace RCommandLine.Attributes
 {
     using System;
+    using Parsing;
 
     /// <summary>
     /// A flag can occur anywhere in the argument string.
@@ -19,6 +20,12 @@
         public FlagAttribute(char shortName, string longName = null) : base(longName)
         {
             _shortName = shortName;
+        }
+
+        public FlagAttribute(NameType longName = NameType.Default) : this(default(char), null)
+        {
+            if (longName == NameType.None)
+                throw new ArgumentException("Flags need at least one short or long name.");
         }
 
         public FlagAttribute(string longName) : this(default(char), longName) { }
