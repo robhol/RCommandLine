@@ -2,7 +2,7 @@
 
 RCommandLine is designed to be as simple and succinct as possible from the user's perspective.
 
-RCommandLine allows you to create simple POCOs exposing properties for commands, flags and arguments that can be specified through the command line. These properties are adorned with Attributes in order to specify desired functions.
+RCommandLine allows you to create simple POCOs exposing properties for commands, flags and arguments that can be specified through the command line. These properties are adorned with Attributes in order to specify desired functions, or specified through a fluent API.
 
 ## Features
 ### Minimal configuration
